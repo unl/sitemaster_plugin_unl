@@ -7,15 +7,21 @@ class TemplateVersions
 {
     public $options = array(
         'current_branches' => array('master', '3.1'), //The currently supported branches in github
+        'cache' => true
     );
     
     public $cache_file = false;
+    public $versions = array();
+    
+    const VERSION_NAME_DEP = 'dep';
+    const VERSION_NAME_HTML = 'html';
     
     public function __construct($options = array())
     {
         $this->options = $this->options + $options;
         
         $this->cache_file = Config::get('CACHE_DIR') . 'unl_template_versions.json';
+        $this->versions = $this->get($this->options['cache']);
     }
 
     /**
@@ -98,5 +104,28 @@ class TemplateVersions
     {
         return file_put_contents($this->cache_file, json_encode($versions));
     }
-    
+
+    /**
+     * @param string $version the version to check
+     * @param  string $version_name one of 'dep' or 'html'
+     * @return bool
+     */
+    public function isCurrent($version, $version_name)
+    {
+        if (!in_array($version_name, array(self::VERSION_NAME_DEP, self::VERSION_NAME_HTML))) {
+            //Not a valid version name
+            return false;
+        }
+        
+        if (!isset($this->versions[$version_name])) {
+            return false;
+        }
+        
+        if (in_array($version, $this->versions[$version_name])) {
+            //if it is in the array of versions for this version_name, it is current
+            return true;
+        }
+        
+        return false;
+    }
 }
