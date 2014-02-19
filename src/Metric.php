@@ -150,4 +150,40 @@ class Metric extends MetricInterface
         //Couldn't find anything.
         return null;
     }
+
+    public function getDEPVersion(\DOMXPath $xpath)
+    {
+        $version = '';
+
+        //look for >= 3.1 templates
+        $nodes = $xpath->query(
+            "//xhtml:script[@id='wdn_dependents']/@src"
+        );
+
+        foreach ($nodes as $node) {
+            $version = $node->nodeValue;
+        }
+
+        $matches = array();
+
+        if (preg_match('/all.js\?dep=([0-9.]*)/', $version, $matches) && isset($matches[1])) {
+            //found look for >= 3.1 templates
+            return $matches[1];
+        }
+
+        //look for 3.0
+        $nodes = $xpath->query(
+            '//xhtml:script/@src'
+        );
+
+        foreach ($nodes as $node) {
+            if (stripos($node->nodeValue, 'templates_3.0') !== false) {
+                //found 3.0
+                return '3.0';
+            }
+        }
+
+        //Couldn't find anything.
+        return null;
+    }
 }
