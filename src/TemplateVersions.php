@@ -24,7 +24,7 @@ class TemplateVersions
         $this->cache_file = Config::get('CACHE_DIR') . 'unl_template_versions.json';
         
         if ($this->options['autoload']) {
-            $this->versions = $this->get($this->options['cache']);
+            $this->versions = $this->grabVersions($this->options['cache']);
         }
     }
 
