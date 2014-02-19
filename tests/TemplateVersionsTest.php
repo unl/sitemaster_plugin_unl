@@ -1,7 +1,7 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
-class MetricTest extends \PHPUnit_Framework_TestCase
+class TemplateVersionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
