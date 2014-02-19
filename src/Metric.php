@@ -4,6 +4,7 @@ namespace SiteMaster\Plugins\Unl;
 use SiteMaster\Core\Auditor\Logger\Metrics;
 use SiteMaster\Core\Auditor\Metric\Mark;
 use SiteMaster\Core\Auditor\MetricInterface;
+use SiteMaster\Core\Config;
 use SiteMaster\Core\Registry\Site;
 use SiteMaster\Core\Auditor\Scan;
 use SiteMaster\Core\Auditor\Site\Page;
@@ -11,6 +12,9 @@ use SiteMaster\Core\Util;
 
 class Metric extends MetricInterface
 {
+    const MARK_MN_UNL_FRAMEWORK_HTML = 'UNL_FRAMEWORK_HTML';
+    const MARK_MN_UNL_FRAMEWORK_DEP = 'UNL_FRAMEWORK_DEP';
+    
     /**
      * @param string $plugin_name
      * @param array $options
@@ -18,8 +22,18 @@ class Metric extends MetricInterface
     public function __construct($plugin_name, array $options = array())
     {
         $options = array_merge_recursive($options, array(
-            'message_text' => array(),
-            'help_text' => array(),
+            'description_text' => array(
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The WDN framework HTML is out of date',
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The WDN framework dependants are out of date'
+            ),
+            'help_text' => array(
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files'
+            ),
+            'point_deductions' => array(
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 20
+            )
         ));
 
         parent::__construct($plugin_name, $options);
@@ -107,6 +121,70 @@ class Metric extends MetricInterface
                 $scan_attributes->save();
             }
         }
+        
+        $version_helper = new TemplateVersions();
+        
+        if (!$version_helper->isCurrent($html_version, TemplateVersions::VERSION_NAME_HTML)) {
+            //Create a new mark
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_HTML;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+            
+            $page->addMark($mark, array(
+                'value_found' => $html_version
+            ));
+        }
+
+        if (!$version_helper->isCurrent($dep_version, TemplateVersions::VERSION_NAME_DEP)) {
+            //Create a new mark
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_DEP;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+
+            $page->addMark($mark, array(
+                'value_found' => $dep_version
+            ));
+        }
+    }
+
+    /**
+     * get the name for a mark
+     *
+     * @param string $machine_name the machine name of the mark
+     * @return string
+     */
+    public function getMarkTitle($machine_name)
+    {
+        if (isset($this->options['title_text'][$machine_name])) {
+            return $this->options['title_text'][$machine_name];
+        }
+
+        return 'Framework Error';
+    }
+    
+    /**
+     * get the point deduction for a mark
+     *
+     * @param string $machine_name the machine name of the mark
+     * @return double
+     */
+    public function getMarkPointDeduction($machine_name)
+    {
+        if (isset($this->options['point_deductions'][$machine_name])) {
+            return $this->options['point_deductions'][$machine_name];
+        }
+
+        return 0;
     }
 
     /**
@@ -115,10 +193,10 @@ class Metric extends MetricInterface
      * @param string $machine_name the machine name of the mark
      * @return string
      */
-    public function getMarkMessage($machine_name)
+    public function getMarkDescription($machine_name)
     {
-        if (isset($this->options['message_text'][$machine_name])) {
-            return $this->options['message_text'][$machine_name];
+        if (isset($this->options['description_text'][$machine_name])) {
+            return $this->options['description_text'][$machine_name];
         }
 
         return 'General WDN error';

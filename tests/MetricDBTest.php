@@ -22,9 +22,11 @@ class MetricDBTest extends DBTestCase
         $scan = Scan::createNewScan($site->id);
         $page_4_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/4_0');
         $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1');
+        $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0');
 
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
+        $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
         
         $metric->markPage($page_4_0, $xpath_template_4_0, $scan);
         
@@ -41,6 +43,22 @@ class MetricDBTest extends DBTestCase
         
         $this->assertEquals('3.1', $scan_attributes->html_version);
         $this->assertEquals('3.1.19', $scan_attributes->dep_version);
+        
+        //check marks
+        $metric->markPage($page_3_0, $xpath_template_3_0, $scan);
+
+        $machine_names_found = array();
+        foreach ($page_3_0->getMarks($metric_record->id) as $page_mark) {
+            $mark = $page_mark->getMark();
+            $machine_names_found[] = $mark->machine_name;
+        }
+
+        $this->assertEquals(
+            array(
+                Metric::MARK_MN_UNL_FRAMEWORK_HTML,
+                Metric::MARK_MN_UNL_FRAMEWORK_DEP
+            ),
+            $machine_names_found);
     }
 
     public function setUpDB()
