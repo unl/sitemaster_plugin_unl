@@ -8,10 +8,10 @@ class TemplateVersionsTest extends \PHPUnit_Framework_TestCase
      */
     public function get()
     {
-        $version_helper = new TemplateVersions();
+        $version_helper = new TemplateVersions(array('cache'=>false, 'autoload'=>false));
         
         //We should check against live data, not cached data
-        $versions = $version_helper->get(false);
+        $versions = $version_helper->grabVersions(false);
 
         /**
          * We can't predict what the versions will be,
@@ -26,11 +26,11 @@ class TemplateVersionsTest extends \PHPUnit_Framework_TestCase
      */
     public function isCurrent()
     {
-        $version_helper = new TemplateVersions();
-        $version_helper->versions = array(
+        $version_helper = new TemplateVersions(array('cache'=>false, 'autoload'=>false));
+        $version_helper->setVersions(array(
             'html' => array('4.0'),
             'dep' => array('4.0.1')
-        );
+        ));
 
         $this->assertEquals(true, $version_helper->isCurrent('4.0', TemplateVersions::VERSION_NAME_HTML));
         $this->assertEquals(false, $version_helper->isCurrent('3.0', TemplateVersions::VERSION_NAME_HTML));

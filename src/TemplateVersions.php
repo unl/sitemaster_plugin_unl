@@ -7,30 +7,62 @@ class TemplateVersions
 {
     public $options = array(
         'current_branches' => array('master', '3.1'), //The currently supported branches in github
-        'cache' => true
+        'cache' => true, //cache the results
+        'autoload' => true, //autoload the current versions
     );
     
-    public $cache_file = false;
-    public $versions = array();
+    protected $cache_file = false;
+    protected $versions = array('html'=>array(), 'dep'=>array());
     
     const VERSION_NAME_DEP = 'dep';
     const VERSION_NAME_HTML = 'html';
     
-    public function __construct($options = array())
+    public function __construct(array $options = array())
     {
-        $this->options = $this->options + $options;
+        $this->options = $options + $this->options;
         
         $this->cache_file = Config::get('CACHE_DIR') . 'unl_template_versions.json';
-        $this->versions = $this->get($this->options['cache']);
+        
+        if ($this->options['autoload']) {
+            $this->versions = $this->get($this->options['cache']);
+        }
     }
 
     /**
-     * Get the versions array.  Will generate cache if $cache is true
+     * get the current versions
+     * 
+     * will return something similar to 
+     * array('html'=>array(), 'dep'=>array())
+     * 
+     * @return array the versions array
+     */
+    public function getVersions()
+    {
+        return $this->versions;
+    }
+
+    /**
+     * Set the versions array
+     * 
+     * a valid versions array is of the form
+     * 
+     * array('html'=>array(), 'dep'=>array())
+     * 
+     * @param array $versions the versions array
+     * @return null
+     */
+    public function setVersions(array $versions)
+    {
+        $this->versions = $versions;
+    }
+
+    /**
+     * grabs the current versions for cache or github the versions array.  Will generate cache if $cache is true
      * 
      * @param bool $cache - retrieve from and save to cache
      * @return array|false
      */
-    public function get($cache = true)
+    public function grabVersions($cache = true)
     {
         if ($cache) {
             if ($data = $this->getFromCache()) {
