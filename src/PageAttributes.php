@@ -23,6 +23,17 @@ class PageAttributes extends Record
     }
 
     /**
+     * Get a PageAttributes object for a scan
+     *
+     * @param int $scanned_page_id the scanned_page.id
+     * @return bool|ScanAttributes
+     */
+    public static function getByScannedPageID($scanned_page_id)
+    {
+        return self::getByAnyField(__CLASS__, 'scanned_page_id', $scanned_page_id);
+    }
+
+    /**
      * Create a new Page Attributes
      *
      * @param int $scanned_page_id fk for scanned_page.id

@@ -21,6 +21,17 @@ class ScanAttributes extends Record
     {
         return 'unl_scan_attributes';
     }
+    
+    /**
+     * Get a ScanAttributes object for a scan
+     *
+     * @param int $scans_id
+     * @return bool|ScanAttributes
+     */
+    public static function getByScansID($scans_id)
+    {
+        return self::getByAnyField(__CLASS__, 'scans_id', $scans_id);
+    }
 
     /**
      * Create a new Scan Attributes
