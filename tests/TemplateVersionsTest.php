@@ -10,7 +10,7 @@ class TemplateVersionsTest extends \PHPUnit_Framework_TestCase
     {
         $version_helper = new TemplateVersions();
         
-        //We should check againt live data, not cached data
+        //We should check against live data, not cached data
         $versions = $version_helper->get(false);
 
         /**
