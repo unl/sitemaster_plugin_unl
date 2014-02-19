@@ -3,7 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
 
-class TemplateVersions
+class FrameworkVersionHelper
 {
     public $options = array(
         'current_branches' => array('master', '3.1'), //The currently supported branches in github

@@ -122,9 +122,9 @@ class Metric extends MetricInterface
             }
         }
         
-        $version_helper = new TemplateVersions();
+        $version_helper = new FrameworkVersionHelper();
         
-        if (!$version_helper->isCurrent($html_version, TemplateVersions::VERSION_NAME_HTML)) {
+        if (!$version_helper->isCurrent($html_version, FrameworkVersionHelper::VERSION_NAME_HTML)) {
             //Create a new mark
             $machine_name = self::MARK_MN_UNL_FRAMEWORK_HTML;
             $mark = $this->getMark(
@@ -140,7 +140,7 @@ class Metric extends MetricInterface
             ));
         }
 
-        if (!$version_helper->isCurrent($dep_version, TemplateVersions::VERSION_NAME_DEP)) {
+        if (!$version_helper->isCurrent($dep_version, FrameworkVersionHelper::VERSION_NAME_DEP)) {
             //Create a new mark
             $machine_name = self::MARK_MN_UNL_FRAMEWORK_DEP;
             $mark = $this->getMark(
