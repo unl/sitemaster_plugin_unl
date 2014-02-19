@@ -116,4 +116,38 @@ class Metric extends MetricInterface
 
         return 'Fix this problem';
     }
+
+    public function getHTMLVersion(\DOMXPath $xpath)
+    {
+        $version = '';
+
+        //look for >= 3.1 templates
+        $nodes = $xpath->query(
+            '//xhtml:body/@data-version'
+        );
+
+        foreach ($nodes as $node) {
+            $version = $node->nodeValue;
+        }
+
+        if (!empty($version)) {
+            //found >= 3.1 templates
+            return $version;
+        }
+
+        //Look for 3.0
+        $nodes = $xpath->query(
+            '//xhtml:script/@src'
+        );
+
+        foreach ($nodes as $node) {
+            if (stripos($node->nodeValue, 'templates_3.0') !== false) {
+                //Found 3.0
+                return '3.0';
+            }
+        }
+
+        //Couldn't find anything.
+        return null;
+    }
 }
