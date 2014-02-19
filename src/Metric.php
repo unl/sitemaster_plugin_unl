@@ -71,7 +71,7 @@ class Metric extends MetricInterface
      */
     public function scan($uri, \DOMXPath $xpath, $depth, Page $page, Metrics $context)
     {
-        $this->markPage($page, $xpath);
+        $this->markPage($page, $xpath, $context->getScan());
 
         return true;
     }
@@ -81,10 +81,32 @@ class Metric extends MetricInterface
      *
      * @param Page $page the page to mark
      * @param \DOMXPath $xpath
+     * @param \SiteMaster\Core\Auditor\Scan $scan
      */
-    public function markPage(Page $page, \DOMXPath $xpath)
+    public function markPage(Page $page, \DOMXPath $xpath, Scan $scan)
     {
+        $html_version = $this->getHTMLVersion($xpath);
+        $dep_version = $this->getDEPVersion($xpath);
         
+        //Save these attributes for the page.
+        PageAttributes::createPageAttributes($page->id, $html_version, $dep_version);
+        
+        if (!$scan_attributes = ScanAttributes::getByScansID($scan->id)) {
+            $scan_attributes = ScanAttributes::createScanAttributes($scan->id, $html_version, $dep_version);
+        } else {
+            //Update the scan version if this page's versions are older
+            if (version_compare($html_version, $scan_attributes->html_version) == -1) {
+                //$html_version is smaller, so decrease the scan attribute version
+                $scan_attributes->html_version = $html_version;
+                $scan_attributes->save();
+            }
+
+            if (version_compare($dep_version, $scan_attributes->dep_version) == -1) {
+                //$dep_version is smaller, so decrease the scan attribute version
+                $scan_attributes->dep_version = $dep_version;
+                $scan_attributes->save();
+            }
+        }
     }
 
     /**
