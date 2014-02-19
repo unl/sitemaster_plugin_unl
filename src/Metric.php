@@ -117,6 +117,12 @@ class Metric extends MetricInterface
         return 'Fix this problem';
     }
 
+    /**
+     * Get the html version of a page
+     * 
+     * @param \DOMXPath $xpath the xpath
+     * @return null|string the version (null if not found)
+     */
     public function getHTMLVersion(\DOMXPath $xpath)
     {
         $version = '';
@@ -151,6 +157,12 @@ class Metric extends MetricInterface
         return null;
     }
 
+    /**
+     * Get the dependency version of a page
+     * 
+     * @param \DOMXPath $xpath the xpath of the page
+     * @return null|string the version (null if not found)
+     */
     public function getDEPVersion(\DOMXPath $xpath)
     {
         $version = '';
