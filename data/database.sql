@@ -27,3 +27,19 @@ CREATE TABLE IF NOT EXISTS `unl_page_attributes` (
   INDEX `scan_html_version_index` (`html_version` ASC),
   INDEX `scan_dep_version_index` (`dep_version` ASC))
   ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `unl_site_progress` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `sites_id` INT NOT NULL,
+  `estimated_completion` DATE DEFAULT '2010-01-01',
+  `self_progress` INT(3) NOT NULL DEFAULT 0,
+  `self_comments` TEXT,
+  `created` DATETIME NOT NULL,
+  `updated` DATETIME NOT NULL,
+  CONSTRAINT `fk_unl_site_status_site1`
+  FOREIGN KEY (`sites_id`)
+  REFERENCES `sites` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  PRIMARY KEY  (`id`)
+) ENGINE = InnoDB;
