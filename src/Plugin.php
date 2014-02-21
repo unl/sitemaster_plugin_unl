@@ -2,6 +2,8 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Plugin\PluginInterface;
+use SiteMaster\Core\Events\RoutesCompile;
+use SiteMaster\Core\Events\Theme\PrependOutput;
 use SiteMaster\Core\Util;
 
 class Plugin extends PluginInterface
@@ -86,6 +88,18 @@ class Plugin extends PluginInterface
     function getEventListeners()
     {
         $listeners = array();
+
+        $listener = new Listener($this);
+
+        $listeners[] = array(
+            'event'    => RoutesCompile::EVENT_NAME,
+            'listener' => array($listener, 'onRoutesCompile')
+        );
+
+        $listeners[] = array(
+            'event'    => PrependOutput::EVENT_NAME,
+            'listener' => array($listener, 'onThemePrependOutput')
+        );
 
         return $listeners;
     }
