@@ -30,6 +30,9 @@ class Listener extends PluginListener
         }
     }
 
+    /**
+     * @param PrependOutput $event the event to process
+     */
     public function onThemePrependOutput(PrependOutput $event)
     {
         $object = $event->getObject();
