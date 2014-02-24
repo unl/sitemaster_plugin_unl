@@ -24,6 +24,7 @@ if ($context->scan_attributes) {
     <section class="wdn-grid-set">
         <div class="bp1-wdn-col-one-half">
             <span class="section-title">We found these framework versions:</span>
+            <span class="section-help">These are lowest versions that we found on your site</span>
             <div class="wdn-grid-set dashboard-metrics">
                 <div class="wdn-col-one-half">
                     <div class="visual-island">
