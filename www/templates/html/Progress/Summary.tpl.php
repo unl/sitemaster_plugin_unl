@@ -31,7 +31,7 @@ if ($context->scan_attributes) {
                 </div>
             </div>
         </div>
-        <div class="bp1-wdn-col-one-half">
+        <div class="bp1-wdn-col-one-half progress-self-report">
             <span class="section-title">Self reported progress:</span>
             <dl>
                 <dt>Estimated Completion Date</dt>
