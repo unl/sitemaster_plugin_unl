@@ -10,7 +10,7 @@ if ($context->scan_attributes) {
 
 <div class="unl-progress-summary dashboard">
     <h2>
-        4.0 Progress Report
+        UNLedu 4.0 Progress Report
     </h2>
     <section class="wdn-grid-set">
         <div class="bp1-wdn-col-one-half">
