@@ -11,15 +11,6 @@ if ($context->scan_attributes) {
 <div class="unl-progress-summary dashboard">
     <h2>
         4.0 Progress Report
-        <?php
-        $user = \SiteMaster\Core\User\Session::getCurrentUser();
-
-        if ($user && $context->site->userIsVerified($user)) {
-            ?>
-            <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button">Edit</a>
-        <?php
-        }
-        ?>
     </h2>
     <section class="wdn-grid-set">
         <div class="bp1-wdn-col-one-half">
@@ -50,6 +41,15 @@ if ($context->scan_attributes) {
                 <dt>Comments</dt>
                 <dd><?php echo $context->progress->self_comments ?></dd>
             </dl>
+            <?php
+            $user = \SiteMaster\Core\User\Session::getCurrentUser();
+
+            if ($user && $context->site->userIsVerified($user)) {
+                ?>
+                <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit</a>
+            <?php
+            }
+            ?>
         </figure>
     </section>
 </div>
