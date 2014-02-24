@@ -13,6 +13,10 @@
     border: none;
 }
 
+.wdn-main a.external {
+    border: none;
+}
+
 @media (min-width: 480px) {
     .progress-self-report {
         border-left: 1px solid black;
