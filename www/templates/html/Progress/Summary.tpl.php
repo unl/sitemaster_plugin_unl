@@ -46,7 +46,7 @@ if ($context->scan_attributes) {
 
             if ($user && $context->site->userIsVerified($user)) {
                 ?>
-                <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit</a>
+                <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit self reported progress</a>
             <?php
             }
             ?>
