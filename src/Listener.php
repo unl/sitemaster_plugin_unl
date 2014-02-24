@@ -1,10 +1,12 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
+use SiteMaster\Core\Config;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Plugin\PluginListener;
 use SiteMaster\Core\Events\Navigation\SiteCompile;
 use SiteMaster\Core\Events\Theme\PrependOutput;
+use SiteMaster\Core\Events\Theme\RegisterStyleSheets;
 use SiteMaster\Core\User\Session;
 
 class Listener extends PluginListener
@@ -40,5 +42,13 @@ class Listener extends PluginListener
             $sites_id = $object->site->id;
             $event->prependOutput(new Progress\Summary(array('sites_id' => $sites_id)));
         }
+    }
+
+    /**
+     * @param RegisterStyleSheets $event
+     */
+    public function onThemeRegisterStyleSheets(RegisterStyleSheets $event)
+    {
+        $event->addStyleSheet(Config::get('URL') . 'plugins/unl/www/css/unl.css');
     }
 }

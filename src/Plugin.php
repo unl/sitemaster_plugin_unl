@@ -4,6 +4,7 @@ namespace SiteMaster\Plugins\Unl;
 use SiteMaster\Core\Plugin\PluginInterface;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Events\Theme\PrependOutput;
+use SiteMaster\Core\Events\Theme\RegisterStyleSheets;
 use SiteMaster\Core\Util;
 
 class Plugin extends PluginInterface
@@ -99,6 +100,11 @@ class Plugin extends PluginInterface
         $listeners[] = array(
             'event'    => PrependOutput::EVENT_NAME,
             'listener' => array($listener, 'onThemePrependOutput')
+        );
+
+        $listeners[] = array(
+            'event'    => RegisterStyleSheets::EVENT_NAME,
+            'listener' => array($listener, 'onThemeRegisterStyleSheets')
         );
 
         return $listeners;
