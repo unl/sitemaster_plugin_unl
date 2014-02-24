@@ -51,4 +51,47 @@ class Summary
             $this->scan_attributes = ScanAttributes::getByScansID($scan->id);
         }
     }
+
+    /**
+     * Determine if the found scan html version is valid (in 4.0)
+     * 
+     * @return bool
+     */
+    public function htmlIsValid()
+    {
+        if (!$this->scan_attributes) {
+            return false;
+        }
+
+        return $this->versionIsValid($this->scan_attributes->html_version);
+    }
+
+    /**
+     * Determine if the found scan dependants are valid (in 4.0)
+     * 
+     * @return bool
+     */
+    public function depIsValid()
+    {
+        if (!$this->scan_attributes) {
+            return false;
+        }
+        
+        return $this->versionIsValid($this->scan_attributes->dep_version);
+    }
+
+    /**
+     * Determine if a given version is valid (in 4.0)
+     * 
+     * @param mixed $version the version to check
+     * @return bool
+     */
+    public function versionIsValid($version)
+    {
+        if (version_compare($version, 4.0, '>=')) {
+            return true;
+        }
+
+        return false;
+    }
 }
