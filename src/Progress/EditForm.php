@@ -13,6 +13,7 @@ use Sitemaster\Core\User\Session;
 use SiteMaster\Core\Util;
 use SiteMaster\Core\ViewableInterface;
 use SiteMaster\Core\PostHandlerInterface;
+use SiteMaster\Plugins\Unl\Progress;
 
 class EditForm implements ViewableInterface, PostHandlerInterface
 {
@@ -30,6 +31,11 @@ class EditForm implements ViewableInterface, PostHandlerInterface
      * @var bool|\SiteMaster\Core\User\User
      */
     public $current_user = false;
+
+    /**
+     * @var bool|\SiteMaster\Plugins\Unl\Progress
+     */
+    public $progress = false;
 
 
     function __construct($options = array())
@@ -52,6 +58,10 @@ class EditForm implements ViewableInterface, PostHandlerInterface
 
         if (!$this->canEdit()) {
             throw new AccessDeniedException('You do not have permission to edit this site.  You must be a verified member.', 403);
+        }
+
+        if (!$this->progress = Progress::getBySitesID($this->site->id)) {
+            $this->progress = Progress::createNewProgress($this->site->id);
         }
     }
 
@@ -100,7 +110,27 @@ class EditForm implements ViewableInterface, PostHandlerInterface
 
     public function handlePost($get, $post, $files)
     {
+        if ($post['self_progress'] < 0) {
+            throw new InvalidArgumentException('Progress must be between 0 and 100', 400);
+        }
         
+        if ($post['self_progress'] > 100) {
+            throw new InvalidArgumentException('Progress must be between 0 and 100', 400);
+        }
+
+        $this->progress->self_progress = (int)$post['self_progress'];
+        //print_r($post);exit();
+        $date = strtotime($post['estimated_completion']);
+        
+        if ($date > strtotime('2014-09-15')) {
+            throw new InvalidArgumentException('The estimated completion date can not be after 2014-09-15', 400);
+        }
+        
+        $this->progress->estimated_completion = Util::epochToDateTime($date);
+        $this->progress->self_comments = $post['self_comments'];
+        $this->progress->save();
+        
+        Controller::redirect($this->site->getURL(), new FlashBagMessage(FlashBagMessage::TYPE_SUCCESS, 'UNL 4.0 progress has been updated'));
     }
 
     public function getEditURL()
