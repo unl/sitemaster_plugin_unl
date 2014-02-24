@@ -45,7 +45,7 @@ if ($context->scan_attributes) {
                 <dt>Estimated Completion Date</dt>
                 <dd><?php echo $context->progress->estimated_completion ?></dd>
                 <dt>Estimated Progress</dt>
-                <dd><?php echo $context->progress->self_progress ?>%</dd>
+                <dd><?php echo (empty($context->progress->self_progress))?'0':$context->progress->self_progress ?>%</dd>
                 <dt>Comments</dt>
                 <dd><?php echo $context->progress->self_comments ?></dd>
             </dl>
