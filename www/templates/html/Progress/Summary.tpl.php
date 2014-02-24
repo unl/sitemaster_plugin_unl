@@ -31,7 +31,7 @@ if ($context->scan_attributes) {
                 </div>
             </div>
         </div>
-        <figure class="bp1-wdn-col-one-half">
+        <div class="bp1-wdn-col-one-half">
             <span class="section-title">Self reported progress:</span>
             <dl>
                 <dt>Estimated Completion Date</dt>
@@ -50,6 +50,6 @@ if ($context->scan_attributes) {
             <?php
             }
             ?>
-        </figure>
+        </div>
     </section>
 </div>
