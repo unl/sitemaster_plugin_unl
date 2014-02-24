@@ -1,10 +1,20 @@
 <?php
 $current_html = '?';
+$current_html_valid = 'invalid';
 $current_dep = '?';
+$current_dep_valid = 'invalid';
 
 if ($context->scan_attributes) {
     $current_html = $context->scan_attributes->html_version;
     $current_dep = $context->scan_attributes->dep_version;
+}
+
+if ($context->htmlIsValid()) {
+    $current_html_valid = 'valid';
+}
+
+if ($context->depIsValid()) {
+    $current_dep_valid = 'valid';
 }
 ?>
 
@@ -18,13 +28,13 @@ if ($context->scan_attributes) {
             <span class="section-help">These are lowest versions that we found on your site</span>
             <div class="wdn-grid-set dashboard-metrics">
                 <div class="wdn-col-one-half">
-                    <div class="visual-island">
+                    <div class="visual-island <?php echo $current_html_valid ?>">
                         <span class="dashboard-value"><?php echo $current_html ?></span>
                         <span class="dashboard-metric">HTML Version</span>
                     </div>
                 </div>
                 <div class="wdn-col-one-half">
-                    <div class="visual-island">
+                    <div class="visual-island <?php echo $current_dep_valid ?>">
                         <span class="dashboard-value"><?php echo $current_dep ?></span>
                         <span class="dashboard-metric">Dependants Version</span>
                     </div>
