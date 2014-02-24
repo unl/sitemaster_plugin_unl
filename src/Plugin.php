@@ -31,6 +31,7 @@ class Plugin extends PluginInterface
         $sql = "SET FOREIGN_KEY_CHECKS = 0;
                 drop table if exists unl_scan_attributes;
                 drop table if exists unl_page_attributes;
+                drop table if exists unl_site_progress;
                 SET FOREIGN_KEY_CHECKS = 1";
 
         if (!Util::execMultiQuery($sql, true)) {
