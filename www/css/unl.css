@@ -1,0 +1,24 @@
+.unl-progress-summary {
+    background-color: #B0D3E7;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.unl-progress-summary h2 {
+    margin-top: 0px;
+}
+
+.progress-self-report {
+    border: none;
+}
+
+.wdn-main a.external {
+    border: none;
+}
+
+@media (min-width: 480px) {
+    .progress-self-report {
+        border-left: 1px solid black;
+    }
+}

@@ -2,6 +2,9 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Plugin\PluginInterface;
+use SiteMaster\Core\Events\RoutesCompile;
+use SiteMaster\Core\Events\Theme\PrependOutput;
+use SiteMaster\Core\Events\Theme\RegisterStyleSheets;
 use SiteMaster\Core\Util;
 
 class Plugin extends PluginInterface
@@ -28,6 +31,7 @@ class Plugin extends PluginInterface
         $sql = "SET FOREIGN_KEY_CHECKS = 0;
                 drop table if exists unl_scan_attributes;
                 drop table if exists unl_page_attributes;
+                drop table if exists unl_site_progress;
                 SET FOREIGN_KEY_CHECKS = 1";
 
         if (!Util::execMultiQuery($sql, true)) {
@@ -86,6 +90,23 @@ class Plugin extends PluginInterface
     function getEventListeners()
     {
         $listeners = array();
+
+        $listener = new Listener($this);
+
+        $listeners[] = array(
+            'event'    => RoutesCompile::EVENT_NAME,
+            'listener' => array($listener, 'onRoutesCompile')
+        );
+
+        $listeners[] = array(
+            'event'    => PrependOutput::EVENT_NAME,
+            'listener' => array($listener, 'onThemePrependOutput')
+        );
+
+        $listeners[] = array(
+            'event'    => RegisterStyleSheets::EVENT_NAME,
+            'listener' => array($listener, 'onThemeRegisterStyleSheets')
+        );
 
         return $listeners;
     }
