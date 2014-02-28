@@ -1,6 +1,7 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
+use SiteMaster\Core\Config;
 use SiteMaster\Core\Plugin\PluginInterface;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Events\Theme\PrependOutput;
@@ -9,6 +10,12 @@ use SiteMaster\Core\Util;
 
 class Plugin extends PluginInterface
 {
+    function __construct($options = array())
+    {
+        parent::__construct($options);
+        Config::set('PAGE_TITLE_LOGGER', 'SiteMaster\Plugins\Unl\Logger\PageTitle');
+    }
+    
     /**
      * @return bool|mixed
      */
