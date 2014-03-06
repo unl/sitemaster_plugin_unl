@@ -96,7 +96,7 @@ function migrateSite($base_url, $data)
         if (!$membership = \SiteMaster\Core\Registry\Site\Member::getByUserIDAndSiteID($user->id, $site->id)) {
             echo "\tCreating membership for $uid " . PHP_EOL;
             $fields = array(
-                'status' => 'APPROVED',
+                'approved' => 'YES',
                 'source' => 'migrate_unl'
             );
             if (!$membership = \SiteMaster\Core\Registry\Site\Member::createMembership($user, $site, $fields)) {
@@ -114,7 +114,11 @@ function migrateSite($base_url, $data)
             $role = getRole($role_name);
             if (!$membership_role = \SiteMaster\Core\Registry\Site\Member\Role::getByRoleIDANDMembershipID($role->id, $membership->id)) {
                 echo "\tCreating role for $uid and $role_name " . $uid . PHP_EOL;
-                if (!$membership_role = \SiteMaster\Core\Registry\Site\Member\Role::createRoleForSiteMember($role, $membership)) {
+                $fields = array(
+                    'approved' => 'YES',
+                    'source' => 'migrate_unl'
+                );
+                if (!$membership_role = \SiteMaster\Core\Registry\Site\Member\Role::createRoleForSiteMember($role, $membership, $fields)) {
                     echo "\tUnable to create membership role for $uid and $role_name" . PHP_EOL;
                     continue;
                 }
