@@ -48,6 +48,11 @@ function getUser($uid)
 function getRole($role_name)
 {
     global $all_roles;
+    
+    if ($role_name == 'manager') {
+        //map the manager role to the admin role
+        $role_name = 'admin';
+    }
 
     if (isset($all_roles[$role_name])) {
         return $all_roles[$role_name];
