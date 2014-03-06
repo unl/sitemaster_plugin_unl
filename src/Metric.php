@@ -24,7 +24,7 @@ class Metric extends MetricInterface
         $options = array_merge_recursive($options, array(
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The WDN framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The WDN framework dependants are out of date'
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The WDN framework dependents are out of date'
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',

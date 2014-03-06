@@ -38,7 +38,7 @@ class PageAttributes extends Record
      *
      * @param int $scanned_page_id fk for scanned_page.id
      * @param string $html_version the html version of the page
-     * @param string $dep_version the dependants version of the page
+     * @param string $dep_version the dependents version of the page
      * @param array $fields an associative array of field names and values to insert
      * @return bool|PageAttributes
      */

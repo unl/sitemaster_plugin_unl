@@ -67,7 +67,7 @@ class Summary
     }
 
     /**
-     * Determine if the found scan dependants are valid (in 4.0)
+     * Determine if the found scan dependents are valid (in 4.0)
      * 
      * @return bool
      */

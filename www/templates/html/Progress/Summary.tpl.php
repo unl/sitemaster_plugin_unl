@@ -36,7 +36,7 @@ if ($context->depIsValid()) {
                 <div class="wdn-col-one-half">
                     <div class="visual-island <?php echo $current_dep_valid ?>">
                         <span class="dashboard-value"><?php echo $current_dep ?></span>
-                        <span class="dashboard-metric">Dependants Version</span>
+                        <span class="dashboard-metric">Dependents Version</span>
                     </div>
                 </div>
             </div>

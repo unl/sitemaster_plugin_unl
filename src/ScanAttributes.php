@@ -38,7 +38,7 @@ class ScanAttributes extends Record
      *
      * @param int $scans_id the scans.id
      * @param string $html_version the lowest html version found in the scan
-     * @param string $dep_version the lowest dependants version found in the scan
+     * @param string $dep_version the lowest dependents version found in the scan
      * @param array $fields an associative array of field names and values to insert
      * @return bool|ScanAttributes
      */
