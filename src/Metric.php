@@ -165,8 +165,8 @@ class Metric extends MetricInterface
      */
     public function getMarkTitle($machine_name)
     {
-        if (isset($this->options['title_text'][$machine_name])) {
-            return $this->options['title_text'][$machine_name];
+        if (isset($this->options['description_text'][$machine_name])) {
+            return $this->options['description_text'][$machine_name];
         }
 
         return 'Framework Error';
