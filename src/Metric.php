@@ -22,9 +22,13 @@ class Metric extends MetricInterface
     public function __construct($plugin_name, array $options = array())
     {
         $options = array_merge_recursive($options, array(
+            'title_text' => array(
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date'
+            ),
             'description_text' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The WDN framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The WDN framework dependents are out of date'
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date'
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
@@ -46,7 +50,7 @@ class Metric extends MetricInterface
      */
     public function getName()
     {
-        return 'UNL WDN';
+        return 'UNLedu Framework Checker';
     }
 
     /**
@@ -165,8 +169,8 @@ class Metric extends MetricInterface
      */
     public function getMarkTitle($machine_name)
     {
-        if (isset($this->options['description_text'][$machine_name])) {
-            return $this->options['description_text'][$machine_name];
+        if (isset($this->options['title_text'][$machine_name])) {
+            return $this->options['title_text'][$machine_name];
         }
 
         return 'Framework Error';
@@ -199,7 +203,7 @@ class Metric extends MetricInterface
             return $this->options['description_text'][$machine_name];
         }
 
-        return 'General WDN error';
+        return 'General UNLedu framework error';
     }
 
     /**
