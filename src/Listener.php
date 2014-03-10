@@ -2,6 +2,7 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
+use SiteMaster\Core\Events\Navigation\MainCompile;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Plugin\PluginListener;
 use SiteMaster\Core\Events\Navigation\SiteCompile;
@@ -15,6 +16,16 @@ class Listener extends PluginListener
     {
         $event->addRoute('/^sites\/(?P<site_id>(\d*))\/unl_progress\/edit\/$/', __NAMESPACE__ . '\Progress\EditForm');
         $event->addRoute('/^unl_progress\/4x0\/$/', __NAMESPACE__ . '\Progress4x0');
+    }
+
+    /**
+     * Compile primary navigation
+     *
+     * @param MainCompile $event
+     */
+    public function onNavigationMainCompile(MainCompile $event)
+    {
+        $event->addNavigationItem(Config::get('URL') . 'unl_progress/4x0/', 'Sites in 4.0');
     }
 
     /**
