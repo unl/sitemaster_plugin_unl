@@ -14,6 +14,7 @@ class Listener extends PluginListener
     public function onRoutesCompile(RoutesCompile $event)
     {
         $event->addRoute('/^sites\/(?P<site_id>(\d*))\/unl_progress\/edit\/$/', __NAMESPACE__ . '\Progress\EditForm');
+        $event->addRoute('/^unl_progress\/4x0\/$/', __NAMESPACE__ . '\Progress4x0');
     }
 
     /**
