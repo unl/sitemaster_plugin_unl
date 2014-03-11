@@ -9,7 +9,7 @@
         <?php
         foreach ($context->sites as $site) {
             ?>
-            <li><a href="<?php $site->getURL() ?>"><?php  echo $site->getTitle()?></a></li>
+            <li><a href="<?php echo $site->getURL() ?>"><?php  echo $site->getTitle()?></a></li>
             <?php
         }
         ?>
