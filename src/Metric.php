@@ -21,7 +21,7 @@ class Metric extends MetricInterface
      */
     public function __construct($plugin_name, array $options = array())
     {
-        $options = array_merge_recursive($options, array(
+        $options = array_replace_recursive(array(
             'title_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date'
@@ -38,7 +38,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 20
             )
-        ));
+        ), $options);
 
         parent::__construct($plugin_name, $options);
     }
