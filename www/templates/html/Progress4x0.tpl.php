@@ -1,6 +1,6 @@
 <div class="panel">
     <p>
-        These are sites that we know are in the 4.0 UNLedu Framework.  This list is auto-generated.  We consider sites to be in 4.0 by looking at the lowest framework version on their site.
+        If your site is on this list, thank you and congratulations! If a site is listed here it means that every page in the site is using the latest UNLedu Web Framework, version 4.0.
     </p>
 </div>
 
