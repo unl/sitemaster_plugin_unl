@@ -33,6 +33,7 @@ foreach ($sites as $site) {
     }
     
     if ($scan->isPassFail()) {
+        //Include the gpa if the scan was pass/fail.  (we don't want to include non-pass/fail GPAs)
         $gpa = $scan->gpa;
     }
     
