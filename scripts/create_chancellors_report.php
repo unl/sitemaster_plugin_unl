@@ -39,7 +39,7 @@ foreach ($sites as $site) {
     
     $total_pages = $scan->getDistinctPageCount();
     
-    if ($total_pages = 0) {
+    if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
         $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, '-', $site->getURL());
         continue;
