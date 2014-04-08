@@ -9,34 +9,44 @@ $sites = new \SiteMaster\Core\Registry\Sites\All();
 $csv = array();
 
 //Headers
-$csv[] = array('Site URL', 'In 4.0', 'Percent of Passing Pages', 'Latest Report URL');
+$csv[] = array('Site URL', 'In 4.0', 'Self Reported % Complete', 'Completion Date', 'Percent of Passing Pages', 'Latest Report URL');
 
 foreach ($sites as $site) {
     /**
      * @var $site \SiteMaster\Core\Registry\Site
      */
+
+    $in_4_0           = '-';
+    $percent_complete = '-';
+    $complete_date    = '-';
+    $gpa              = '-';
+
+    if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
+        $complete_date    = $progress->estimated_completion;
+        $percent_complete = $progress->self_progress;
+    }
+    
     if (!$scan = $site->getLatestScan()) {
         //No scans found for this site... end early
-        $csv[] = array($site->base_url, '-', '-', $site->getURL());
+        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, '-', $site->getURL());
         continue;
     }
     
-    $gpa = $scan->gpa;
-    if (!$scan->isPassFail()) {
-        $gpa = '-';
+    if ($scan->isPassFail()) {
+        $gpa = $scan->gpa;
     }
     
     $total_pages = $scan->getDistinctPageCount();
     
     if ($total_pages = 0) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array($site->base_url, '-', '-', $site->getURL());
+        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, '-', $site->getURL());
         continue;
     }
 
     if (!$unl_scan_attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id)) {
         //No scan attributes found for this site... end early
-        $csv[] = array($site->base_url, '-', $scan->gpa, $site->getURL());
+        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, $scan->gpa, $site->getURL());
         continue;
     }
     
@@ -44,8 +54,9 @@ foreach ($sites as $site) {
     if ($unl_scan_attributes->html_version != '4.0') {
         $in_4_0 = 'no';
     }
-    
-    $csv[] = array($site->base_url, $in_4_0, $gpa, $site->getURL());
+
+    //We found everything we needed, add this site to the csv
+    $csv[] = array($site->base_url, $in_4_0, $percent_complete, $complete_date, $gpa, $site->getURL());
 }
 
 $fp = fopen(__DIR__ . '/../files/4.0_report.csv', 'w');
