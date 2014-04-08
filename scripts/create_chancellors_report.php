@@ -9,7 +9,7 @@ $sites = new \SiteMaster\Core\Registry\Sites\All();
 $csv = array();
 
 //Headers
-$csv[] = array('Site URL', 'In 4.0', 'Self Reported % Complete', 'Completion Date', 'Percent of Passing Pages', 'Latest Report URL');
+$csv[] = array('Site URL', 'In 4.0', 'Self Reported % Complete', 'Est. Completion Date', 'Percent of Passing Pages', 'Latest Report URL');
 
 foreach ($sites as $site) {
     /**
