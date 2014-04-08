@@ -3,6 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
 use SiteMaster\Core\Events\Navigation\MainCompile;
+use SiteMaster\Core\Events\Navigation\SubCompile;
 use SiteMaster\Core\Plugin\PluginInterface;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Events\Theme\PrependOutput;
@@ -119,6 +120,11 @@ class Plugin extends PluginInterface
         $listeners[] = array(
             'event'    => RegisterStyleSheets::EVENT_NAME,
             'listener' => array($listener, 'onThemeRegisterStyleSheets')
+        );
+
+        $listeners[] = array(
+            'event'    => SubCompile::EVENT_NAME,
+            'listener' => array($listener, 'onNavigationSubCompile')
         );
 
         return $listeners;

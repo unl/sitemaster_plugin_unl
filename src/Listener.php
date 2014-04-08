@@ -3,6 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
 use SiteMaster\Core\Events\Navigation\MainCompile;
+use SiteMaster\Core\Events\Navigation\SubCompile;
 use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Plugin\PluginListener;
 use SiteMaster\Core\Events\Navigation\SiteCompile;
@@ -26,6 +27,22 @@ class Listener extends PluginListener
     public function onNavigationMainCompile(MainCompile $event)
     {
         $event->addNavigationItem(Config::get('URL') . 'unl_progress/4x0/', 'Sites in 4.0');
+    }
+
+    /**
+     * Compile sub navigation
+     *
+     * @param SubCompile $event
+     */
+    public function onNavigationSubCompile(SubCompile $event)
+    {
+        $user = Session::getCurrentUser();
+        $chancellors_report_exists = file_exists(__DIR__ . '/../files/4.0_report.csv');
+        
+        if ($event->isFor(Config::get('URL') . 'unl_progress/4x0/') && $user && $chancellors_report_exists) {
+            //Only add it as a child of the Sites in 4.0 primary navigation item
+            $event->addNavigationItem(Config::get('URL') . 'plugins/unl/files/4.0_report.csv', 'Chancellor\'s Report');
+        }
     }
 
     /**
