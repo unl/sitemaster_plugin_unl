@@ -9,7 +9,7 @@ $sites = new \SiteMaster\Core\Registry\Sites\All();
 $csv = array();
 
 //Headers
-$csv[] = array('Site URL', 'In 4.0', 'Self Reported % Complete', 'Completion Date', 'Percent of Passing Pages', 'Latest Report URL');
+$csv[] = array('Site URL', 'In 4.0', 'Self Reported % Complete', 'Est. Completion Date', 'Percent of Passing Pages', 'Latest Report URL');
 
 foreach ($sites as $site) {
     /**
@@ -17,9 +17,9 @@ foreach ($sites as $site) {
      */
 
     $in_4_0           = '-';
-    $percent_complete = '-';
+    $percent_complete = NULL;
     $complete_date    = '-';
-    $gpa              = '-';
+    $gpa              = NULL;
 
     if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
         $complete_date    = $progress->estimated_completion;
@@ -28,7 +28,7 @@ foreach ($sites as $site) {
     
     if (!$scan = $site->getLatestScan()) {
         //No scans found for this site... end early
-        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, '-', $site->getURL());
+        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, $gpa, $site->getURL());
         continue;
     }
     
@@ -41,7 +41,7 @@ foreach ($sites as $site) {
     
     if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, '-', $site->getURL());
+        $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, $gpa, $site->getURL());
         continue;
     }
 
