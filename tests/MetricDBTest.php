@@ -53,12 +53,8 @@ class MetricDBTest extends DBTestCase
             $machine_names_found[] = $mark->machine_name;
         }
 
-        $this->assertEquals(
-            array(
-                Metric::MARK_MN_UNL_FRAMEWORK_HTML,
-                Metric::MARK_MN_UNL_FRAMEWORK_DEP
-            ),
-            $machine_names_found);
+        $this->assertContains(Metric::MARK_MN_UNL_FRAMEWORK_HTML, $machine_names_found);
+        $this->assertContains(Metric::MARK_MN_UNL_FRAMEWORK_DEP, $machine_names_found);
     }
 
     public function setUpDB()
