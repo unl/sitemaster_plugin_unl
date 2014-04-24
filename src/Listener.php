@@ -76,6 +76,11 @@ class Listener extends PluginListener
                 $event->prependOutput(new Help\Notice());
             }
         }
+
+        $user = Session::getCurrentUser();
+        if ($user && $object instanceof \SiteMaster\Core\User\View && $event->getFormat() == 'html') {
+            $event->prependOutput(new Help\WDNNewsletterNotice());
+        }
     }
 
     /**
