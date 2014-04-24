@@ -70,6 +70,11 @@ class Listener extends PluginListener
         if ($object instanceof \SiteMaster\Core\Registry\Site\View && $event->getFormat() == 'html') {
             $sites_id = $object->site->id;
             $event->prependOutput(new Progress\Summary(array('sites_id' => $sites_id)));
+
+            $scan = $object->site->getLatestScan();
+            if ($scan && $scan->gpa != '100') {
+                $event->prependOutput(new Help\Notice());
+            }
         }
     }
 
