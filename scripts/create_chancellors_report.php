@@ -26,7 +26,7 @@ foreach ($sites as $site) {
         $percent_complete = $progress->self_progress;
     }
     
-    if (!$scan = $site->getLatestScan()) {
+    if (!$scan = $site->getLatestScan(true)) {
         //No scans found for this site... end early
         $csv[] = array($site->base_url, '-', $percent_complete, $complete_date, $gpa, $site->getURL());
         continue;
