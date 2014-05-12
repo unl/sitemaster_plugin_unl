@@ -48,7 +48,7 @@ class Progress extends Record
         $progress = new self();
         $progress->created              = Util::epochToDateTime();
         $progress->updated              = Util::epochToDateTime();
-        $progress->estimated_completion = '2014-9-15';
+        $progress->estimated_completion = '2014-8-15';
         $progress->synchronizeWithArray($fields);
 
         $progress->sites_id      = $sites_id;

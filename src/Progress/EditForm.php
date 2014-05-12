@@ -122,8 +122,8 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         //print_r($post);exit();
         $date = strtotime($post['estimated_completion']);
         
-        if ($date > strtotime('2014-09-15')) {
-            throw new InvalidArgumentException('The estimated completion date can not be after 2014-09-15', 400);
+        if ($date > strtotime('2014-08-15')) {
+            throw new InvalidArgumentException('The estimated completion date can not be after 2014-08-15', 400);
         }
         
         $this->progress->estimated_completion = Util::epochToDateTime($date);
