@@ -42,15 +42,15 @@ class MetricTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function containsYouTubeEmbed()
+    public function getYouTubeEmbeds()
     {
         $metric = new Metric('unl');
         
         $xpath_template = $this->getTestXPath('example.html');
-        $this->assertEquals(true, $metric->containsYouTubeEmbed($xpath_template));
+        $this->assertEquals(array('//www.youtube.com/embed/SxPE9xwsXTs'), $metric->getYouTubeEmbeds($xpath_template));
 
         $xpath_template = $this->getTestXPath('template_4_0.html');
-        $this->assertEquals(false, $metric->containsYouTubeEmbed($xpath_template));
+        $this->assertEquals(array(), $metric->getYouTubeEmbeds($xpath_template));
     }
 
     public function getTestXPath($filename)
