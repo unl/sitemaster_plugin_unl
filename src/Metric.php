@@ -302,4 +302,23 @@ class Metric extends MetricInterface
         //Couldn't find anything.
         return null;
     }
+
+    /**
+     * Determine if a youtube was embedded in the page
+     * 
+     * @param \DomXPath $xpath the xpath of the page
+     * @return bool true if a youtubue embed was found
+     */
+    public function containsYouTubeEmbed(\DomXPath $xpath) {
+        //look for youtubue embeds
+        $nodes = $xpath->query(
+            "//xhtml:iframe[contains(@src,'//www.youtube.com/embed/')]"
+        );
+        
+        if ($nodes->length >= 1) {
+            return true;
+        }
+        
+        return false;
+    }
 }
