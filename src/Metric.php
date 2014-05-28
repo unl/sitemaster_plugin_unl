@@ -331,7 +331,7 @@ class Metric extends MetricInterface
      * Determine if a youtube was embedded in the page
      * 
      * @param \DomXPath $xpath the xpath of the page
-     * @return array|false an array of youtube embed sources will be returned
+     * @return array an array of youtube embed sources will be returned
      */
     public function getYouTubeEmbeds(\DomXPath $xpath) {
         //look for youtubue embeds
