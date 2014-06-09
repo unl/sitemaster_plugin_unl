@@ -17,6 +17,7 @@ class Listener extends PluginListener
     {
         $event->addRoute('/^sites\/(?P<site_id>(\d*))\/unl_progress\/edit\/$/', __NAMESPACE__ . '\Progress\EditForm');
         $event->addRoute('/^unl_progress\/4x0\/$/', __NAMESPACE__ . '\Progress4x0');
+        $event->addRoute('/^unl_progress\/help\/4.0_progress\/$/', __NAMESPACE__ . '\Help\Progress4x0');
     }
 
     /**
@@ -42,6 +43,7 @@ class Listener extends PluginListener
         if ($event->isFor(Config::get('URL') . 'unl_progress/4x0/') && $user && $chancellors_report_exists) {
             //Only add it as a child of the Sites in 4.0 primary navigation item
             $event->addNavigationItem(Config::get('URL') . 'plugins/unl/files/4.0_report.csv', 'Chancellor\'s Report');
+            $event->addNavigationItem(Config::get('URL') . 'unl_progress/help/4.0_progress/', 'How to report progress');
         }
     }
 
