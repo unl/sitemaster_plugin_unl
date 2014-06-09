@@ -165,7 +165,7 @@ class Metric extends MetricInterface
             ));
         }
         
-        //youtubue notice
+        //youtube notice
         $embeds = $this->getYouTubeEmbeds($xpath);
         if (!empty($embeds)) {
             $machine_name = self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE;
