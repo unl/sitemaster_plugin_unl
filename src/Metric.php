@@ -14,6 +14,7 @@ class Metric extends MetricInterface
 {
     const MARK_MN_UNL_FRAMEWORK_HTML = 'UNL_FRAMEWORK_HTML';
     const MARK_MN_UNL_FRAMEWORK_DEP = 'UNL_FRAMEWORK_DEP';
+    const MARK_MN_UNL_FRAMEWORK_YOUTUBUE = 'UNL_FRAMEWORK_YOUTUBUE';
     
     /**
      * @param string $plugin_name
@@ -24,19 +25,23 @@ class Metric extends MetricInterface
         $options = array_replace_recursive(array(
             'title_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date'
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
+                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
             ),
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date'
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
+                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files'
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
+                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
             ),
             'point_deductions' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 20
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 20,
+                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 0,
             )
         ), $options);
 
@@ -158,6 +163,25 @@ class Metric extends MetricInterface
             $page->addMark($mark, array(
                 'value_found' => $dep_version
             ));
+        }
+        
+        //youtube notice
+        $embeds = $this->getYouTubeEmbeds($xpath);
+        if (!empty($embeds)) {
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+            
+            foreach ($embeds as $embed) {
+                $page->addMark($mark, array(
+                    'value_found' => $embed
+                ));
+            }
         }
     }
 
@@ -301,5 +325,25 @@ class Metric extends MetricInterface
 
         //Couldn't find anything.
         return null;
+    }
+
+    /**
+     * Determine if a youtube was embedded in the page
+     * 
+     * @param \DomXPath $xpath the xpath of the page
+     * @return array an array of youtube embed sources will be returned
+     */
+    public function getYouTubeEmbeds(\DomXPath $xpath) {
+        //look for youtubue embeds
+        $nodes = $xpath->query(
+            "//xhtml:iframe[contains(@src,'//www.youtube.com/embed/')]"
+        );
+        
+        $sources = array();
+        foreach ($nodes as $node) {
+            $sources[] = $node->getAttribute('src');
+        }
+        
+        return $sources;
     }
 }
