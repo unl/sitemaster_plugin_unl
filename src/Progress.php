@@ -14,6 +14,7 @@ class Progress extends Record
     public $self_comments;            //TEXT NULL
     public $created;                  //DATETIME NOT NULL
     public $updated;                  //DATETIME NOT NULL
+    public $replaced_by;              //INT, fk for sites.id
 
     public function keys()
     {
