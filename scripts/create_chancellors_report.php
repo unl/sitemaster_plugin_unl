@@ -15,6 +15,11 @@ foreach ($sites as $site) {
     /**
      * @var $site \SiteMaster\Core\Registry\Site
      */
+    
+    if ($site->production_status != \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION) {
+        //Only export sites that are in production.
+        continue;
+    }
 
     $in_4_0           = '-';
     $percent_complete = NULL;
