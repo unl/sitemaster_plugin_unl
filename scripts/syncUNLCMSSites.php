@@ -45,7 +45,15 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     $site = \SiteMaster\Core\Registry\Site::getByBaseURL($site_info['uri']);
     if (false === $site) {
         //Site wasn't found, create it.
-        $site = \SiteMaster\Core\Registry\Site::createNewSite($site_info['uri']);
+        $production_status = \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION;
+        
+        if (strpos($site_info['uri'], '://unlcms.unl.edu/') !== false) {
+            //Sites that start in ://unlcms.unl.edu/ should be considered 'development' instances
+            $production_status = \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT;
+        }
+        $site = \SiteMaster\Core\Registry\Site::createNewSite($site_info['uri'], array(
+            'production_status' => $production_status
+        ));
     }
     
     //Add members
