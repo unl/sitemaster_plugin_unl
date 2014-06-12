@@ -74,6 +74,14 @@ class Plugin extends PluginInterface
      */
     public function onUpdate($previousVersion)
     {
+        if ((int)$previousVersion == 1) {
+            $sql = file_get_contents($this->getRootDirectory() . "/data/update-2014061101.sql");
+            
+            if (!Util::execMultiQuery($sql, true)) {
+                return false;
+            }
+        }
+        
         return true;
     }
 
@@ -88,7 +96,7 @@ class Plugin extends PluginInterface
      */
     public function getVersion()
     {
-        return true;
+        return 2014061101;
     }
 
     /**
