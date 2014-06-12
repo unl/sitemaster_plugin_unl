@@ -24,3 +24,8 @@
         border-left: 1px solid black;
     }
 }
+
+.select2-container {
+    width: 100%;
+    display: block;
+}

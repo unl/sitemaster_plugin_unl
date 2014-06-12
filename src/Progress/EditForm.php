@@ -128,6 +128,13 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         
         $this->progress->estimated_completion = Util::epochToDateTime($date);
         $this->progress->self_comments = $post['self_comments'];
+
+        if (isset($post['replaced_by'])) {
+            $this->progress->replaced_by = $post['replaced_by'];
+        } else {
+            $this->progress->replaced_by = null;
+        }
+        
         $this->progress->save();
         
         Controller::redirect($this->site->getURL(), new FlashBagMessage(FlashBagMessage::TYPE_SUCCESS, 'UNL 4.0 progress has been updated'));
