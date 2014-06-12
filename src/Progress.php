@@ -3,6 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use DB\Record;
 use SiteMaster\Core\Registry\Site\Member;
+use SiteMaster\Core\Registry\Site;
 use SiteMaster\Core\Util;
 
 class Progress extends Record
@@ -60,5 +61,19 @@ class Progress extends Record
         }
 
         return $progress;
+    }
+
+    /**
+     * Get the replaced by site (the site that will be replacing this one.)
+     * 
+     * @return false|Site
+     */
+    public function getReplacedBySite()
+    {
+        if (empty($this->replaced_by)) {
+            return false;
+        }
+        
+        return Site::getByID($this->replaced_by);
     }
 }
