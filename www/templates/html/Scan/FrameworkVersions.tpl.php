@@ -10,7 +10,7 @@ $site           = $scan->getSite();
             This is a list of all framework versions that we found on your site.
         </div>
     </header>
-    <table data-sortlist="[[0,0],[2,0]]" class="sortable">
+    <table data-sortlist="[[1,1],[2,1]]" class="sortable">
         <thead>
         <tr>
             <th class="path">Path</th>
