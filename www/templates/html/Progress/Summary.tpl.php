@@ -51,9 +51,17 @@ if ($context->depIsValid()) {
                 <dt>Comments</dt>
                 <dd><?php echo $context->progress->self_comments ?></dd>
             </dl>
+        </div>
+        <div class="wdn-col-full wdn-center">
             <?php
+            if ($context->scan) {
+                ?>
+                <a href="<?php echo $context->scan->getURL() ?>unl/versions/" class="wdn-button wdn-button-triad">See what versions we found</a>
+            <?php
+            }
+    
             $user = \SiteMaster\Core\User\Session::getCurrentUser();
-
+    
             if ($user && $context->site->userIsVerified($user)) {
                 ?>
                 <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit self reported progress</a>

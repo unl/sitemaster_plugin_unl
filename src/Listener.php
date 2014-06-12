@@ -18,6 +18,7 @@ class Listener extends PluginListener
         $event->addRoute('/^sites\/(?P<site_id>(\d*))\/unl_progress\/edit\/$/', __NAMESPACE__ . '\Progress\EditForm');
         $event->addRoute('/^unl_progress\/4x0\/$/', __NAMESPACE__ . '\Progress4x0');
         $event->addRoute('/^unl_progress\/help\/4.0_progress\/$/', __NAMESPACE__ . '\Help\Progress4x0');
+        $event->addRoute('/^sites\/(?P<site_id>(\d*))\/scans\/(?P<scans_id>(\d*))\/unl\/versions\/$/',     __NAMESPACE__ . '\Scan\FrameworkVersions');
     }
 
     /**
