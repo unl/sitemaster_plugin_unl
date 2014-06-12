@@ -30,6 +30,11 @@ class Summary
      */
     public $scan_attributes = false;
 
+    /**
+     * @var bool|\SiteMaster\Core\Auditor\Scan
+     */
+    public $scan = false;
+
     function __construct($options = array())
     {
         $this->options += $options;
@@ -47,8 +52,8 @@ class Summary
             $this->progress = Progress::createNewProgress($this->site->id);
         }
         
-        if ($scan = $this->site->getLatestScan()) {
-            $this->scan_attributes = ScanAttributes::getByScansID($scan->id);
+        if ($this->scan = $this->site->getLatestScan()) {
+            $this->scan_attributes = ScanAttributes::getByScansID($this->scan->id);
         }
     }
 
