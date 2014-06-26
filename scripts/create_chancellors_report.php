@@ -30,6 +30,7 @@ foreach ($sites as $site) {
     $version_found    = NULL;
     $total_pages      = NULL;
     $replaced_by      = NULL;
+    $title            = html_entity_decode(strip_tags($site->title)); //
 
     if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
         $complete_date    = $progress->estimated_completion;
@@ -42,7 +43,7 @@ foreach ($sites as $site) {
     
     if (!$scan = $site->getLatestScan(true)) {
         //No scans found for this site... end early
-        $csv[] = array($site->base_url, $site->title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
     
@@ -59,13 +60,13 @@ foreach ($sites as $site) {
     
     if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array($site->base_url, $site->title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
 
     if (!$unl_scan_attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id)) {
         //No scan attributes found for this site... end early
-        $csv[] = array($site->base_url, $site->title, '-', $version_found, $percent_complete, $complete_date, $comments, $scan->gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $scan->gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
     
@@ -76,7 +77,7 @@ foreach ($sites as $site) {
     }
 
     //We found everything we needed, add this site to the csv
-    $csv[] = array($site->base_url, $site->title, $in_4_0, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+    $csv[] = array($site->base_url, $title, $in_4_0, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
 }
 
 $fp = fopen(__DIR__ . '/../files/4.0_report.csv', 'w');
