@@ -33,7 +33,7 @@ foreach ($sites as $site) {
     $title            = html_entity_decode(strip_tags($site->title)); //
 
     if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
-        $complete_date    = date('c', strtotime($progress->estimated_completion));
+        $complete_date    = date('o-m-d', strtotime($progress->estimated_completion));
         $percent_complete = $progress->self_progress;
         $comments         = $progress->self_comments;
         if ($replaced_by_site = $progress->getReplacedBySite()) {
@@ -48,7 +48,7 @@ foreach ($sites as $site) {
     }
     
     if ($scan->end_time) {
-        $scan_date = date('c', strtotime($scan->end_time));
+        $scan_date = date('o-m-d', strtotime($scan->end_time));
     }
     
     if ($scan->isPassFail()) {
