@@ -21,9 +21,9 @@ foreach ($sites as $site) {
         continue;
     }
 
-    $in_4_0           = '-';
+    $in_4_0           = NULL;
     $percent_complete = NULL;
-    $complete_date    = '-';
+    $complete_date    = NULL;
     $gpa              = NULL;
     $comments         = NULL;
     $scan_date        = NULL;
@@ -43,7 +43,7 @@ foreach ($sites as $site) {
     
     if (!$scan = $site->getLatestScan(true)) {
         //No scans found for this site... end early
-        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
     
@@ -60,13 +60,13 @@ foreach ($sites as $site) {
     
     if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
 
     if (!$unl_scan_attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id)) {
         //No scan attributes found for this site... end early
-        $csv[] = array($site->base_url, $title, '-', $version_found, $percent_complete, $complete_date, $comments, $scan->gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
+        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $scan->gpa, $total_pages, $scan_date, $replaced_by, $site->getURL());
         continue;
     }
     
