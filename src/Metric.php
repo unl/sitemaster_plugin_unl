@@ -129,6 +129,12 @@ class Metric extends MetricInterface
                 $scan_attributes->dep_version = $dep_version;
                 $scan_attributes->save();
             }
+            
+            //Update the root site URL if we need to
+            if (empty($scan_attributes->root_site_url) && $root = $this->getRootSiteURL($xpath)) {
+                $scan_attributes->root_site_url = $root;
+                $scan_attributes->save();
+            }
         }
         
         $version_helper = new FrameworkVersionHelper();
@@ -345,5 +351,38 @@ class Metric extends MetricInterface
         }
         
         return $sources;
+    }
+
+    /**
+     * Get the root site for this page.  The root site is the first site found in the breadcrumbs, as long as it is not 'www.unl.edu'.
+     * A root site is usually a college or department.
+     * 
+     * @param \DomXpath $xpath
+     * @return bool
+     */
+    public function getRootSiteURL(\DomXpath $xpath)
+    {
+        //look for youtubue embeds
+        $nodes = $xpath->query(
+            "//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:a"
+        );
+        
+        switch ($nodes->length) {
+            case 0:
+                break;
+            case 1:
+            case 2:
+                return $nodes->item(0)->getAttribute('href');
+                break;
+            default:
+                //There are more than 2 bread crumbs
+                if ($nodes->item(0)->getAttribute('href') == 'http://www.unl.edu/') {
+                    //Most of the time, www.unl.edu will be the root, but we actually want the second.
+                    return $nodes->item(1)->getAttribute('href');
+                }
+                return $nodes->item(0)->getAttribute('href');
+        }
+
+        return false;
     }
 }

@@ -11,6 +11,7 @@ class ScanAttributes extends Record
     public $scans_id;         //fk for scans.id
     public $html_version;     //VARCHAR(10)
     public $dep_version;      //VARCHAR(10)
+    public $root_site_url;    //VARCHAR(255)
 
     public function keys()
     {
