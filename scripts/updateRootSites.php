@@ -7,7 +7,7 @@ ini_set('display_errors', true);
 require_once(__DIR__ . '/../../../init.php');
 
 $sites  = new \SiteMaster\Core\Registry\Sites\All();
-$parser = new \Spider_Parser();
+$parser = new \SiteMaster\Core\Auditor\Parser\HTML5();
 $metric = new \SiteMaster\Plugins\Unl\Metric('unl');
 
 foreach ($sites as $site) {
