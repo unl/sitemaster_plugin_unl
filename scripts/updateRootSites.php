@@ -7,12 +7,11 @@ ini_set('display_errors', true);
 require_once(__DIR__ . '/../../../init.php');
 
 $sites  = new \SiteMaster\Core\Registry\Sites\All();
-$logger = new  SiteMaster\Plugins\Unl\Logger\SiteTitle(new Page());
 $parser = new \Spider_Parser();
 $metric = new \SiteMaster\Plugins\Unl\Metric('unl');
 
 foreach ($sites as $site) {
-    if (!$scan = $site->getLatestScan()) {
+    if (!$scan = $site->getLatestScan(true)) {
         //Don't have a scan yet, skip.
         continue;
     }
