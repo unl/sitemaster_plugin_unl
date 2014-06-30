@@ -364,7 +364,7 @@ class Metric extends MetricInterface
     {
         //look for youtubue embeds
         $nodes = $xpath->query(
-            "//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:a"
+            "(//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li|//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:span)/xhtml:a"
         );
         
         switch ($nodes->length) {

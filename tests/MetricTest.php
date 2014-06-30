@@ -1,6 +1,8 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
+use SiteMaster\Core\Auditor\Parser\HTMl5;
+
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -70,7 +72,7 @@ class MetricTest extends \PHPUnit_Framework_TestCase
 
     public function getTestXPath($filename)
     {
-        $parser = new \Spider_Parser();
+        $parser = new HTMl5();
         $html = file_get_contents(__DIR__ . '/data/' . $filename);
         return $parser->parse($html);
     }
