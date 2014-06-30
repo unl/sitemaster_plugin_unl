@@ -129,6 +129,12 @@ class Metric extends MetricInterface
                 $scan_attributes->dep_version = $dep_version;
                 $scan_attributes->save();
             }
+            
+            //Update the root site URL if we need to
+            if (empty($scan_attributes->root_site_url) && $root = $this->getRootSiteURL($xpath)) {
+                $scan_attributes->root_site_url = $root;
+                $scan_attributes->save();
+            }
         }
         
         $version_helper = new FrameworkVersionHelper();
