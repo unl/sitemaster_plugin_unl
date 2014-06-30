@@ -18,6 +18,7 @@ foreach ($sites as $site) {
 
     //Download and parse the home page
     if (!$html = @file_get_contents($site->base_url)) {
+        echo "\t unable to get HTML for " . $site->base_url;
         continue;
     }
 
@@ -29,6 +30,14 @@ foreach ($sites as $site) {
         echo 'Updating root site for ' . $site->base_url . ' -- ' . $root . PHP_EOL;
         $attributes->root_site_url = $root;
         $attributes->save();
+    } else {
+        if (!$root) {
+            echo "\t unable to get root site for " . $site->base_url;
+        }
+        
+        if (!$attributes) {
+            echo "\t unable to get attributes site for " . $site->base_url;
+        }
     }
     
     //Don't flood servers with requests
