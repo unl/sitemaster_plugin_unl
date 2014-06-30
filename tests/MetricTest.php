@@ -61,9 +61,9 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $metric = new Metric('unl');
 
         $xpath_template = $this->getTestXPath('template_3_0.html');
-        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+        $this->assertEquals('http://www.unl.edu/', $metric->getRootSiteURL($xpath_template));
         $xpath_template = $this->getTestXPath('template_3_1.html');
-        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+        $this->assertEquals('http://www.unl.edu/', $metric->getRootSiteURL($xpath_template));
         $xpath_template = $this->getTestXPath('template_4_0.html');
         $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
     }

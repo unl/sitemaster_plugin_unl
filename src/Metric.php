@@ -371,10 +371,11 @@ class Metric extends MetricInterface
             case 0:
                 break;
             case 1:
+            case 2:
                 return $nodes->item(0)->getAttribute('href');
                 break;
             default:
-                //There are more than 1 bread crumbs
+                //There are more than 2 bread crumbs
                 if ($nodes->item(0)->getAttribute('href') == 'http://www.unl.edu/') {
                     //Most of the time, www.unl.edu will be the root, but we actually want the second.
                     return $nodes->item(1)->getAttribute('href');
