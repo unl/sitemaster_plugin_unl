@@ -1,4 +1,4 @@
-<<?php
+<?php
 ini_set('display_errors', true);
 
 //Initialize all settings and autoloaders
