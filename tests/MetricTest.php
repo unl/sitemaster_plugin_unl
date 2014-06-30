@@ -53,6 +53,21 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $metric->getYouTubeEmbeds($xpath_template));
     }
 
+    /**
+     * @test
+     */
+    public function getRootSiteURL()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('template_3_0.html');
+        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+        $xpath_template = $this->getTestXPath('template_3_1.html');
+        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+        $xpath_template = $this->getTestXPath('template_4_0.html');
+        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+    }
+
     public function getTestXPath($filename)
     {
         $parser = new \Spider_Parser();
