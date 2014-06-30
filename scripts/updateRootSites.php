@@ -18,7 +18,7 @@ foreach ($sites as $site) {
 
     //Download and parse the home page
     if (!$html = @file_get_contents($site->base_url)) {
-        echo "\t unable to get HTML for " . $site->base_url;
+        echo "\t unable to get HTML for " . $site->base_url . PHP_EOL;
         continue;
     }
 
@@ -32,11 +32,11 @@ foreach ($sites as $site) {
         $attributes->save();
     } else {
         if (!$root) {
-            echo "\t unable to get root site for " . $site->base_url;
+            echo "\t unable to get root site for " . $site->base_url . PHP_EOL;
         }
         
         if (!$attributes) {
-            echo "\t unable to get attributes site for " . $site->base_url;
+            echo "\t unable to get attributes site for " . $site->base_url . PHP_EOL;
         }
     }
     
