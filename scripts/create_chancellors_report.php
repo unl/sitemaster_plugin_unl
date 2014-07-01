@@ -97,6 +97,7 @@ foreach ($sites as $site) {
             $scan_date,
             $replaced_by,
             $root_site_url,
+            $root_site_title,
             $site->getURL()
         );
         continue;
@@ -132,6 +133,7 @@ foreach ($sites as $site) {
             $scan_date,
             $replaced_by,
             $root_site_url,
+            $root_site_title,
             $site->getURL()
         );
         continue;
@@ -161,6 +163,7 @@ foreach ($sites as $site) {
             $scan_date,
             $replaced_by,
             $root_site_url,
+            $root_site_title,
             $site->getURL()
         );
         continue;
@@ -198,6 +201,7 @@ foreach ($sites as $site) {
         $scan_date,
         $replaced_by,
         $root_site_url,
+        $root_site_title,
         $site->getURL()
     );
 }
