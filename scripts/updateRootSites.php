@@ -22,22 +22,26 @@ foreach ($sites as $site) {
         continue;
     }
 
-    $xpath = $parser->parse($html);
-    
     $attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id);
+    
+    if (!empty($attributes->root_site_url)) {
+        echo "\t Already have a root site for " . $site->base_url . PHP_EOL;
+        continue;
+    }
+
+    if (!$attributes) {
+        echo "\t unable to get attributes site for " . $site->base_url . PHP_EOL;
+        continue;
+    }
+
+    $xpath = $parser->parse($html);
     $root = $metric->getRootSiteURL($xpath);
-    if ($root && $attributes) {
+    if ($root) {
         echo 'Updating root site for ' . $site->base_url . ' -- ' . $root . PHP_EOL;
         $attributes->root_site_url = $root;
         $attributes->save();
     } else {
-        if (!$root) {
-            echo "\t unable to get root site for " . $site->base_url . PHP_EOL;
-        }
-        
-        if (!$attributes) {
-            echo "\t unable to get attributes site for " . $site->base_url . PHP_EOL;
-        }
+        echo "\t unable to get root site for " . $site->base_url . PHP_EOL;
     }
     
     //Don't flood servers with requests
