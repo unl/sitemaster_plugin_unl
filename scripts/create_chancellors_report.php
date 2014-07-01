@@ -8,6 +8,17 @@ $sites = new \SiteMaster\Core\Registry\Sites\All();
 
 $csv = array();
 
+function calcPercent($pages_with_errors, $total_pages)
+{
+    if ($total_pages == 0) {
+        return 100;
+    }
+    
+    $passing_pages = $total_pages - $pages_with_errors;
+    
+    return round(($passing_pages / $total_pages) * 100);
+}
+
 //Headers
 $csv[] = array(
     'Site URL',
@@ -123,11 +134,11 @@ foreach ($sites as $site) {
         );
         continue;
     }
-
-    $metric_framework = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('unl_wdn')->id, -1, false)->count())?false:true;
-    $metric_links     = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('link_checker')->id, -1, false)->count())?false:true;
-    $metric_html      = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('w3c_html')->id, -1, false)->count())?false:true;
-    $metric_a11y      = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('pa11y')->id, -1, false)->count())?false:true;
+    
+    $metric_framework = calcPercent($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('unl_wdn')->id, -1, false)->count(), $total_pages);
+    $metric_links     = calcPercent($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('link_checker')->id, -1, false)->count(), $total_pages);
+    $metric_html      = calcPercent($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('w3c_html')->id, -1, false)->count(), $total_pages);
+    $metric_a11y      = calcPercent($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('pa11y')->id, -1, false)->count(), $total_pages);
 
     if (!$unl_scan_attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id)) {
         //No scan attributes found for this site... end early
