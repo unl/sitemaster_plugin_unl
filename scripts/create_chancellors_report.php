@@ -9,7 +9,25 @@ $sites = new \SiteMaster\Core\Registry\Sites\All();
 $csv = array();
 
 //Headers
-$csv[] = array('Site URL', 'Site Title', 'In 4.0', 'Version Found', 'Self Reported % Complete', 'Est. Completion Date', 'comments', 'Percent of Passing Pages', 'Total Pages', 'Scan Date', 'Replaced By', 'Root Site URL', 'Latest Report URL');
+$csv[] = array(
+    'Site URL',
+    'Site Title',
+    'In 4.0',
+    'Version Found',
+    'Self Reported % Complete',
+    'Est. Completion Date',
+    'comments',
+    'Percent of Passing Pages',
+    'Total Pages',
+    'Metric - wdn',
+    'Metric - links',
+    'Metric - pa11y',
+    'Metric - html',
+    'Scan Date',
+    'Replaced By',
+    'Root Site URL',
+    'Latest Report URL'
+);
 
 foreach ($sites as $site) {
     /**
@@ -32,6 +50,11 @@ foreach ($sites as $site) {
     $replaced_by      = NULL;
     $title            = html_entity_decode(strip_tags($site->title));
     $root_site_url    = NULL;
+    $metric_framework = NULL;
+    $metric_links     = NULL;
+    $metric_a11y      = NULL;
+    $metric_html      = NULL;
+    
 
     if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
         $complete_date    = date('o-m-d', strtotime($progress->estimated_completion));
@@ -44,7 +67,25 @@ foreach ($sites as $site) {
     
     if (!$scan = $site->getLatestScan(true)) {
         //No scans found for this site... end early
-        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $root_site_url, $site->getURL());
+        $csv[] = array(
+            $site->base_url,
+            $title,
+            NULL,
+            $version_found,
+            $percent_complete,
+            $complete_date,
+            $comments,
+            $gpa,
+            $total_pages,
+            $metric_framework,
+            $metric_links,
+            $metric_a11y,
+            $metric_html,
+            $scan_date,
+            $replaced_by,
+            $root_site_url,
+            $site->getURL()
+        );
         continue;
     }
     
@@ -58,16 +99,57 @@ foreach ($sites as $site) {
     }
     
     $total_pages = $scan->getDistinctPageCount();
-    
+
     if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $root_site_url, $site->getURL());
+        $csv[] = array(
+            $site->base_url,
+            $title,
+            NULL,
+            $version_found,
+            $percent_complete,
+            $complete_date,
+            $comments,
+            $gpa,
+            $total_pages,
+            $metric_framework,
+            $metric_links,
+            $metric_a11y,
+            $metric_html,
+            $scan_date,
+            $replaced_by,
+            $root_site_url,
+            $site->getURL()
+        );
         continue;
     }
 
+    $metric_framework = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('unl_wdn')->id, -1, false)->count())?false:true;
+    $metric_links     = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('link_checker')->id, -1, false)->count())?false:true;
+    $metric_html      = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('w3c_html')->id, -1, false)->count())?false:true;
+    $metric_a11y      = ($scan->getHotSpots(\SiteMaster\Core\Auditor\Metric::getByMachineName('pa11y')->id, -1, false)->count())?false:true;
+
     if (!$unl_scan_attributes = \SiteMaster\Plugins\Unl\ScanAttributes::getByScansID($scan->id)) {
         //No scan attributes found for this site... end early
-        $csv[] = array($site->base_url, $title, NULL, $version_found, $percent_complete, $complete_date, $comments, $scan->gpa, $total_pages, $scan_date, $replaced_by, $root_site_url, $site->getURL());
+        $csv[] = array(
+            $site->base_url,
+            $title,
+            NULL,
+            $version_found,
+            $percent_complete,
+            $complete_date,
+            $comments,
+            $scan->gpa,
+            $total_pages,
+            $metric_framework,
+            $metric_links,
+            $metric_a11y,
+            $metric_html,
+            $scan_date,
+            $replaced_by,
+            $root_site_url,
+            $site->getURL()
+        );
         continue;
     }
     
@@ -80,7 +162,25 @@ foreach ($sites as $site) {
     $root_site_url = $unl_scan_attributes->root_site_url;
 
     //We found everything we needed, add this site to the csv
-    $csv[] = array($site->base_url, $title, $in_4_0, $version_found, $percent_complete, $complete_date, $comments, $gpa, $total_pages, $scan_date, $replaced_by, $root_site_url, $site->getURL());
+    $csv[] = array(
+        $site->base_url,
+        $title,
+        $in_4_0,
+        $version_found,
+        $percent_complete,
+        $complete_date,
+        $comments,
+        $gpa,
+        $total_pages,
+        $metric_framework,
+        $metric_links,
+        $metric_a11y,
+        $metric_html,
+        $scan_date,
+        $replaced_by,
+        $root_site_url,
+        $site->getURL()
+    );
 }
 
 $fp = fopen(__DIR__ . '/../files/4.0_report.csv', 'w');
