@@ -37,6 +37,7 @@ $csv[] = array(
     'Scan Date',
     'Replaced By',
     'Root Site URL',
+    'Root Site Title',
     'Latest Report URL'
 );
 
@@ -61,6 +62,7 @@ foreach ($sites as $site) {
     $replaced_by      = NULL;
     $title            = html_entity_decode(strip_tags($site->title));
     $root_site_url    = NULL;
+    $root_site_title  = NULL;
     $metric_framework = NULL;
     $metric_links     = NULL;
     $metric_a11y      = NULL;
@@ -170,7 +172,13 @@ foreach ($sites as $site) {
         $in_4_0 = 'no';
     }
     
-    $root_site_url = $unl_scan_attributes->root_site_url;
+    if (filter_var($unl_scan_attributes->root_site_url, FILTER_VALIDATE_URL)) {
+        $root_site_url = $unl_scan_attributes->root_site_url;
+
+        if ($root_site = \SiteMaster\Core\Registry\Site::getByBaseURL($root_site_url)) {
+            $root_site_title = $root_site->title;
+        }
+    }
 
     //We found everything we needed, add this site to the csv
     $csv[] = array(
