@@ -70,6 +70,18 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
     }
 
+    /**
+     * @test
+     */
+    public function getPDFLinks()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('example.html');
+        $links = $metric->getPDFLinks($xpath_template);
+        $this->assertEquals('test.pdf', $links[0]['href']);
+    }
+
     public function getTestXPath($filename)
     {
         $parser = new HTMl5();

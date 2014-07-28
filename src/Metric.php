@@ -385,4 +385,29 @@ class Metric extends MetricInterface
 
         return false;
     }
+
+    /**
+     * Get a array of PDF links
+     * 
+     * @param \DomXpath $xpath
+     * @return array - an arry of links.  Each link is an associative array with 'href' and 'html' values
+     */
+    public function getPDFLinks(\DomXpath $xpath)
+    {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:a");
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+            
+            if (strtolower(substr($href, -4)) == '.pdf') {
+                $links[] = array(
+                    'href' => $href,
+                    'html' => $xpath->document->saveHTML($node)
+                );
+            }
+        }
+        
+        return $links;
+    }
 }
