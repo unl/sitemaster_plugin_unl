@@ -390,7 +390,7 @@ class Metric extends MetricInterface
      * Get a array of PDF links
      * 
      * @param \DomXpath $xpath
-     * @return array - an arry of links.  Each link is an associative array with 'href' and 'html' values
+     * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
      */
     public function getPDFLinks(\DomXpath $xpath)
     {
@@ -409,5 +409,30 @@ class Metric extends MetricInterface
         }
         
         return $links;
+    }
+
+    /**
+     * Get a list of flash objects
+     * 
+     * @param \DomXpath $xpath
+     * @return array - an array of objects.  Each link is an associative array with 'file' and 'html' values
+     */
+    public function getFlashObjects(\DomXpath $xpath)
+    {
+        $objects = array();
+        $nodes = $xpath->query("//xhtml:object");
+
+        foreach ($nodes as $node) {
+            $file = $node->getAttribute('data');
+
+            if (strtolower(substr($file, -4)) == '.swf') {
+                $objects[] = array(
+                    'file' => $file,
+                    'html' => $xpath->document->saveHTML($node)
+                );
+            }
+        }
+
+        return $objects;
     }
 }

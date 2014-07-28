@@ -82,6 +82,18 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test.pdf', $links[0]['href']);
     }
 
+    /**
+     * @test
+     */
+    public function getFlashObjects()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('example.html');
+        $links = $metric->getFlashObjects($xpath_template);
+        $this->assertEquals('test.pdf', $links[0]['file']);
+    }
+
     public function getTestXPath($filename)
     {
         $parser = new HTMl5();
