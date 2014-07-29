@@ -15,6 +15,8 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_HTML = 'UNL_FRAMEWORK_HTML';
     const MARK_MN_UNL_FRAMEWORK_DEP = 'UNL_FRAMEWORK_DEP';
     const MARK_MN_UNL_FRAMEWORK_YOUTUBUE = 'UNL_FRAMEWORK_YOUTUBUE';
+    const MARK_MN_UNL_FRAMEWORK_PDF_LINKS = 'UNL_FRAMEWORK_PDF';
+    const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
     
     /**
      * @param string $plugin_name
@@ -27,21 +29,29 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF link was found',
+                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
             ),
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'Please ensure that the PDF is accessible.',
+                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See http://webaim.org/techniques/acrobat/ for help with PDF accessibility.',
+                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
             ),
             'point_deductions' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 20,
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 0,
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 0,
+                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
             )
         ), $options);
 
@@ -186,6 +196,44 @@ class Metric extends MetricInterface
             foreach ($embeds as $embed) {
                 $page->addMark($mark, array(
                     'value_found' => $embed
+                ));
+            }
+        }
+        
+        $pdfs = $this->getPDFLinks($xpath);
+        if (!empty($pdfs)) {
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+
+            foreach ($pdfs as $pdf) {
+                $page->addMark($mark, array(
+                    'value_found' => $pdf['value_found'],
+                    'context'     => $pdf['context']
+                ));
+            }
+        }
+
+        $flash_objects = $this->getFlashObjects($xpath);
+        if (!empty($flash_objects)) {
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+
+            foreach ($flash_objects as $flash_object) {
+                $page->addMark($mark, array(
+                    'value_found' => $flash_object['value_found'],
+                    'context'     => $flash_object['context']
                 ));
             }
         }
@@ -384,5 +432,55 @@ class Metric extends MetricInterface
         }
 
         return false;
+    }
+
+    /**
+     * Get a array of PDF links
+     * 
+     * @param \DomXpath $xpath
+     * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
+     */
+    public function getPDFLinks(\DomXpath $xpath)
+    {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:a");
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+            
+            if (strtolower(substr($href, -4)) == '.pdf') {
+                $links[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+        
+        return $links;
+    }
+
+    /**
+     * Get a list of flash objects
+     * 
+     * @param \DomXpath $xpath
+     * @return array - an array of objects.  Each link is an associative array with 'file' and 'html' values
+     */
+    public function getFlashObjects(\DomXpath $xpath)
+    {
+        $objects = array();
+        $nodes = $xpath->query("//xhtml:object");
+
+        foreach ($nodes as $node) {
+            $file = $node->getAttribute('data');
+
+            if (strtolower(substr($file, -4)) == '.swf') {
+                $objects[] = array(
+                    'value_found' => $file,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
+        return $objects;
     }
 }
