@@ -451,7 +451,7 @@ class Metric extends MetricInterface
             if (strtolower(substr($href, -4)) == '.pdf') {
                 $links[] = array(
                     'value_found' => $href,
-                    'context' => $xpath->document->saveHTML($node)
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
                 );
             }
         }
@@ -476,7 +476,7 @@ class Metric extends MetricInterface
             if (strtolower(substr($file, -4)) == '.swf') {
                 $objects[] = array(
                     'value_found' => $file,
-                    'context' => $xpath->document->saveHTML($node)
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
                 );
             }
         }
