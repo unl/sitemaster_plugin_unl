@@ -116,26 +116,6 @@ foreach ($sites as $site) {
 
     if (0 == $total_pages) {
         //Didn't find any pages in the scan, don't report as failing...
-        $csv[] = array(
-            $site->base_url,
-            $title,
-            NULL,
-            $version_found,
-            $percent_complete,
-            $complete_date,
-            $comments,
-            $gpa,
-            $total_pages,
-            $metric_framework,
-            $metric_links,
-            $metric_a11y,
-            $metric_html,
-            $scan_date,
-            $replaced_by,
-            $root_site_url,
-            $root_site_title,
-            $site->getURL()
-        );
         continue;
     }
     
