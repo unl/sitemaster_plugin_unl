@@ -40,10 +40,10 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
             ),
             'help_text' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see http://www1.unl.edu/wdn/wiki/Mirroring_the_Template_Files',
+                self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
+                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See http://webaim.org/techniques/acrobat/ for help with PDF accessibility.',
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See [webaim](http://webaim.org/techniques/acrobat/) for help with PDF accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
             ),
             'point_deductions' => array(
