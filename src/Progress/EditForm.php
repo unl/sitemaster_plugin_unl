@@ -129,7 +129,7 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         $this->progress->estimated_completion = Util::epochToDateTime($date);
         $this->progress->self_comments = $post['self_comments'];
 
-        if (isset($post['replaced_by'])) {
+        if (!empty($post['replaced_by'])) {
             $this->progress->replaced_by = $post['replaced_by'];
         } else {
             $this->progress->replaced_by = null;
