@@ -119,7 +119,7 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         }
 
         $this->progress->self_progress = (int)$post['self_progress'];
-        //print_r($post);exit();
+        
         $date = strtotime($post['estimated_completion']);
         
         if ($date > strtotime('2014-08-15')) {
