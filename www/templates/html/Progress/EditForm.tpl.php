@@ -12,7 +12,14 @@
                 $value = $context->progress->self_progress;
             }
             ?>
-            <input id="self_progress" name="self_progress" type="range" min="0" max="100" step="1" value="<?php echo $value ?>">
+            <script type="text/javascript">
+                function updateSelfProgress(val) {
+                    document.getElementById('self_progress_value').innerHTML=val;
+                }
+            </script>
+            <input id="self_progress" name="self_progress" type="range" min="0" max="100" step="1" onchange="updateSelfProgress(this.value);" value="<?php echo $value ?>">
+            <br />
+            current self reported progress: <span id="self_progress_value"><?php  echo $value ?></span>%
         </li>
         <li>
             <label for="self_comments">Comments</label>
