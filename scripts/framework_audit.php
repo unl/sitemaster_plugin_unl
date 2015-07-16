@@ -83,8 +83,6 @@ foreach ($sites as $site) {
         $title,
         $dep
     );
-    
-    break;
 }
 
 $fp = fopen(__DIR__ . '/../files/framework_audit.csv', 'w');
