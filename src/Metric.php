@@ -29,7 +29,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
                 self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF link was found',
+                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF was found. Please independently ensure PDF accessibility',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
             ),
             'description_text' => array(
