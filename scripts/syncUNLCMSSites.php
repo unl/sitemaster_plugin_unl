@@ -24,6 +24,10 @@ if (false === $cms_sites
 
 $admin_role = \SiteMaster\Core\Registry\Site\Role::getByRoleName('admin');
 
+//Store all base URLs for later use, to make things easier
+$cms_base_urls = array();
+
+//Loop over all cms sites and create/update them and memberships
 foreach ($cms_sites as $cms_site_id=>$site_info) {
     /*
      * @var $site_info array(2) {
@@ -42,6 +46,10 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
         $site_info['uri'] .= '/';
     }
     
+    //Store the base url for later use
+    $cms_base_urls[] = $site_info['uri'];
+    
+    //Find the site in our registry
     $site = \SiteMaster\Core\Registry\Site::getByBaseURL($site_info['uri']);
     if (false === $site) {
         //Site wasn't found, create it.
@@ -52,8 +60,15 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
             $production_status = \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT;
         }
         $site = \SiteMaster\Core\Registry\Site::createNewSite($site_info['uri'], array(
-            'production_status' => $production_status
+            'production_status' => $production_status,
+            'source' => 'UNL_CMS'
         ));
+    }
+    
+    if (empty($site->source)) {
+        //Make sure that webaudit knows that it is a cms site
+        $site->source = 'UNL_CMS';
+        $site->save();
     }
     
     //Add members
@@ -107,5 +122,29 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
             //remove em (they are no longer in the list of users)
             $role->delete();
         }
+    }
+}
+
+
+//Clean up old unlcms development sites that no longer exist or have gone into production
+//ONLY if we have a list of base URLs from the call of unlcms. we wouldn't want to delete everything if that api call fails for some reason.
+if (!empty($cms_base_urls)) {
+    //Loop over sites in the registry and remove the ones we need to
+    //Only remove http://unlcms.unl.edu/ sites, as these are unlcms specific and development sites.
+    //They should not ever move to non-unlcms servers. Production sites might, so we can't assume anything for them.
+    $cms_sites = new \SiteMaster\Plugins\Unl\Sites\CMSDevSites();
+    foreach ($cms_sites as $site) {
+        /**
+         * @var $site \SiteMaster\Core\Registry\Site
+         */
+        
+        //If the cms currently knows about this site, we don't need to remove it.
+        if (in_array($site->base_url, $cms_base_urls)) {
+            continue;
+        }
+        
+        //The CMS doesn't know about it, so we can remove it.
+        echo 'Removing: ' . $site->base_url . PHP_EOL;
+        $site->delete();
     }
 }
