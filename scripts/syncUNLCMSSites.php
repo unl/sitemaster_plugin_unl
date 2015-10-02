@@ -129,18 +129,14 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
 //Clean up old unlcms development sites that no longer exist or have gone into production
 //ONLY if we have a list of base URLs from the call of unlcms. we wouldn't want to delete everything if that api call fails for some reason.
 if (!empty($cms_base_urls)) {
-    //Loop over all sites in the registry and remove the ones we need to
-    $cms_sites = new \SiteMaster\Core\Registry\Sites\All();
+    //Loop over sites in the registry and remove the ones we need to
+    //Only remove http://unlcms.unl.edu/ sites, as these are unlcms specific and development sites.
+    //They should not ever move to non-unlcms servers. Production sites might, so we can't assume anything for them.
+    $cms_sites = new \SiteMaster\Plugins\Unl\Sites\CMSDevSites();
     foreach ($cms_sites as $site) {
         /**
          * @var $site \SiteMaster\Core\Registry\Site
          */
-        
-        //Only remove http://unlcms.unl.edu/ sites, as these are unlcms specific and development sites.
-        //They should not ever move to non-unlcms servers. Production sites might, so we can't assume anything for them.
-        if (0 !== strpos($site->base_url, 'http://unlcms.unl.edu/')) {
-            continue;
-        }
         
         //If the cms currently knows about this site, we don't need to remove it.
         if (in_array($site->base_url, $cms_base_urls)) {
