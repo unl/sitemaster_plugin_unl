@@ -137,6 +137,11 @@ if (!empty($cms_base_urls)) {
         /**
          * @var $site \SiteMaster\Core\Registry\Site
          */
+
+        //Don't remove the base unlcms site.
+        if ('http://unlcms.unl.edu/' == $site->base_url) {
+            continue;
+        }
         
         //If the cms currently knows about this site, we don't need to remove it.
         if (in_array($site->base_url, $cms_base_urls)) {
