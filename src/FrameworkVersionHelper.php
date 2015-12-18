@@ -6,12 +6,13 @@ use SiteMaster\Core\Config;
 class FrameworkVersionHelper
 {
     public $options = array(
-        'current_branches' => array('master'), //The currently supported branches in github
+        'current_branches' => array('master', '4.1'), //The currently supported branches in github
         'cache' => true, //cache the results
         'autoload' => true, //autoload the current versions
     );
     
     protected $cache_file = false;
+    protected $all_dep_cache_file = false;
     protected $versions = array('html'=>array(), 'dep'=>array());
     
     const VERSION_NAME_DEP = 'dep';
@@ -22,6 +23,7 @@ class FrameworkVersionHelper
         $this->options = $options + $this->options;
         
         $this->cache_file = Config::get('CACHE_DIR') . 'unl_template_versions.json';
+        $this->all_cache_file = Config::get('CACHE_DIR') . 'unl_template_versions_all.json';
         
         if ($this->options['autoload']) {
             $this->versions = $this->grabVersions($this->options['cache']);
@@ -159,5 +161,22 @@ class FrameworkVersionHelper
         }
         
         return false;
+    }
+
+    /**
+     * @param array $dep_versions
+     * @return int
+     */
+    public function setAllVersions(array $dep_versions)
+    {
+        return file_put_contents($this->all_cache_file, json_encode($dep_versions));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAllVersions()
+    {
+        return json_decode(file_get_contents($this->all_cache_file), true);
     }
 }
