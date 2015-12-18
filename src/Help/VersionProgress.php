@@ -4,7 +4,7 @@ namespace SiteMaster\Plugins\Unl\Help;
 use SiteMaster\Core\Config;
 use SiteMaster\Core\ViewableInterface;
 
-class Progress4x0 implements ViewableInterface
+class VersionProgress implements ViewableInterface
 {
     /**
      * @var array
@@ -18,11 +18,11 @@ class Progress4x0 implements ViewableInterface
 
     public function getURL()
     {
-        return Config::get('URL') . 'unl_progress/help/4.0_progress';
+        return Config::get('URL') . 'unl_progress/help';
     }
 
     public function getPageTitle()
     {
-        return 'Help: 4.0 Progress Reporting';
+        return 'Help: Progress Reporting';
     }
 }

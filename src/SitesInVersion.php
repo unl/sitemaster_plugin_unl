@@ -3,7 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use DB\RecordList;
 
-class SitesIn4x0 extends RecordList
+class SitesInVersion extends RecordList
 {
     public function __construct(array $options = array())
     {

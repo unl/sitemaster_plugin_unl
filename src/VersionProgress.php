@@ -4,7 +4,7 @@ namespace SiteMaster\Plugins\Unl;
 use SiteMaster\Core\Registry\Site;
 use SiteMaster\Core\ViewableInterface;
 
-class Progress4x0 implements ViewableInterface
+class VersionProgress implements ViewableInterface
 {
     /**
      * @var array
@@ -12,7 +12,7 @@ class Progress4x0 implements ViewableInterface
     public $options = array();
 
     /**
-     * @var array|SitesIn4x0
+     * @var array|SitesInVersion
      */
     public $sites = array();
 
@@ -20,7 +20,7 @@ class Progress4x0 implements ViewableInterface
     {
         $this->options += $options;
         
-        $this->sites = new SitesIn4x0();
+        $this->sites = new SitesInVersion();
     }
 
     /**
@@ -30,7 +30,7 @@ class Progress4x0 implements ViewableInterface
      */
     public function getURL()
     {
-        return \SiteMaster\Core\Config::get('URL') . 'unl_progress/4x0/';
+        return \SiteMaster\Core\Config::get('URL') . 'unl_progress/';
     }
 
     /**
@@ -40,6 +40,6 @@ class Progress4x0 implements ViewableInterface
      */
     public function getPageTitle()
     {
-        return 'Sites in 4.0';
+        return 'Version Progress';
     }
 }
