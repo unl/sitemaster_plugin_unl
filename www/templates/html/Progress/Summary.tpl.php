@@ -20,7 +20,7 @@ if ($context->depIsValid()) {
 
 <div class="unl-progress-summary dashboard">
     <h2>
-        UNLedu 4.0 Progress Report
+        UNLedu 4.1 Progress Report
     </h2>
     <section class="wdn-grid-set">
         <div class="bp1-wdn-col-one-half">
