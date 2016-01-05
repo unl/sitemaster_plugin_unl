@@ -2,7 +2,7 @@
     <ol>
         <li>
             <label for="estimated_completion">Estimated Completion Date</label>
-            <input id="estimated_completion" name="estimated_completion" type="date" max="2014-08-15" value="<?php echo $context->progress->estimated_completion ?>" >
+            <input id="estimated_completion" name="estimated_completion" type="date" value="<?php echo $context->progress->estimated_completion ?>" >
         </li>
         <li>
             <label for="self_progress">Current Conversion Progress</label>

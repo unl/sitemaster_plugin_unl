@@ -122,10 +122,6 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         
         $date = strtotime($post['estimated_completion']);
         
-        if ($date > strtotime('2014-08-15')) {
-            throw new InvalidArgumentException('The estimated completion date can not be after 2014-08-15', 400);
-        }
-        
         $this->progress->estimated_completion = Util::epochToDateTime($date);
         $this->progress->self_comments = $post['self_comments'];
 
@@ -137,7 +133,7 @@ class EditForm implements ViewableInterface, PostHandlerInterface
         
         $this->progress->save();
         
-        Controller::redirect($this->site->getURL(), new FlashBagMessage(FlashBagMessage::TYPE_SUCCESS, 'UNL 4.0 progress has been updated'));
+        Controller::redirect($this->site->getURL(), new FlashBagMessage(FlashBagMessage::TYPE_SUCCESS, 'UNL progress has been updated'));
     }
 
     public function getEditURL()
