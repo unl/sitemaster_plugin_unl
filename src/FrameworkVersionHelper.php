@@ -6,7 +6,7 @@ use SiteMaster\Core\Config;
 class FrameworkVersionHelper
 {
     public $options = array(
-        'current_branches' => array('master'), //The currently supported branches in github
+        'current_branches' => array('master', '4.0'), //The currently supported branches in github
         'cache' => true, //cache the results
         'autoload' => true, //autoload the current versions
     );
