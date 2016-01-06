@@ -71,12 +71,6 @@ foreach ($sites as $site) {
     }
     
     $dep = $metric->getDEPVersion($xpath);
-    
-    if ($dep == $versions['dep'][0]) {
-        //Don't report ones that are a success
-        echo "\tUp to date... not logging" . PHP_EOL;
-        continue;
-    }
 
     $csv[] = array(
         $site->base_url,
