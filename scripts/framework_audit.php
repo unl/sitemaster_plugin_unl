@@ -52,13 +52,7 @@ function getXPath($url)
     return $parser->parse($html);
 }
 
-
-$i = 0;
 foreach ($sites as $site) {
-    $i++;
-    if ($i > 10) {
-        continue;
-    }
     /**
      * @var $site \SiteMaster\Core\Registry\Site
      */
