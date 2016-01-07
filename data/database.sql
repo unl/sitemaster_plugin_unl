@@ -48,3 +48,13 @@ CREATE TABLE IF NOT EXISTS `unl_site_progress` (
   references `sites`(`id`),
   PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `unl_version_history` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `version_type` ENUM('HTML', 'DEP') NOT NULL,
+  `version_number` VARCHAR(56),
+  `number_of_sites` INT NOT NULL DEFAULT 0,
+  `date_created` DATE NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE (`date_created`, `version_type`, `version_number`)
+) ENGINE = InnoDB;
