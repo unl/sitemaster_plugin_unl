@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `unl_scan_attributes` (
   `scans_id` INT NOT NULL,
   `html_version` VARCHAR(10),
   `dep_version` VARCHAR(10),
+  `root_site_url` VARCHAR(255),
   CONSTRAINT `fk_unl_scan_attributes_scans1`
   FOREIGN KEY (`scans_id`)
   REFERENCES `scans` (`id`)
@@ -36,10 +37,14 @@ CREATE TABLE IF NOT EXISTS `unl_site_progress` (
   `self_comments` TEXT,
   `created` DATETIME NOT NULL,
   `updated` DATETIME NOT NULL,
+  `replaced_by` INT NULL,
   CONSTRAINT `fk_unl_site_status_site1`
   FOREIGN KEY (`sites_id`)
   REFERENCES `sites` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
+  CONSTRAINT fk_replaced_by
+  FOREIGN KEY (`replaced_by`)
+  references `sites`(`id`),
   PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB;
