@@ -1,10 +1,15 @@
 <?php
+use SiteMaster\Plugins\Unl\VersionHistory;
+
 ini_set('display_errors', true);
 
 //Initialize all settings and autoloaders
 require_once(__DIR__ . '/../../../init.php');
 
 $sites = new \SiteMaster\Core\Registry\Sites\All();
+
+$found_versions = array();
+$date_of_scan = date("Y-m-d", strtotime('today midnight'));
 
 $csv = array();
 
@@ -48,8 +53,12 @@ function getXPath($url)
 }
 
 
-
+$i = 0;
 foreach ($sites as $site) {
+    $i++;
+    if ($i > 10) {
+        continue;
+    }
     /**
      * @var $site \SiteMaster\Core\Registry\Site
      */
@@ -71,6 +80,18 @@ foreach ($sites as $site) {
     }
     
     $dep = $metric->getDEPVersion($xpath);
+    $html = $metric->getHTMLVersion($xpath);
+    
+    if (!isset($found_versions['dep'][$dep])) {
+        $found_versions['dep'][$dep] = 0;
+    }
+
+    if (!isset($found_versions['html'][$html])) {
+        $found_versions['html'][$html] = 0;
+    }
+
+    $found_versions['dep'][$dep]++;
+    $found_versions['html'][$html]++;
 
     $csv[] = array(
         $site->base_url,
@@ -79,6 +100,7 @@ foreach ($sites as $site) {
     );
 }
 
+//Write CSV
 $fp = fopen(__DIR__ . '/../files/framework_audit.csv', 'w');
 
 foreach ($csv as $fields) {
@@ -86,3 +108,23 @@ foreach ($csv as $fields) {
 }
 
 fclose($fp);
+
+//Write DB LOG
+foreach ($found_versions['html'] as $html_version=>$num_sites) {
+    if ($record = VersionHistory::getByDateAndVersion($date_of_scan, VersionHistory::VERSION_TYPE_HTML, $html_version)) {
+        $record->number_of_sites = $num_sites;
+        $record->save();
+    } else {
+        VersionHistory::createHistoryRecord(VersionHistory::VERSION_TYPE_HTML, $html_version, $num_sites, $date_of_scan);
+    }
+}
+
+foreach ($found_versions['dep'] as $dep_version=>$num_sites) {
+    if ($record = VersionHistory::getByDateAndVersion($date_of_scan, VersionHistory::VERSION_TYPE_DEP, $dep_version)) {
+        $record->number_of_sites = $num_sites;
+        $record->save();
+    } else {
+        VersionHistory::createHistoryRecord(VersionHistory::VERSION_TYPE_DEP, $dep_version, $num_sites, $date_of_scan);
+    }
+}
+
