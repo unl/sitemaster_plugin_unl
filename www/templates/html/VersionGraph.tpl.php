@@ -18,7 +18,7 @@ $id = $context->getVersionType() . uniqid();
 
             <?php $i = 0; ?>
             <?php foreach ($data['versions'] as $version=>$version_data): ?>
-            <?php $color = \SiteMaster\Plugins\Unl\VersionReport::stringToColorCode($version); ?>
+            <?php $color = \SiteMaster\Plugins\Unl\VersionGraph::stringToColorCode($version); ?>
             data.datasets[<?php echo $i ?>] = {
                 label: "<?php echo $version ?>",
                 fillColor: "rgba(<?php echo $color ?>,.15)",

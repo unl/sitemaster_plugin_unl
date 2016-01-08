@@ -93,91 +93,24 @@ class VersionReport implements ViewableInterface
 
         return $title;
     }
-
-    public function getVersionHelper()
-    {
-        return new FrameworkVersionHelper();
-    }
     
     public function getRecentHTMLGraph()
     {
-        $data = $this->getGraphData(VersionHistory::VERSION_TYPE_HTML, $this->recent_html_history);
-        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $data);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $this->recent_html_history);
     }
 
     public function getRecentDepGraph()
     {
-        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_DEP, $this->recent_dep_history);
-        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $data);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $this->recent_dep_history);
     }
 
     public function getYearHTMLGraph()
     {
-        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_HTML, $this->year_html_history);
-        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $data);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $this->year_html_history);
     }
 
     public function getYearDepGraph()
     {
-        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_DEP, $this->year_dep_history);
-        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $data);
-    }
-    
-    
-    public function getGraphData($type, $data)
-    {
-        $dates = array();
-
-        $version_helper = $this->getVersionHelper();
-
-        $all_versions = $version_helper->getAllVersions();
-        
-        //Create an array of dates with counts for each version
-        foreach ($data as $record) {
-            if (!isset($dates[$record->date_created])) {
-                //Create date and fill with default data
-                $dates[$record->date_created] = array_fill_keys($all_versions[strtolower($type)], 0);
-                $dates[$record->date_created]['unknown'] = 0;
-            }
-            
-            $version_number = $record->version_number;
-            
-            if (!in_array($version_number, $all_versions[strtolower($type)])) {
-                
-                $version_number = 'unknown';
-            }
-            
-            $dates[$record->date_created][$version_number] += $record->number_of_sites;
-        }
-        
-        //Filter out zeros
-
-        
-        $data_sets = array();
-        $data_sets['dates'] = array();
-        
-        foreach ($dates as $date=>$versions) {
-            $data_sets['dates'][] = $date;
-            foreach ($versions as $version=>$count) {
-                if ($count > 0) {
-                    //Only include versions for which we have results
-                    $data_sets['versions'][$version][] = $count;
-                }
-            }
-        }
-        
-        return $data_sets;
-    }
-    
-    public static function stringToColorCode($str) {
-        $hex = dechex(crc32($str));
-        $hex = substr($hex, 0, 6);
-
-        $r = hexdec(substr($hex,0,2));
-        $g = hexdec(substr($hex,2,2));
-        $b = hexdec(substr($hex,4,2));
-
-        $rgb = array($r, $g, $b);
-        return implode(",", $rgb);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $this->year_dep_history);
     }
 }
