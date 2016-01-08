@@ -29,3 +29,15 @@
     width: 100%;
     display: block;
 }
+
+.framework-chart .line-legend li {
+    display: inline-block;
+}
+
+.framework-chart .line-legend span.color {
+    margin-bottom: 1em;
+}
+
+.framework-chart canvas {
+    min-height: 500px;
+}

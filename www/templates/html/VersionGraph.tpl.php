@@ -3,7 +3,7 @@
 $data = $context->getData()->getRawObject();
 $id = $context->getVersionType() . uniqid();
 ?>
-<div class="graph-container">
+<div class="graph-container framework-chart">
     <canvas id="<?php echo $id ?>_chart"></canvas>
     <div class="legend-container">
         <div id="<?php echo $id; ?>_chart_legend"></div>
@@ -18,13 +18,13 @@ $id = $context->getVersionType() . uniqid();
 
             <?php $i = 0; ?>
             <?php foreach ($data['versions'] as $version=>$version_data): ?>
-            <?php $color = '#'.\SiteMaster\Plugins\Unl\VersionReport::stringToColorCode($version); ?>
+            <?php $color = \SiteMaster\Plugins\Unl\VersionReport::stringToColorCode($version); ?>
             data.datasets[<?php echo $i ?>] = {
                 label: "<?php echo $version ?>",
-                fillColor: "<?php echo $color ?>",
-                strokeColor: "<?php echo $color ?>",
-                pointColor: "<?php echo $color ?>",
-                pointHighlightStroke: "<?php echo $color ?>",
+                fillColor: "rgba(<?php echo $color ?>,.15)",
+                strokeColor: "rgba(<?php echo $color ?>,1)",
+                pointColor: "rgba(<?php echo $color ?>,1)",
+                pointHighlightStroke: "rgba(<?php echo $color ?>,1)",
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 data: <?php echo json_encode($version_data) ?>
@@ -36,7 +36,7 @@ $id = $context->getVersionType() . uniqid();
             var chart = new Chart(ctx).Line(data, {
                 responsive: false,
                 maintainAspectRatio: false,
-                datasetFill: false,
+                datasetFill: true,
                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span class=\"color\" style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
                 tooltipFontSize: 10,
                 tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",

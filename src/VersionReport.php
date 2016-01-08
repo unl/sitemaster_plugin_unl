@@ -170,8 +170,14 @@ class VersionReport implements ViewableInterface
     }
     
     public static function stringToColorCode($str) {
-        $code = dechex(crc32($str));
-        $code = substr($code, 0, 6);
-        return $code;
+        $hex = dechex(crc32($str));
+        $hex = substr($hex, 0, 6);
+
+        $r = hexdec(substr($hex,0,2));
+        $g = hexdec(substr($hex,2,2));
+        $b = hexdec(substr($hex,4,2));
+
+        $rgb = array($r, $g, $b);
+        return implode(",", $rgb);
     }
 }
