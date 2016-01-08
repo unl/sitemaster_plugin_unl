@@ -1,13 +1,12 @@
 
 <?php
 $data = $context->getData()->getRawObject();
-//TODO: Show only the first of the last 12 months + last 5 days
-//TODO: Only show the versions which were reported (dep)
+$id = $context->getVersionType() . uniqid();
 ?>
 <div class="graph-container">
-    <canvas id="<?php echo $context->getVersionType(); ?>_chart"></canvas>
+    <canvas id="<?php echo $id ?>_chart"></canvas>
     <div class="legend-container">
-        <div id="<?php echo $context->getVersionType(); ?>_chart_legend"></div>
+        <div id="<?php echo $id; ?>_chart_legend"></div>
     </div>
     
     <script>
@@ -33,7 +32,7 @@ $data = $context->getData()->getRawObject();
             <?php $i++; ?>
             <?php endforeach; ?>
             
-            var ctx = document.getElementById("<?php echo $context->getVersionType(); ?>_chart").getContext("2d");
+            var ctx = document.getElementById("<?php echo $id; ?>_chart").getContext("2d");
             var chart = new Chart(ctx).Line(data, {
                 responsive: false,
                 maintainAspectRatio: false,
@@ -44,7 +43,7 @@ $data = $context->getData()->getRawObject();
                 multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
             });
     
-            $("#<?php echo $context->getVersionType(); ?>_chart_legend").html(chart.generateLegend());
+            $("#<?php echo $id; ?>_chart_legend").html(chart.generateLegend());
         });
     </script>
 </div>

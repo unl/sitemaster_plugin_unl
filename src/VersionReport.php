@@ -14,14 +14,22 @@ class VersionReport implements ViewableInterface
     /**
      * @var VersionHistory\ByTypeAndDate
      */
-    protected $html_history;
+    protected $recent_html_history;
 
     /**
      * @var VersionHistory\ByTypeAndDate
      */
-    protected $dep_history;
-    
-    protected $after_date;
+    protected $recent_dep_history;
+
+    /**
+     * @var VersionHistory\ByTypeAndDate
+     */
+    protected $year_html_history;
+
+    /**
+     * @var VersionHistory\ByTypeAndDate
+     */
+    protected $year_dep_history;
 
     function __construct($options = array())
     {
@@ -33,14 +41,34 @@ class VersionReport implements ViewableInterface
             $this->after_date = $this->options['after_date'];
         }
         
-        $this->html_history = new VersionHistory\ByTypeAndDate(array(
+        $last_7_days = array();
+        for ($i=0; $i<14; $i++) {
+            $last_7_days[] = date("Y-m-d", strtotime($i." days ago"));
+        }
+        
+        $last_year = array();
+        for ($i = 1; $i <= 56; $i++) {
+            $last_year[] = date("Y-m-d", strtotime("$i weeks ago"));
+        }
+        
+        $this->recent_html_history = new VersionHistory\ByTypeAndDate(array(
             'version_type' => VersionHistory::VERSION_TYPE_HTML,
-            'after_date' => $this->after_date
+            'dates' => $last_7_days
         ));
 
-        $this->dep_history = new VersionHistory\ByTypeAndDate(array(
+        $this->recent_dep_history = new VersionHistory\ByTypeAndDate(array(
             'version_type' => VersionHistory::VERSION_TYPE_DEP,
-            'after_date' => $this->after_date
+            'dates' => $last_7_days
+        ));
+        
+        $this->year_html_history = new VersionHistory\ByTypeAndDate(array(
+            'version_type' => VersionHistory::VERSION_TYPE_HTML,
+            'dates' => $last_year
+        ));
+        
+        $this->year_dep_history = new VersionHistory\ByTypeAndDate(array(
+            'version_type' => VersionHistory::VERSION_TYPE_DEP,
+            'dates' => $last_year
         ));
     }
 
@@ -66,29 +94,38 @@ class VersionReport implements ViewableInterface
         return $title;
     }
 
-    public function getHTMLHistory()
-    {
-        return $this->html_history;
-    }
-
-    public function getDepHistory()
-    {
-        return $this->dep_history;
-    }
-
     public function getVersionHelper()
     {
         return new FrameworkVersionHelper();
     }
     
-    public function getGraphData($type)
+    public function getRecentHTMLGraph()
     {
-        if (VersionHistory::VERSION_TYPE_HTML == $type) {
-            $data = $this->getHTMLHistory();
-        } else {
-            $data = $this->getDepHistory();
-        }
-        
+        $data = $this->getGraphData(VersionHistory::VERSION_TYPE_HTML, $this->recent_html_history);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $data);
+    }
+
+    public function getRecentDepGraph()
+    {
+        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_DEP, $this->recent_dep_history);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $data);
+    }
+
+    public function getYearHTMLGraph()
+    {
+        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_HTML, $this->year_html_history);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_HTML, $data);
+    }
+
+    public function getYearDepGraph()
+    {
+        $data =  $this->getGraphData(VersionHistory::VERSION_TYPE_DEP, $this->year_dep_history);
+        return new VersionGraph(VersionHistory::VERSION_TYPE_DEP, $data);
+    }
+    
+    
+    public function getGraphData($type, $data)
+    {
         $dates = array();
 
         $version_helper = $this->getVersionHelper();
@@ -136,14 +173,5 @@ class VersionReport implements ViewableInterface
         $code = dechex(crc32($str));
         $code = substr($code, 0, 6);
         return $code;
-    }
-
-    /**
-     * @param $type
-     * @return VersionGraph
-     */
-    public function getVersionGraph($type)
-    {
-        return new VersionGraph($type, $this->getGraphData($type));
     }
 }

@@ -15,8 +15,8 @@ class ByTypeAndDate extends RecordList
             throw new Exception('version_type is required', 500);
         }
 
-        if (!isset($this->options['after_date'])) {
-            throw new Exception('after_date is required', 500);
+        if (!isset($this->options['dates'])) {
+            throw new Exception('dates is required', 500);
         }
         
         $options['array'] = self::getBySQL(array(
@@ -38,11 +38,18 @@ class ByTypeAndDate extends RecordList
 
     public function getSQL()
     {
+        $dates = array();
+        foreach ($this->options['dates'] as $date) {
+            $dates[] = "'".self::escapeString($date)."'";
+        }
+        
+        $dates = implode(', ',$dates);
+        
         //Build the list
         $sql = "SELECT id
                 FROM unl_version_history
                 WHERE version_type = '" . self::escapeString($this->options['version_type']) ."'
-                 AND date_created > '" . self::escapeString($this->options['after_date']). "'";
+                 AND date_created IN (" . $dates. ")";
 
         $sql .= "\n ORDER BY date_created ASC";
 
