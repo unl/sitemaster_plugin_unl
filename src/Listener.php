@@ -41,6 +41,11 @@ class Listener extends PluginListener
     {
         $user = Session::getCurrentUser();
         $chancellors_report_exists = file_exists(__DIR__ . '/../files/4.0_report.csv');
+
+        if ($event->isFor(Config::get('URL') . 'unl_progress/')) {
+            //Only add it as a child of the Sites in 4.0 primary navigation item
+            $event->addNavigationItem(Config::get('URL') . 'unl_versions/', 'Framework Version Report');
+        }
         
         if ($event->isFor(Config::get('URL') . 'unl_progress/') && $user && $chancellors_report_exists) {
             //Only add it as a child of the Sites in 4.0 primary navigation item
