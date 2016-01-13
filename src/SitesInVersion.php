@@ -53,15 +53,24 @@ class SitesInVersion extends RecordList
         if ($this->version == 'none') {
             $sql .= "WHERE unl_scan_attributes.dep_version IS NULL";
         } else if (self::VERSION_TYPE_HTML == $this->version_type) {
-            $sql .= "WHERE unl_scan_attributes.html_version = '" . $this->escapeString($this->version) . "'
+            if ('none' == $this->version) {
+                $sql .= "WHERE unl_scan_attributes.html_version IS NULL";
+            } else {
+                $sql .= "WHERE unl_scan_attributes.html_version = '" . $this->escapeString($this->version) . "'
                      AND unl_scan_attributes.dep_version >= '" . $this->escapeString($this->version) . "'";
+            }
+            
         } else {
-            $sql .= "WHERE unl_scan_attributes.dep_version = '" . $this->escapeString($this->version) . "'";
+            if ('none' == $this->version) {
+                $sql .= "WHERE unl_scan_attributes.dep_version IS NULL";
+            } else {
+                $sql .= "WHERE unl_scan_attributes.dep_version = '" . $this->escapeString($this->version) . "'";
+            }
         }
         
-        $sql .= "GROUP BY sites.id
+        $sql .= " GROUP BY sites.id
                 ORDER BY sites.base_url ASC";
-        
+
         return $sql;
     }
 }
