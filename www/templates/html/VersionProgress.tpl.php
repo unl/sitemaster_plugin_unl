@@ -74,7 +74,7 @@ $versions = $version_helper->getAllVersions();
                 <?php
                 foreach ($sites as $site) {
                     ?>
-                    <li><a href="<?php echo $site->getURL() ?>"><?php  echo $site->getTitle()?></a></li>
+                    <li><a href="<?php echo $site->getURL() ?>"><?php  echo $site->getTitle()?></a> - <?php echo $site->base_url ?></li>
                     <?php
                 }
                 ?>
