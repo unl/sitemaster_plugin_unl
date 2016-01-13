@@ -29,7 +29,7 @@ $versions = $version_helper->getAllVersions();
                 <ul>
                     <li>
                         <label for="major_release_version">
-                            Select an Minor Release Version
+                            Select a Minor Release Version
                         </label>
                         <select name="vdep" id="major_release_version">
                             <?php foreach($versions['dep'] as $version): ?>
