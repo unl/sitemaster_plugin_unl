@@ -9,7 +9,9 @@ class VersionProgress implements ViewableInterface
     /**
      * @var array
      */
-    public $options = array();
+    public $options = array(
+        'production_status' => NULL
+    );
 
     /**
      * @var array|SitesInVersion
@@ -22,7 +24,7 @@ class VersionProgress implements ViewableInterface
 
     function __construct($options = array())
     {
-        $this->options += $options;
+        $this->options = $options += $this->options;
         
         if (isset($options['vhtml'])) {
             $this->version = $options['vhtml'];
@@ -35,7 +37,8 @@ class VersionProgress implements ViewableInterface
         if (!empty($this->version)) {
             $this->sites = new SitesInVersion(array(
                 'version' => $this->version,
-                'version_type' => $this->version_type
+                'version_type' => $this->version_type,
+                'production_status' => $this->options['production_status']
             ));
         }
     }
