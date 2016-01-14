@@ -5,10 +5,6 @@ $id = $context->getVersionType() . uniqid();
 ?>
 <div class="graph-container framework-chart">
     <canvas id="<?php echo $id ?>_chart"></canvas>
-    <div class="legend-container">
-        <div id="<?php echo $id; ?>_chart_legend"></div>
-    </div>
-    
     <script>
         require(['jquery', '<?php echo \SiteMaster\Core\Config::get('URL') . 'www/js/vendor/chart.min.js' ?>'], function($) {
             var data = {
@@ -43,7 +39,30 @@ $id = $context->getVersionType() . uniqid();
                 multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
             });
     
-            $("#<?php echo $id; ?>_chart_legend").html(chart.generateLegend());
+            //$("#<?php echo $id; ?>_chart_legend").html(chart.generateLegend());
         });
     </script>
+    
+    <div class="table-scroll-container">
+        <div class="table-scroll">
+            <table class="wdn-stretch">
+                <thead>
+                    <th>Date</th>
+                    <?php foreach ($data['versions'] as $version=>$version_data): ?>
+                        <th><?php echo $version ?> <span class="legend-color" style="background-color: rgb(<?php echo \SiteMaster\Plugins\Unl\VersionGraph::stringToColorCode($version); ?>)">&nbsp;</span></th>
+                    <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($data['dates'] as $key=>$date): ?>
+                        <tr>
+                            <td><?php echo $date ?></td>
+                            <?php foreach ($data['versions'] as $version=>$version_data): ?>
+                                <td><?php echo $version_data[$key] ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

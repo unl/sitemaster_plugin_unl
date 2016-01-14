@@ -41,3 +41,27 @@
 .framework-chart canvas {
     min-height: 500px;
 }
+
+.table-scroll-container {
+    position: relative;
+}
+
+.table-scroll {
+    overflow:auto;
+}
+
+.table-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    height: .5em;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+span.legend-color {
+    height: .5em;
+    display: block;
+}
+
