@@ -53,13 +53,23 @@ $id = $context->getVersionType() . uniqid();
                     <?php endforeach; ?>
                 </thead>
                 <tbody>
+                    <?php $previous_date = false ?>
                     <?php foreach ($data['dates'] as $key=>$date): ?>
                         <tr>
                             <td><?php echo $date ?></td>
                             <?php foreach ($data['versions'] as $version=>$version_data): ?>
-                                <td><?php echo $version_data[$key] ?></td>
+                                <td>
+                                    <?php echo $version_data[$key] ?>
+                                    <?php if (false !== $previous_date): ?>
+                                        <?php $diff = $version_data[$key] - $version_data[$previous_date]; ?>
+                                        <?php if($diff): ?>
+                                                (<?php printf("%+d",$diff); ?>)
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </td>
                             <?php endforeach; ?>
                         </tr>
+                        <?php $previous_date = $key; ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>
