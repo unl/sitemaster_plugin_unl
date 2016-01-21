@@ -48,11 +48,16 @@ class VersionHistory extends Record
      */
     public static function getByDateAndVersion($date, $version_type, $version)
     {
+        $version_sql = 'version_number = "' . RecordList::escapeString($version) . '"';
+        if (null === $version) {
+            $version_sql = 'version_number IS NULL';
+        }
+        
         return self::getByAnyField(
             __CLASS__, 
             'date_created',
             $date,
-            'version_type = "' . RecordList::escapeString($version_type) . '" AND version_number = "' . RecordList::escapeString($version) . '"'
+            'version_type = "' . RecordList::escapeString($version_type) . '" AND ' . $version_sql
         );
     }
 
