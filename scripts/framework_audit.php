@@ -76,6 +76,15 @@ foreach ($sites as $site) {
     $dep = $metric->getDEPVersion($xpath);
     $html = $metric->getHTMLVersion($xpath);
     
+    //convert null to a string for more accurate array access (php converts a null key to an empty string '')
+    if (null === $dep) {
+        $dep = 'null';
+    }
+    
+    if (null === $html) {
+        $html = 'null';
+    }
+    
     if (!isset($found_versions['dep'][$dep])) {
         $found_versions['dep'][$dep] = 0;
     }
