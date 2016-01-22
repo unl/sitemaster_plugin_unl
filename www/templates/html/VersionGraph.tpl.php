@@ -45,7 +45,7 @@ $id = $context->getVersionType() . uniqid();
     
     <div class="table-scroll-container">
         <div class="table-scroll">
-            <table class="wdn-stretch">
+            <table class="wdn-stretch sortable" data-sortlist="[[0,1]]">
                 <thead>
                     <th>Date</th>
                     <?php foreach ($data['versions'] as $version=>$version_data): ?>
