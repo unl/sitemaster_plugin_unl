@@ -74,14 +74,21 @@ class VersionGraph
     }
 
     public static function stringToColorCode($str) {
-        $hex = dechex(crc32($str));
-        $hex = substr($hex, 0, 6);
-
-        $r = hexdec(substr($hex,0,2));
-        $g = hexdec(substr($hex,2,2));
-        $b = hexdec(substr($hex,4,2));
-
-        $rgb = array($r, $g, $b);
+        switch($str) {
+            case '4.0':
+                //this was resulting in a light yellow, which had a very low contrast
+                $rgb = array(255, 205, 0);
+                break;
+            default: 
+                $hex = dechex(crc32($str));
+                $hex = substr($hex, 0, 6);
+        
+                $r = hexdec(substr($hex,0,2));
+                $g = hexdec(substr($hex,2,2));
+                $b = hexdec(substr($hex,4,2));
+        
+                $rgb = array($r, $g, $b);
+        }
         return implode(",", $rgb);
     }
 }
