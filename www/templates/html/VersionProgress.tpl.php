@@ -20,16 +20,6 @@ $versions = $version_helper->getAllVersions();
                             <option value="none">none</option>
                         </select>
                     </li>
-                    <li>
-                        <label for="production_status">
-                            Select a production status
-                        </label>
-                        <select name="production_status" id="production_status">
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION?>" selected="selected">In Production</option>
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT?>">In Development</option>
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_ARCHIVED?>">Archived</option>
-                        </select>
-                    </li>
                 </ul>
                 <input type="submit" value="submit" />
             </form>
@@ -46,16 +36,6 @@ $versions = $version_helper->getAllVersions();
                                 <option value="<?php echo $version ?>"><?php echo $version ?></option>
                             <?php endforeach; ?>
                             <option value="none">none</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label for="production_status">
-                            Select a production status
-                        </label>
-                        <select name="production_status" id="production_status">
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION?>" selected="selected">In Production</option>
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT?>">In Development</option>
-                            <option value="<?php echo \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_ARCHIVED?>">Archived</option>
                         </select>
                     </li>
                 </ul>
