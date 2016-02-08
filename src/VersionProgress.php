@@ -35,11 +35,26 @@ class VersionProgress implements ViewableInterface
         }
         
         if (!empty($this->version)) {
-            $this->sites = new SitesInVersion(array(
-                'version' => $this->version,
-                'version_type' => $this->version_type,
-                'production_status' => $this->options['production_status']
-            ));
+            if (!$data = file(__DIR__ . '/../files/framework_audit.csv')) {
+                throw new \Exception('No data found', 500);
+            }
+
+            $data = array_map('str_getcsv', $data);
+            //Remove the first 4 rows (header data)
+            array_shift($data);
+            array_shift($data);
+            array_shift($data);
+            array_shift($data);
+            
+            $this->sites = array();
+            print_r($this->version_type);
+            $version_index = ($this->version_type == SitesInVersion::VERSION_TYPE_HTML)?2:3;
+            foreach ($data as $row) {
+                print_r($row);
+                if ($row[$version_index] == $this->version) {
+                    $this->sites[] = $row[0];
+                }
+            }
         }
     }
 
