@@ -72,7 +72,11 @@ $versions = $version_helper->getAllVersions();
         <?php if (0 < count($sites)): ?>
             <ul>
                 <?php foreach ($sites as $base_url): ?>
-                    <?php $site = \SiteMaster\Core\Registry\Site::getByBaseURL($base_url); ?>
+                    <?php
+                    if (!$site = \SiteMaster\Core\Registry\Site::getByBaseURL($base_url)) {
+                        continue;
+                    }
+                    ?>
                     <li><a href="<?php echo $site->getURL() ?>"><?php  echo $site->getTitle()?></a> - <?php echo $site->base_url ?></li>
                 <?php endforeach; ?>
             </ul>
