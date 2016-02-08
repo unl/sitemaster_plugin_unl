@@ -47,14 +47,17 @@ class VersionProgress implements ViewableInterface
             array_shift($data);
             
             $this->sites = array();
-            print_r($this->version_type);
             $version_index = ($this->version_type == SitesInVersion::VERSION_TYPE_HTML)?2:3;
+            $version_to_test = $this->version;
+            if ('none' == $version_to_test) {
+                $version_to_test = 'null';
+            }
             foreach ($data as $row) {
-                print_r($row);
-                if ($row[$version_index] == $this->version) {
+                if ($row[$version_index] == $version_to_test) {
                     $this->sites[] = $row[0];
                 }
             }
+            
         }
     }
 
