@@ -15,7 +15,8 @@ $csv = array();
 
 $csv[] = array(
     'date of report',
-    'expected version'
+    'expected HTML version',
+    'expected DEP version'
 );
 
 $helper   = new \SiteMaster\Plugins\Unl\FrameworkVersionHelper();
@@ -24,6 +25,7 @@ $metric   = new SiteMaster\Plugins\Unl\Metric('unl');
 
 $csv[] = array(
     \SiteMaster\Core\Util::epochToDateTime(),
+    $versions['html'][0],
     $versions['dep'][0]
 );
 
@@ -33,7 +35,8 @@ $csv[] = array();
 $csv[] = array(
     'Site URL',
     'Site Title',
-    'Version Found',
+    'HTML Version Found',
+    'DEP Version Found',
 );
 
 function getXPath($url)
@@ -43,7 +46,7 @@ function getXPath($url)
     $html = @file_get_contents($url);
     
     //Sleep for half a second to prevent flooding
-    usleep(500);
+    usleep(500000);
     
     if (!$html) {
         return false;
@@ -98,7 +101,8 @@ foreach ($sites as $site) {
 
     $csv[] = array(
         $site->base_url,
-        $title,
+        str_replace("\n", ' ', $title),
+        $html,
         $dep
     );
 }
