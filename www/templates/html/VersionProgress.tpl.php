@@ -43,6 +43,9 @@ $versions = $version_helper->getAllVersions();
             </form>
         </div>
     </div>
+    <p>
+        <a href="<?php echo \SiteMaster\Core\Config::get('URL') ?>plugins/unl/files/framework_audit.csv">Download a CSV of the full report</a> - taken <?php echo $context->getReportDate(); ?>
+    </p>
 </div>
 
 <div>

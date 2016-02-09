@@ -21,6 +21,8 @@ class VersionProgress implements ViewableInterface
     protected $version;
 
     protected $version_type;
+    
+    protected $report_date;
 
     function __construct($options = array())
     {
@@ -40,6 +42,7 @@ class VersionProgress implements ViewableInterface
             }
 
             $data = array_map('str_getcsv', $data);
+            $this->report_date = $data[1][0];
             //Remove the first 4 rows (header data)
             array_shift($data);
             array_shift($data);
@@ -100,5 +103,10 @@ class VersionProgress implements ViewableInterface
     public function getVersionHelper()
     {
         return new FrameworkVersionHelper();
+    }
+    
+    public function getReportDate()
+    {
+        return $this->report_date;
     }
 }
