@@ -50,14 +50,46 @@ $versions = $version_helper->getAllVersions();
         <?php $sites = $context->getSites(); ?>
         <h2>Results</h2>
         <?php if (0 < count($sites)): ?>
-            <ul>
+            <ul class="site-list-progress">
                 <?php foreach ($sites as $base_url): ?>
                     <?php
                     if (!$site = \SiteMaster\Core\Registry\Site::getByBaseURL($base_url)) {
                         continue;
                     }
+                    
+                    $estimated_completion = 'none';
+                    $comments = 'none';
+                    
+                    if ($progress = \SiteMaster\Plugins\Unl\Progress::getBySitesID($site->id)) {
+                        $estimated_completion = $progress->estimated_completion;
+                        $comments = $progress->self_comments;
+                    }
+                    
                     ?>
-                    <li><a href="<?php echo $site->getURL() ?>"><?php  echo $site->getTitle()?></a> - <?php echo $site->base_url ?></li>
+                    <li class="site clear-fix">
+                        <div class="panel clear-fix">
+                            <div class="wdn-grid-set">
+                                <div class="bp2-wdn-col-one-half">
+                                    <a href="<?php echo $site->getURL(); ?>">
+                                        <div class="url">
+                                            <?php echo $site->base_url ?>
+                                        </div>
+                                        <div class="title">
+                                            <?php echo $site->getTitle() ?>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bp2-wdn-col-one-half">
+                                    <dl class="progress">
+                                        <dt>Estimated Completion Date</dt>
+                                        <dd><?php echo $estimated_completion ?></dd>
+                                        <dt>Comments</dt>
+                                        <dd><?php echo $comments ?></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>

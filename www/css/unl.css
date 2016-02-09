@@ -65,3 +65,31 @@ span.legend-color {
     display: block;
 }
 
+.site-list-progress {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.site-list-progress .site {
+    list-style-type: none;
+    padding: 5px;
+    margin-left: 0px;
+}
+
+.site-list-progress .site .progress {
+    clear: both;
+}
+
+.site-list-progress .site .progress dt {
+    font-weight: bold;
+}
+
+.site-list-progress .site .url {
+    font-weight: bold;
+    font-size: 1.4em;
+    word-wrap: break-word;
+}
+
+.site-list-progress .site .title {
+    font-size: .8em;
+}
