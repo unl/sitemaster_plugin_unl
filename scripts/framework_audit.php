@@ -135,3 +135,28 @@ foreach ($found_versions['dep'] as $dep_version=>$num_sites) {
     }
 }
 
+//Clean up existing data for the day.
+
+$existing_html = new \SiteMaster\Plugins\Unl\VersionHistory\ByTypeAndDate(array(
+    'version_type' => VersionHistory::VERSION_TYPE_HTML,
+    'dates' => array($date_of_scan)
+));
+
+foreach ($existing_html as $version_record) {
+    if (!array_key_exists($version_record->version_number, $found_versions['html'])) {
+        echo $version_record->version_number . ' was no longer found, deleting...' . PHP_EOL;
+        $version_record->delete();
+    }
+}
+
+$existing_dep = new \SiteMaster\Plugins\Unl\VersionHistory\ByTypeAndDate(array(
+    'version_type' => VersionHistory::VERSION_TYPE_DEP,
+    'dates' => array($date_of_scan)
+));
+
+foreach ($existing_dep as $version_record) {
+    if (!array_key_exists($version_record->version_number, $found_versions['dep'])) {
+        echo $version_record->version_number . ' was no longer found, deleting...' . PHP_EOL;
+        $version_record->delete();
+    }
+}
