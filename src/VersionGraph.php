@@ -60,11 +60,17 @@ class VersionGraph
         $data_sets = array();
         $data_sets['dates'] = array();
 
+        //loop over all the dates to create a data set of dates
         foreach ($dates as $date=>$versions) {
             $data_sets['dates'][] = $date;
+            //Loop over  all the versions to compile a data set of versions
             foreach ($versions as $version=>$count) {
-                if ($count > 0) {
-                    //Only include versions for which we have results
+                $total_count = 0;
+                foreach ($dates as $total_versions) {
+                    $total_count += $total_versions[$version];
+                }
+                if ($total_count > 0) {
+                    //Only include versions for which we have results in the series
                     $data_sets['versions'][$version][] = $count;
                 }
             }
