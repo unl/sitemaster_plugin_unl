@@ -101,7 +101,7 @@ foreach ($sites as $site) {
 
     $csv[] = array(
         $site->base_url,
-        str_replace("\n", ' ', $title),
+        str_replace(array("\r","\n"), ' ', $title),
         $html,
         $dep
     );
