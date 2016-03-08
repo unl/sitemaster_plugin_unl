@@ -93,7 +93,7 @@ class Summary
      */
     public function versionIsValid($version)
     {
-        if (version_compare($version, 4.0, '>=')) {
+        if (version_compare($version, 4.1, '>=')) {
             return true;
         }
 
