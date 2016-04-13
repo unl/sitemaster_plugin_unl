@@ -1,6 +1,7 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
+use SiteMaster\Core\Auditor\Parser\HTML5;
 use SiteMaster\Core\Auditor\Scan;
 use SiteMaster\Core\Auditor\Site\Page;
 use SiteMaster\Core\DBTests\BaseTestDataInstaller;
@@ -20,9 +21,9 @@ class MetricDBTest extends DBTestCase
         $metric_record = $metric->getMetricRecord();
         $site = Site::getByBaseURL('http://www.test.com/');
         $scan = Scan::createNewScan($site->id);
-        $page_4_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/4_0');
-        $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1');
-        $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0');
+        $page_4_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/4_0', Page::FOUND_WITH_CRAWL);
+        $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1', Page::FOUND_WITH_CRAWL);
+        $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0', Page::FOUND_WITH_CRAWL);
 
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
@@ -77,7 +78,7 @@ class MetricDBTest extends DBTestCase
 
     public function getTestXPath($filename)
     {
-        $parser = new \Spider_Parser();
+        $parser = new HTML5();
         $html = file_get_contents(__DIR__ . '/data/' . $filename);
         return $parser->parse($html);
     }

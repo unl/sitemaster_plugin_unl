@@ -1,7 +1,7 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
-use SiteMaster\Core\Auditor\Parser\HTMl5;
+use SiteMaster\Core\Auditor\Parser\HTML5;
 
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,7 +79,7 @@ class MetricTest extends \PHPUnit_Framework_TestCase
 
         $xpath_template = $this->getTestXPath('example.html');
         $links = $metric->getPDFLinks($xpath_template);
-        $this->assertEquals('test.pdf', $links[0]['href']);
+        $this->assertEquals('test.pdf', $links[0]['value_found']);
     }
 
     /**
@@ -91,7 +91,7 @@ class MetricTest extends \PHPUnit_Framework_TestCase
 
         $xpath_template = $this->getTestXPath('example.html');
         $links = $metric->getFlashObjects($xpath_template);
-        $this->assertEquals('test.pdf', $links[0]['file']);
+        $this->assertEquals('your-flash-file.swf', $links[0]['value_found']);
     }
 
     public function getTestXPath($filename)
