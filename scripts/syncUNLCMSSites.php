@@ -4,6 +4,25 @@ ini_set('display_errors', true);
 //Initialize all settings and autoloaders
 require_once(__DIR__ . '/../../../init.php');
 
+function is_in_maintenance_mode($base_url) {
+    $info = \SiteMaster\Core\Util::getHTTPInfo($base_url);
+    sleep(1); //be nice to the server
+    return 503 == $info['http_code'];
+}
+
+function determine_production_status($base_url) {
+    if (is_in_maintenance_mode($base_url)) {
+        return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_ARCHIVED;
+    }
+    
+    if (strpos($base_url, '://unlcms.unl.edu/') !== false) {
+        //Sites that start in ://unlcms.unl.edu/ should be considered 'development' instances
+        return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT;
+    }
+
+    return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION;
+}
+
 //Append the current time to prevent caching.
 $cms_json_url = 'http://unlcms.unl.edu/admin/sites/unl/feed?time=' . time();
 
@@ -53,14 +72,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     $site = \SiteMaster\Core\Registry\Site::getByBaseURL($site_info['uri']);
     if (false === $site) {
         //Site wasn't found, create it.
-        $production_status = \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION;
-        
-        if (strpos($site_info['uri'], '://unlcms.unl.edu/') !== false) {
-            //Sites that start in ://unlcms.unl.edu/ should be considered 'development' instances
-            $production_status = \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT;
-        }
         $site = \SiteMaster\Core\Registry\Site::createNewSite($site_info['uri'], array(
-            'production_status' => $production_status,
             'source' => 'UNL_CMS'
         ));
     }
@@ -70,6 +82,10 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
         $site->source = 'UNL_CMS';
         $site->save();
     }
+    
+    //update production status (auto-archive)
+    $site->production_status = determine_production_status($site->base_url);
+    $site->save();
     
     //Add members
     foreach ($site_info['users'] as $uid=>$user_info) {
