@@ -35,14 +35,16 @@ class VersionProgress implements ViewableInterface
             $this->version = $options['vdep'];
             $this->version_type = SitesInVersion::VERSION_TYPE_DEP;
         }
+
+        if (!$data = file(__DIR__ . '/../files/framework_audit.csv')) {
+            throw new \Exception('No data found', 500);
+        }
+
+        $data = array_map('str_getcsv', $data);
+        $this->report_date = $data[1][0];
         
         if (!empty($this->version)) {
-            if (!$data = file(__DIR__ . '/../files/framework_audit.csv')) {
-                throw new \Exception('No data found', 500);
-            }
 
-            $data = array_map('str_getcsv', $data);
-            $this->report_date = $data[1][0];
             //Remove the first 4 rows (header data)
             array_shift($data);
             array_shift($data);
