@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <title>SiteMaster testing site</title>
+</head>
+<body>
+    <div>
+        This file will test wdn-icon- font detection and usage for a11y considerations
+        
+        <div>
+            Test for missing aria-hidden.
+            <span class="wdn-icon-test" id="no-aria-hidden"></span>
+        </div>
+
+        <div>
+            Test for usage with aria-hidden but the element has content. This can be issue because important text will be hidden from screen readers.
+            <span class="wdn-icon-test" aria-hidden="true" id="has-contents">test contents</span>
+        </div>
+        
+        <div>
+            Good usage
+            <span class="wdn-icon-test" aria-hidden="true" id="good-usage"></span><span class="wdn-text-hidden">test action</span>
+        </div>
+        
+    </div>
+</body>
+</html>

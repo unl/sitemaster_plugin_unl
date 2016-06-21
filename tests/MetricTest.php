@@ -2,6 +2,7 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
+use \SiteMaster\Plugins\Unl\Metric as UNLMetric;
 
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,6 +93,25 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $xpath_template = $this->getTestXPath('example.html');
         $links = $metric->getFlashObjects($xpath_template);
         $this->assertEquals('your-flash-file.swf', $links[0]['value_found']);
+    }
+
+    /**
+     * @test
+     */
+    public function getIconFontErrors()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('icon-font.html');
+        $errors = $metric->getIconFontErrors($xpath_template);
+        
+        //Should only have found 1 element for both errors
+        $this->assertEquals(1, count($errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN]));
+        $this->assertEquals(1, count($errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
+        
+        //Make sure we found the right elements
+        $this->assertEquals('no-aria-hidden', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]->getAttribute('id'));
+        $this->assertEquals('has-contents', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]->getAttribute('id'));
     }
 
     public function getTestXPath($filename)
