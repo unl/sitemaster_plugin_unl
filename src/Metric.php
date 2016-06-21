@@ -525,7 +525,7 @@ class Metric extends MetricInterface
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(),
         );
         
-        $nodes = $xpath->query("//xhtml:*[contains(@class,'wdn-icon-')]");
+        $nodes = $xpath->query("//xhtml:*[@id='maincontent']//xhtml:*[contains(@class,'wdn-icon-')]");
 
         foreach ($nodes as $node) {
             //perform tests
