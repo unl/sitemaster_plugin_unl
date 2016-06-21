@@ -110,8 +110,8 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
         
         //Make sure we found the right elements
-        $this->assertEquals('no-aria-hidden', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]->getAttribute('id'));
-        $this->assertEquals('has-contents', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]->getAttribute('id'));
+        $this->assertEquals('wdn-icon-no-aria-hidden', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
+        $this->assertEquals('wdn-icon-has-contents', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
     }
 
     public function getTestXPath($filename)
