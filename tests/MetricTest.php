@@ -2,7 +2,6 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
-use \SiteMaster\Plugins\Unl\Metric as UNLMetric;
 
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
@@ -106,12 +105,12 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $errors = $metric->getIconFontErrors($xpath_template);
         
         //Should only have found 1 element for both errors
-        $this->assertEquals(1, count($errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN]));
-        $this->assertEquals(1, count($errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
+        $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN]));
+        $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
         
         //Make sure we found the right elements
-        $this->assertEquals('wdn-icon-no-aria-hidden', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
-        $this->assertEquals('wdn-icon-has-contents', $errors[UNLMetric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
+        $this->assertEquals('wdn-icon-no-aria-hidden', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
+        $this->assertEquals('wdn-icon-has-contents', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
     }
 
     public function getTestXPath($filename)
