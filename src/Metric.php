@@ -17,6 +17,8 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_YOUTUBUE = 'UNL_FRAMEWORK_YOUTUBUE';
     const MARK_MN_UNL_FRAMEWORK_PDF_LINKS = 'UNL_FRAMEWORK_PDF';
     const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
+    const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
+    const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
     
     /**
      * @param string $plugin_name
@@ -31,6 +33,8 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF was found. Please independently ensure PDF accessibility',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
             ),
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
@@ -38,6 +42,8 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'Please ensure that the PDF is accessible.',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
@@ -45,6 +51,8 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See [webaim](http://webaim.org/techniques/acrobat/) for help with PDF accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
             ),
             'point_deductions' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
@@ -52,6 +60,8 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 0,
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 0,
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 1,
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 1,
             )
         ), $options);
 
@@ -234,6 +244,24 @@ class Metric extends MetricInterface
                 $page->addMark($mark, array(
                     'value_found' => $flash_object['value_found'],
                     'context'     => $flash_object['context']
+                ));
+            }
+        }
+
+        $errors = $this->getIconFontErrors($xpath);
+        foreach ($errors as $machine_name=>$elements) {
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+
+            foreach ($elements as $element) {
+                $page->addMark($mark, array(
+                    'value_found' => $element['value_found'],
+                    'context'     => $element['context']
                 ));
             }
         }
@@ -482,5 +510,53 @@ class Metric extends MetricInterface
         }
 
         return $objects;
+    }
+
+    /**
+     * Get a list of flash objects
+     *
+     * @param \DomXpath $xpath
+     * @return array - an array of objects.  Each link is an associative array with 'file' and 'html' values
+     */
+    public function getIconFontErrors(\DomXpath $xpath)
+    {
+        $errors = array(
+            self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => array(),
+            self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(),
+        );
+        
+        $nodes = $xpath->query("//xhtml:*[@id='maincontent']//xhtml:*[contains(@class,'wdn-icon-')]");
+
+        foreach ($nodes as $node) {
+            //perform tests
+            $node_value = preg_replace('/\s+/', '', $node->nodeValue);
+            $context = htmlspecialchars($xpath->document->saveHTML($node));
+            
+            //compute the value_found (icon class)
+            $icon_class = '';
+            $classes = explode(' ', $node->getAttribute('class'));
+            foreach ($classes as $class) {
+                if (0 === strpos($class, 'wdn-icon-')) {
+                    $icon_class = $class;
+                }
+            }
+            
+            if (!empty($node_value)) {
+                $errors[self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][] = array(
+                    'value_found' => $icon_class,
+                    'context' => $context,
+                );
+            }
+            
+            
+            if (!$node->hasAttribute('aria-hidden') || 'true' != $node->getAttribute('aria-hidden')) {
+                $errors[self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][] = array(
+                    'value_found' => $icon_class,
+                    'context' => $context,
+                );
+            }
+        }
+
+        return $errors;
     }
 }

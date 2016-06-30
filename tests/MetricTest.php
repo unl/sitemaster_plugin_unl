@@ -94,6 +94,25 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('your-flash-file.swf', $links[0]['value_found']);
     }
 
+    /**
+     * @test
+     */
+    public function getIconFontErrors()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('icon-font.html');
+        $errors = $metric->getIconFontErrors($xpath_template);
+        
+        //Should only have found 1 element for both errors
+        $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN]));
+        $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
+        
+        //Make sure we found the right elements
+        $this->assertEquals('wdn-icon-no-aria-hidden', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
+        $this->assertEquals('wdn-icon-has-contents', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
+    }
+
     public function getTestXPath($filename)
     {
         $parser = new HTMl5();
