@@ -3,6 +3,8 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
 
+set_include_path(get_include_path() . PATH_SEPARATOR . '../src');
+
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -111,6 +113,23 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         //Make sure we found the right elements
         $this->assertEquals('wdn-icon-no-aria-hidden', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
         $this->assertEquals('wdn-icon-has-contents', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
+    }
+
+     /**
+     * @test
+     */
+    public function getBrandInconsistencies()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template = $this->getTestXPath('template_4_0_unl.html');
+        $errors = $metric->getBrandInconsistencyReferences($xpath_template);
+        $this->assertEquals(2, count($errors));
+        $this->assertEquals('UNL', $errors[0]['value_found']);
+        $this->assertEquals(1, $errors[0]['count']);
+        $this->assertEquals('UNL', $errors[0]['context']);
+        $this->assertEquals(3, $errors[1]['count']);
+        $this->assertEquals('University of Nebraska-Lincoln', $errors[1]['value_found']);
     }
 
     public function getTestXPath($filename)
