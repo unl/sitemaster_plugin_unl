@@ -3,8 +3,6 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . '../src');
-
 class MetricTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -65,6 +65,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 0,
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 1,
+                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 1,
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 0,
             )
         ), $options);
