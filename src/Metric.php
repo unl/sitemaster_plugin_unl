@@ -36,7 +36,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Brand inconsistencies were found with the University of Nebraska brand.',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Style inconsistencies were found with the University of Nebraska style guide.',
             ),
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
@@ -46,7 +46,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'We are shying away from using "Lincoln" in brand messaging when referring to this campus of the University of Nebraska. Try to use "NU", "Nebraska", or "University of Nebraska" instead.',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
@@ -56,7 +56,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'See the brand book for more discussion on this topic.',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
             ),
             'point_deductions' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
