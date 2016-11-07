@@ -610,7 +610,7 @@ class Metric extends MetricInterface
                 substr_count($node->textContent, 'University of Nebraska–Lincoln') + //emdash
                 substr_count($node->textContent, 'University of Nebraska—Lincoln') + //endash
                 substr_count($node->textContent, 'University of Nebraska Lincoln'); //space
-            if ($full_names > 0) {
+            if ($full_names > 1) {
                 $errors[] = array(
                     'value_found' => 'University of Nebraska-Lincoln',
                     'count' => $full_names,
