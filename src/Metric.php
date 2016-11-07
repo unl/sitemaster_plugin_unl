@@ -19,6 +19,7 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
+    const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
     
     /**
      * @param string $plugin_name
@@ -35,6 +36,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Style inconsistencies were found with the University of Nebraska style guide.',
             ),
             'description_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
@@ -44,6 +46,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
             ),
             'help_text' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
@@ -53,6 +56,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
             ),
             'point_deductions' => array(
                 self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
@@ -62,6 +66,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 1,
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 1,
+                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 0,
             )
         ), $options);
 
@@ -262,6 +267,24 @@ class Metric extends MetricInterface
                 $page->addMark($mark, array(
                     'value_found' => $element['value_found'],
                     'context'     => $element['context']
+                ));
+            }
+        }
+
+        $errors = $this->getBrandInconsistencyReferences($xpath);
+        if (!empty($errors)) {
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+            foreach ($errors as $error) {
+                $page->addMark($mark, array(
+                    'value_found' => $error['value_found'],
+                    'context'     => $error['context']
                 ));
             }
         }
@@ -553,6 +576,45 @@ class Metric extends MetricInterface
                 $errors[self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][] = array(
                     'value_found' => $icon_class,
                     'context' => $context,
+                );
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Get a list of instances of "UNL" and "University of Nebraska--Lincoln" in the text of the document
+     *
+     * @param \DomXpath $xpath
+     * @return array - an array of the textual references to "UNL" or similar. Each is an associative array with 'context', 'value_found' values
+     */ 
+    public function getBrandInconsistencyReferences(\DomXpath $xpath)
+    {
+        $errors = array();
+
+        $nodes = $xpath->query("//*[@id='wdn_content_wrapper']//text()");
+        foreach ($nodes as $node) {
+            $unls = substr_count($node->textContent, 'UNL');
+            if ($unls > 0) {
+                $errors[] = array(
+                    'value_found' => 'UNL',
+                    'count' => $unls,
+                    'context' => $node->textContent
+                );
+            }
+            $full_names = 
+                substr_count($node->textContent, 'University of Nebraska-Lincoln') + //normal dash
+                substr_count($node->textContent, 'University of Nebraska--Lincoln') +  //two dashes
+                substr_count($node->textContent, 'University of NebraskaLincoln') + //no space
+                substr_count($node->textContent, 'University of Nebraska–Lincoln') + //emdash
+                substr_count($node->textContent, 'University of Nebraska—Lincoln') + //endash
+                substr_count($node->textContent, 'University of Nebraska Lincoln'); //space
+            if ($full_names > 1) {
+                $errors[] = array(
+                    'value_found' => 'University of Nebraska-Lincoln',
+                    'count' => $full_names,
+                    'context' => $node->textContent
                 );
             }
         }
