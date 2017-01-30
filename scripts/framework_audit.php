@@ -6,7 +6,7 @@ ini_set('display_errors', true);
 //Initialize all settings and autoloaders
 require_once(__DIR__ . '/../../../init.php');
 
-$sites = new \SiteMaster\Core\Registry\Sites\All();
+$sites = new \SiteMaster\Core\Registry\Sites\WithGroup(['group_name'=>'unl']);
 
 $found_versions = array();
 $date_of_scan = date("Y-m-d", strtotime('today midnight'));

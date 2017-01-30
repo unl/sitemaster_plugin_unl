@@ -4,7 +4,7 @@ ini_set('display_errors', true);
 //Initialize all settings and autoloaders
 require_once(__DIR__ . '/../../../init.php');
 
-$sites = new \SiteMaster\Core\Registry\Sites\All();
+$sites = new \SiteMaster\Core\Registry\Sites\WithGroup(['group_name'=>'unl']);
 
 $csv = array();
 
