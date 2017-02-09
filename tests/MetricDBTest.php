@@ -20,7 +20,7 @@ class MetricDBTest extends DBTestCase
         $metric = new Metric('metric_links');
         $metric_record = $metric->getMetricRecord();
         $site = Site::getByBaseURL('http://www.test.com/');
-        $scan = Scan::createNewScan($site->id);
+        $scan = Scan::createNewScan($site);
         $page_4_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/4_0', Page::FOUND_WITH_CRAWL);
         $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1', Page::FOUND_WITH_CRAWL);
         $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0', Page::FOUND_WITH_CRAWL);
