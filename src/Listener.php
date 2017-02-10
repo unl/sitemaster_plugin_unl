@@ -76,7 +76,11 @@ class Listener extends PluginListener
     public function onThemePrependOutput(PrependOutput $event)
     {
         $object = $event->getObject();
-        if ($object instanceof \SiteMaster\Core\Registry\Site\View && $event->getFormat() == 'html') {
+        if (
+            $object instanceof \SiteMaster\Core\Registry\Site\View
+            && $event->getFormat() == 'html'
+            && $object->site->getPrimaryGroupName() == 'unl'
+        ) {
             $sites_id = $object->site->id;
             $event->prependOutput(new Progress\Summary(array('sites_id' => $sites_id)));
 
