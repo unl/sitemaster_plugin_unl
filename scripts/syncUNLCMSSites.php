@@ -23,6 +23,10 @@ function determine_production_status($base_url) {
     return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_PRODUCTION;
 }
 
+function strip_protocol($url) {
+    return str_ireplace(['http://', 'https://'], '//', $url);
+}
+
 //Append the current time to prevent caching.
 $cms_json_url = 'http://unlcms.unl.edu/admin/sites/unl/feed?time=' . time();
 
@@ -45,6 +49,8 @@ $admin_role = \SiteMaster\Core\Registry\Site\Role::getByRoleName('admin');
 
 //Store all base URLs for later use, to make things easier
 $cms_base_urls = array();
+
+$registry = new \SiteMaster\Core\Registry\Registry();
 
 //Loop over all cms sites and create/update them and memberships
 foreach ($cms_sites as $cms_site_id=>$site_info) {
@@ -69,8 +75,11 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     $cms_base_urls[] = $site_info['uri'];
     
     //Find the site in our registry
-    $site = \SiteMaster\Core\Registry\Site::getByBaseURL($site_info['uri']);
-    if (false === $site) {
+    $site = $registry->getClosestSite($site_info['uri']);
+    if (
+        false === $site //no site found
+        || strip_protocol($site->base_url) !== strip_protocol($site_info['uri']) //site was found, but base URLs don't match
+    ) {
         //Site wasn't found, create it.
         $site = \SiteMaster\Core\Registry\Site::createNewSite($site_info['uri'], array(
             'source' => 'UNL_CMS'
@@ -85,6 +94,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     
     //update production status (auto-archive)
     $site->production_status = determine_production_status($site->base_url);
+    $site->base_url = $site_info['uri']; //Base URL protocol might change
     $site->save();
     
     //Add members
