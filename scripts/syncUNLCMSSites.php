@@ -100,9 +100,9 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     //Add members
     foreach ($site_info['users'] as $uid=>$user_info) {
         $uid = trim(strtolower($uid));
-        $user = \SiteMaster\Core\User\User::getByUIDAndProvider($uid, 'UNL');
+        $user = \SiteMaster\Core\User\User::getByUIDAndProvider($uid, 'unl.edu');
         if (!$user) {
-            $user = \SiteMaster\Core\User\User::createUser($uid, 'UNL');
+            $user = \SiteMaster\Core\User\User::createUser($uid, 'unl.edu');
         }
         
         if (!$membership = $site->getMembershipForUser($user)) {
@@ -139,7 +139,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
         }
         
         $user = $membership->getUser();
-        if ($user->provider != 'UNL') {
+        if ($user->provider != 'unl.edu') {
             //Not a UNL user
             continue;
         }
