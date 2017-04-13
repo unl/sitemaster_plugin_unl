@@ -16,7 +16,17 @@ class PageTitle extends PageTitleInterface
      */
     public function getPageTitle(DOMXPath $xpath)
     {
-        if (!$result = $xpath->query("//xhtml:div[@id='pagetitle']")) {
+        if ($title = $this->getH1($xpath)) {
+            //use the H1 if available
+            return $title;
+        }
+        
+        return $this->getTitle($xpath);
+    }
+    
+    public function getH1(DOMXPath $xpath)
+    {
+        if (!$result = $xpath->query("//xhtml:h1")) {
             return false;
         }
 
@@ -25,5 +35,18 @@ class PageTitle extends PageTitleInterface
         }
 
         return trim(strip_tags($result->item(0)->textContent));
+    }
+    
+    public function getTitle(DOMXPath $xpath)
+    {
+        if (!$result = $xpath->query('//xhtml:title')) {
+            return false;
+        }
+
+        if (!$result->length) {
+            return false;
+        }
+
+        return $result->item(0)->textContent;
     }
 }
