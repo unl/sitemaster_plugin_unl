@@ -102,7 +102,9 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
         $uid = trim(strtolower($uid));
         $user = \SiteMaster\Core\User\User::getByUIDAndProvider($uid, 'unl.edu');
         if (!$user) {
-            $user = \SiteMaster\Core\User\User::createUser($uid, 'unl.edu');
+            $user = \SiteMaster\Core\User\User::createUser($uid, 'unl.edu', [
+                'is_private' => \SiteMaster\Core\User\User::PRIVATE_NO,
+            ]);
         }
         
         if (!$membership = $site->getMembershipForUser($user)) {
