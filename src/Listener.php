@@ -2,6 +2,7 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
+use SiteMaster\Core\Events\Navigation\GroupCompile;
 use SiteMaster\Core\Events\Navigation\MainCompile;
 use SiteMaster\Core\Events\Navigation\SubCompile;
 use SiteMaster\Core\Events\RoutesCompile;
@@ -29,7 +30,7 @@ class Listener extends PluginListener
      */
     public function onNavigationMainCompile(MainCompile $event)
     {
-        $event->addNavigationItem(Config::get('URL') . 'unl_progress/', 'Sites in Version');
+        //Nothing to do here
     }
 
     /**
@@ -39,15 +40,29 @@ class Listener extends PluginListener
      */
     public function onNavigationSubCompile(SubCompile $event)
     {
+       //Nothing to do here
+    }
+
+    /**
+     * Compile sub navigation
+     *
+     * @param SubCompile $event
+     */
+    public function onNavigationGroupCompile(GroupCompile $event)
+    {
         $user = Session::getCurrentUser();
         $chancellors_report_exists = file_exists(__DIR__ . '/../files/4.0_report.csv');
 
-        if ($event->isFor(Config::get('URL') . 'unl_progress/')) {
-            //Only add it as a child of the Sites in 4.0 primary navigation item
-            $event->addNavigationItem(Config::get('URL') . 'unl_versions/', 'Framework Version Report');
+        if ($event->getGroupName() !== 'unl') {
+            return;
         }
+
+        $event->addNavigationItem(Config::get('URL') . 'unl_progress/', 'Sites in Version');
         
-        if ($event->isFor(Config::get('URL') . 'unl_progress/') && $user && $chancellors_report_exists) {
+        //Only add it as a child of the Sites in 4.0 primary navigation item
+        $event->addNavigationItem(Config::get('URL') . 'unl_versions/', 'Framework Version Report');
+
+        if ($user && $chancellors_report_exists) {
             //Only add it as a child of the Sites in 4.0 primary navigation item
             $event->addNavigationItem(Config::get('URL') . 'plugins/unl/files/4.0_report.csv', 'Chancellor\'s Report');
             $event->addNavigationItem(Config::get('URL') . 'unl_progress/help/4.0_progress/', 'How to report progress');

@@ -2,6 +2,7 @@
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Config;
+use SiteMaster\Core\Events\Navigation\GroupCompile;
 use SiteMaster\Core\Events\Navigation\MainCompile;
 use SiteMaster\Core\Events\Navigation\SubCompile;
 use SiteMaster\Core\Plugin\PluginInterface;
@@ -149,6 +150,11 @@ class Plugin extends PluginInterface
         $listeners[] = array(
             'event'    => SubCompile::EVENT_NAME,
             'listener' => array($listener, 'onNavigationSubCompile')
+        );
+
+        $listeners[] = array(
+            'event'    => GroupCompile::EVENT_NAME,
+            'listener' => array($listener, 'onNavigationGroupCompile')
         );
 
         return $listeners;
