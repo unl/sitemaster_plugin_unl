@@ -25,6 +25,9 @@ class SiteTitle
             return false;
         }
 
-        return trim(strip_tags($result->item(0)->textContent));
+        $title = strip_tags($result->item(0)->textContent);
+
+        //replace any extra spaces and newlines with just one space
+        return trim(preg_replace('/\s+/', ' ', $title));
     }
 }
