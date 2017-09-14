@@ -5,8 +5,8 @@ ini_set('display_errors', true);
 require_once(__DIR__ . '/../../../init.php');
 
 $sites  = new \SiteMaster\Core\Registry\Sites\WithGroup(['group_name'=>'unl']);
-$logger = new  SiteMaster\Plugins\Unl\Logger\SiteTitle();
-$parser = new \Spider_Parser();
+$logger = new SiteMaster\Plugins\Unl\Logger\SiteTitle();
+$parser = new \SiteMaster\Core\Auditor\Parser\HTML5();
 
 /**
  * Always override the site title for the registry
@@ -20,10 +20,6 @@ foreach ($sites as $site) {
     
     $xpath = $parser->parse($html);
     $new_title = $logger->getSiteTitle($xpath);
-    
-    if ($site->title != $new_title) {
-        
-    }
 
     if ($site->title != $new_title) {
         echo $site->base_url . PHP_EOL;
