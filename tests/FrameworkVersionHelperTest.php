@@ -1,7 +1,7 @@
 <?php
 namespace SiteMaster\Plugins\Unl;
 
-class FrameworkVersionHelperTest extends \PHPUnit_Framework_TestCase
+class FrameworkVersionHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

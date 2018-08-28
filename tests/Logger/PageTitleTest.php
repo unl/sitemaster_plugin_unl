@@ -5,7 +5,7 @@ use SiteMaster\Core\Auditor\Parser\HTML5;
 use SiteMaster\Core\Auditor\Site\Page;
 use SiteMaster\Plugins\Unl\Plugin;
 
-class PageTitleTest extends \PHPUnit_Framework_TestCase
+class PageTitleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

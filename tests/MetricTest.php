@@ -3,7 +3,7 @@ namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
 
-class MetricTest extends \PHPUnit_Framework_TestCase
+class MetricTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
