@@ -22,7 +22,7 @@ if ($context->depIsValid()) {
     <h2>
         UNLedu 5.0 Progress Report
     </h2>
-    <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw dcf-txt-sm dashboard-metrics">
+    <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw dcf-txt-sm">
         <div class="dcf-p-2">
             <span class="section-title">We found these framework versions:</span>
             <span class="section-help">These are lowest versions that we found on your site</span>
@@ -54,7 +54,7 @@ if ($context->depIsValid()) {
         </div>
     </section>
 
-    <div class="dcf-txt-center">
+    <div class="dcf-txt-center dcf-p-4">
         <?php
         if ($context->scan) {
             ?>
