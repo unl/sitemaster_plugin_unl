@@ -22,11 +22,11 @@ if ($context->depIsValid()) {
     <h2>
         UNLedu 5.0 Progress Report
     </h2>
-    <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
-        <div>
+    <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw dcf-txt-sm dashboard-metrics">
+        <div class="dcf-p-2">
             <span class="section-title">We found these framework versions:</span>
             <span class="section-help">These are lowest versions that we found on your site</span>
-            <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+            <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw dashboard-metrics"">
                 <div>
                     <div class="visual-island <?php echo $current_html_valid ?>">
                         <span class="dashboard-value"><?php echo $current_html ?></span>
@@ -41,7 +41,7 @@ if ($context->depIsValid()) {
                 </div>
             </div>
         </div>
-        <div class="progress-self-report">
+        <div class="progress-self-report dcf-p-2">
             <span class="section-title">Self reported progress:</span>
             <dl>
                 <dt>Estimated Completion Date</dt>
@@ -52,22 +52,23 @@ if ($context->depIsValid()) {
                 <dd><?php echo $context->progress->self_comments ?></dd>
             </dl>
         </div>
-        <div class="dcf-grid-full dcf-txt-center">
-            <?php
-            if ($context->scan) {
-                ?>
-                <a href="<?php echo $context->scan->getURL() ?>unl/versions/" class="wdn-button wdn-button-triad">See what versions we found</a>
-            <?php
-            }
-    
-            $user = \SiteMaster\Core\User\Session::getCurrentUser();
-    
-            if ($user && $context->site->userIsVerified($user)) {
-                ?>
-                <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit self reported progress</a>
-            <?php
-            }
-            ?>
-        </div>
     </section>
+
+    <div class="dcf-txt-center">
+        <?php
+        if ($context->scan) {
+            ?>
+          <a href="<?php echo $context->scan->getURL() ?>unl/versions/" class="wdn-button wdn-button-triad">See what versions we found</a>
+            <?php
+        }
+
+        $user = \SiteMaster\Core\User\Session::getCurrentUser();
+
+        if ($user && $context->site->userIsVerified($user)) {
+            ?>
+          <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit self reported progress</a>
+            <?php
+        }
+        ?>
+    </div>
 </div>
