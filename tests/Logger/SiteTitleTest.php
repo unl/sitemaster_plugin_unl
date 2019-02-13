@@ -15,6 +15,11 @@ class SiteTitleTest extends \PHPUnit\Framework\TestCase
         $plugin = new Plugin();
         $logger = new SiteTitle(new Page());
         $parser = new HTML5();
+        $html = file_get_contents($plugin->getRootDirectory() . '/tests/data/template_5_0.html');
+        $xpath = $parser->parse($html);
+
+        $this->assertEquals('Web Developer Network', $logger->getSiteTitle($xpath));
+
         $html = file_get_contents($plugin->getRootDirectory() . '/tests/data/template_4_0.html');
         $xpath = $parser->parse($html);
 

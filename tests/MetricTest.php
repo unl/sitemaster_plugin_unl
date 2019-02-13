@@ -11,12 +11,14 @@ class MetricTest extends \PHPUnit\Framework\TestCase
     public function getHTMLVersion()
     {
         $metric = new Metric('unl');
-        
+
+        $xpath_template_5_0     = $this->getTestXPath('template_5_0.html');
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
         $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
         $xpath_template_unknown = $this->getTestXPath('example.html');
-        
+
+        $this->assertEquals('5.0', $metric->getHTMLVersion($xpath_template_5_0));
         $this->assertEquals('4.0', $metric->getHTMLVersion($xpath_template_4_0));
         $this->assertEquals('3.1', $metric->getHTMLVersion($xpath_template_3_1));
         $this->assertEquals('3.0', $metric->getHTMLVersion($xpath_template_3_0));
@@ -30,11 +32,13 @@ class MetricTest extends \PHPUnit\Framework\TestCase
     {
         $metric = new Metric('unl');
 
+        $xpath_template_5_0     = $this->getTestXPath('template_5_0.html');
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
         $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
         $xpath_template_unknown = $this->getTestXPath('example.html');
 
+        $this->assertEquals('5.0.5', $metric->getDEPVersion($xpath_template_5_0));
         $this->assertEquals('4.0.9', $metric->getDEPVersion($xpath_template_4_0));
         $this->assertEquals('3.1.19', $metric->getDEPVersion($xpath_template_3_1));
         $this->assertEquals('3.0', $metric->getDEPVersion($xpath_template_3_0));
@@ -51,7 +55,7 @@ class MetricTest extends \PHPUnit\Framework\TestCase
         $xpath_template = $this->getTestXPath('example.html');
         $this->assertEquals(array('//www.youtube.com/embed/SxPE9xwsXTs'), $metric->getYouTubeEmbeds($xpath_template));
 
-        $xpath_template = $this->getTestXPath('template_4_0.html');
+        $xpath_template = $this->getTestXPath('template_5_0.html');
         $this->assertEquals(array(), $metric->getYouTubeEmbeds($xpath_template));
     }
 
@@ -67,6 +71,8 @@ class MetricTest extends \PHPUnit\Framework\TestCase
         $xpath_template = $this->getTestXPath('template_3_1.html');
         $this->assertEquals('http://www.unl.edu/', $metric->getRootSiteURL($xpath_template));
         $xpath_template = $this->getTestXPath('template_4_0.html');
+        $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
+        $xpath_template = $this->getTestXPath('template_5_0.html');
         $this->assertEquals('http://wdn.unl.edu/', $metric->getRootSiteURL($xpath_template));
     }
 
@@ -120,7 +126,7 @@ class MetricTest extends \PHPUnit\Framework\TestCase
     {
         $metric = new Metric('unl');
 
-        $xpath_template = $this->getTestXPath('template_4_0_unl.html');
+        $xpath_template = $this->getTestXPath('template_5_0_unl.html');
         $errors = $metric->getBrandInconsistencyReferences($xpath_template);
         $this->assertEquals(2, count($errors));
         $this->assertEquals('UNL', $errors[0]['value_found']);
