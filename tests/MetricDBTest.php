@@ -1,4 +1,4 @@
-j<?php
+<?php
 namespace SiteMaster\Plugins\Unl;
 
 use SiteMaster\Core\Auditor\Parser\HTML5;
