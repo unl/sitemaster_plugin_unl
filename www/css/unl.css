@@ -15,11 +15,11 @@
     border: none;
 }
 
-.wdn-main a.external {
+.dcf-main a.external {
     border: none;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 674px) {
     .progress-self-report {
         border-left: 1px solid black;
     }

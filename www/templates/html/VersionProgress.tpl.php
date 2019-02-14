@@ -5,8 +5,8 @@ $versions = $version_helper->getAllVersions();
 ?>
 <div class="panel">
     Select the version you want to view
-    <div class="bp1-wdn-grid-set-halves">
-        <div class="wdn-col">
+    <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+        <div>
             <form action="<?php echo $context->getURL() ?>" method="get">
                 <ul>
                     <li>
@@ -24,7 +24,7 @@ $versions = $version_helper->getAllVersions();
                 <input type="submit" value="submit" />
             </form>
         </div>
-        <div class="wdn-col">
+        <div>
             <form action="<?php echo $context->getURL() ?>" method="get">
                 <ul>
                     <li>
@@ -71,8 +71,8 @@ $versions = $version_helper->getAllVersions();
                     ?>
                     <li class="site clear-fix">
                         <div class="panel clear-fix">
-                            <div class="wdn-grid-set">
-                                <div class="bp2-wdn-col-one-half">
+                            <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+                                <div>
                                     <a href="<?php echo $site->getURL(); ?>">
                                         <div class="url">
                                             <?php echo $site->base_url ?>
@@ -82,7 +82,7 @@ $versions = $version_helper->getAllVersions();
                                         </div>
                                     </a>
                                 </div>
-                                <div class="bp2-wdn-col-one-half">
+                                <div>
                                     <dl class="progress">
                                         <dt>Estimated Completion Date</dt>
                                         <dd><?php echo $estimated_completion ?></dd>
