@@ -51,10 +51,12 @@
 </form>
 
 <script>
-    $(document).ready(function() {
+    document.addEventListener("DOMContentLoaded", function() {
+      $(document).ready(function () {
         WDN.loadCSS('<?php echo $base_url . 'plugins/unl/www/js/vendor/select2/select2.css' ?>');
-        WDN.loadJS('<?php echo $base_url . 'plugins/unl/www/js/vendor/select2/select2.min.js' ?>', function() {
-            $('.select2').select2();
+        WDN.loadJS('<?php echo $base_url . 'plugins/unl/www/js/vendor/select2/select2.min.js' ?>', function () {
+          $('.select2').select2();
         });
+      });
     });
 </script>
