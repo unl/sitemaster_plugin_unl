@@ -15,7 +15,7 @@ class PageTitleTest extends \PHPUnit\Framework\TestCase
         $plugin = new Plugin();
         $logger = new PageTitle(new Page());
         $parser = new HTML5();
-        $html = file_get_contents($plugin->getRootDirectory() . '/tests/data/template_5_0.html');
+        $html = file_get_contents($plugin->getRootDirectory() . '/tests/data/template_5_1.html');
         $xpath = $parser->parse($html);
 
         $this->assertEquals('Content Resource Examples', $logger->getPageTitle($xpath));
