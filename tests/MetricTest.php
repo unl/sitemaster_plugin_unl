@@ -134,12 +134,18 @@ class MetricTest extends \PHPUnit\Framework\TestCase
 
         $xpath_template = $this->getTestXPath('template_5_1_unl.html');
         $errors = $metric->getBrandInconsistencyReferences($xpath_template);
-        $this->assertEquals(2, count($errors));
+        $this->assertEquals(3, count($errors));
+
         $this->assertEquals('UNL', $errors[0]['value_found']);
         $this->assertEquals(1, $errors[0]['count']);
         $this->assertEquals('UNL', $errors[0]['context']);
-        $this->assertEquals(3, $errors[1]['count']);
-        $this->assertEquals('University of Nebraska-Lincoln', $errors[1]['value_found']);
+
+        $this->assertEquals('UNL', $errors[1]['value_found']);
+        $this->assertEquals(1, $errors[1]['count']);
+        $this->assertEquals('UNL', $errors[1]['context']);
+
+        $this->assertEquals(3, $errors[2]['count']);
+        $this->assertEquals('University of Nebraska-Lincoln', $errors[2]['value_found']);
     }
 
     public function getTestXPath($filename)

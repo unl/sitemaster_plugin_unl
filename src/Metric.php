@@ -463,7 +463,7 @@ class Metric extends MetricInterface
     {
         //look for youtubue embeds
         $nodes = $xpath->query(
-            "(//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li|//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:span)/xhtml:a"
+            "(//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li|//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:span|//xhtml:*[@id='dcf-breadcrumbs']/xhtml:ol/xhtml:li|//xhtml:*[@id='dcf=breadcrumbs']/xhtml:ol/xhtml:li/xhtml:span)/xhtml:a"
         );
         
         switch ($nodes->length) {
@@ -593,7 +593,7 @@ class Metric extends MetricInterface
     {
         $errors = array();
 
-        $nodes = $xpath->query("//*[@id='wdn_content_wrapper']//text()");
+        $nodes = $xpath->query("//*[@id='wdn_content_wrapper']//text()|//*[@id='dcf-main']//text()");
         foreach ($nodes as $node) {
             $unls = substr_count($node->textContent, 'UNL');
             if ($unls > 0) {
