@@ -17,7 +17,7 @@ class SiteTitle
      */
     public function getSiteTitle(DOMXPath $xpath)
     {
-        if (!$result = $xpath->query("//xhtml:*[@id='wdn_site_title']")) {
+        if (!$result = $xpath->query("//xhtml:*[@id='wdn_site_title']|//xhtml:*[@id='dcf-site-title']")) {
             return false;
         }
 
