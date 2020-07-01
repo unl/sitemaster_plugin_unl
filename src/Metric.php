@@ -35,7 +35,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF was found. Please independently ensure PDF accessibility',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
-                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'A box.com link was found',
+                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'A box.com link was found. Please independently ensure link is still valid.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Style inconsistencies were found with the University of Nebraska style guide.',
