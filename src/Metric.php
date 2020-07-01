@@ -17,10 +17,11 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_YOUTUBUE = 'UNL_FRAMEWORK_YOUTUBUE';
     const MARK_MN_UNL_FRAMEWORK_PDF_LINKS = 'UNL_FRAMEWORK_PDF';
     const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
+    const MARK_MN_UNL_FRAMEWORK_BOX_LINK = 'UNL_FRAMEWORK_BOX';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
     const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
-    
+
     /**
      * @param string $plugin_name
      * @param array $options
@@ -34,6 +35,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF was found. Please independently ensure PDF accessibility',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
+                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'A box.com link was found',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Style inconsistencies were found with the University of Nebraska style guide.',
@@ -44,6 +46,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'Please ensure that the PDF is accessible.',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
+                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'The use of box.com links are discouraged as University of Nebraska–Lincoln is moving away from using box.com',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
@@ -54,6 +57,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See [webaim](http://webaim.org/techniques/acrobat/) for help with PDF accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
+                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'Verify the box.com link is still valid, and if not remove or replace with current link.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
@@ -64,6 +68,7 @@ class Metric extends MetricInterface
                 self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 0,
                 self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 0,
                 self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
+                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 0,
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 1,
                 self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 1,
                 self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 0,
@@ -135,10 +140,10 @@ class Metric extends MetricInterface
     {
         $html_version = $this->getHTMLVersion($xpath);
         $dep_version = $this->getDEPVersion($xpath);
-        
+
         //Save these attributes for the page.
         PageAttributes::createPageAttributes($page->id, $html_version, $dep_version);
-        
+
         if (!$scan_attributes = ScanAttributes::getByScansID($scan->id)) {
             $scan_attributes = ScanAttributes::createScanAttributes($scan->id, $html_version, $dep_version);
         } else {
@@ -154,16 +159,16 @@ class Metric extends MetricInterface
                 $scan_attributes->dep_version = $dep_version;
                 $scan_attributes->save();
             }
-            
+
             //Update the root site URL if we need to
             if (empty($scan_attributes->root_site_url) && $root = $this->getRootSiteURL($xpath)) {
                 $scan_attributes->root_site_url = $root;
                 $scan_attributes->save();
             }
         }
-        
+
         $version_helper = new FrameworkVersionHelper();
-        
+
         if (!$version_helper->isCurrent($html_version, FrameworkVersionHelper::VERSION_NAME_HTML)) {
             //Create a new mark
             $machine_name = self::MARK_MN_UNL_FRAMEWORK_HTML;
@@ -174,7 +179,7 @@ class Metric extends MetricInterface
                 $this->getMarkDescription($machine_name),
                 $this->getMarkHelpText($machine_name)
             );
-            
+
             $page->addMark($mark, array(
                 'value_found' => $html_version
             ));
@@ -195,7 +200,7 @@ class Metric extends MetricInterface
                 'value_found' => $dep_version
             ));
         }
-        
+
         //youtube notice
         $embeds = $this->getYouTubeEmbeds($xpath);
         if (!empty($embeds)) {
@@ -207,14 +212,14 @@ class Metric extends MetricInterface
                 $this->getMarkDescription($machine_name),
                 $this->getMarkHelpText($machine_name)
             );
-            
+
             foreach ($embeds as $embed) {
                 $page->addMark($mark, array(
                     'value_found' => $embed
                 ));
             }
         }
-        
+
         $pdfs = $this->getPDFLinks($xpath);
         if (!empty($pdfs)) {
             $machine_name = self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS;
@@ -249,6 +254,25 @@ class Metric extends MetricInterface
                 $page->addMark($mark, array(
                     'value_found' => $flash_object['value_found'],
                     'context'     => $flash_object['context']
+                ));
+            }
+        }
+
+        $box_links = $this->getBoxLinks($xpath);
+        if (!empty($box_links)) {
+            $machine_name = self::MARK_MN_UNL_FRAMEWORK_BOX_LINK;
+            $mark = $this->getMark(
+                $machine_name,
+                $this->getMarkTitle($machine_name),
+                $this->getMarkPointDeduction($machine_name),
+                $this->getMarkDescription($machine_name),
+                $this->getMarkHelpText($machine_name)
+            );
+
+            foreach ($box_links as $box_link) {
+                $page->addMark($mark, array(
+                    'value_found' => $box_link['value_found'],
+                    'context'     => $box_link['context']
                 ));
             }
         }
@@ -304,7 +328,7 @@ class Metric extends MetricInterface
 
         return 'Framework Error';
     }
-    
+
     /**
      * get the point deduction for a mark
      *
@@ -352,7 +376,7 @@ class Metric extends MetricInterface
 
     /**
      * Get the html version of a page
-     * 
+     *
      * @param \DOMXPath $xpath the xpath
      * @return null|string the version (null if not found)
      */
@@ -392,7 +416,7 @@ class Metric extends MetricInterface
 
     /**
      * Get the dependency version of a page
-     * 
+     *
      * @param \DOMXPath $xpath the xpath of the page
      * @return null|string the version (null if not found)
      */
@@ -434,7 +458,7 @@ class Metric extends MetricInterface
 
     /**
      * Determine if a youtube was embedded in the page
-     * 
+     *
      * @param \DomXPath $xpath the xpath of the page
      * @return array an array of youtube embed sources will be returned
      */
@@ -443,19 +467,19 @@ class Metric extends MetricInterface
         $nodes = $xpath->query(
             "//xhtml:iframe[contains(@src,'//www.youtube.com/embed/')]"
         );
-        
+
         $sources = array();
         foreach ($nodes as $node) {
             $sources[] = $node->getAttribute('src');
         }
-        
+
         return $sources;
     }
 
     /**
      * Get the root site for this page.  The root site is the first site found in the breadcrumbs, as long as it is not 'www.unl.edu'.
      * A root site is usually a college or department.
-     * 
+     *
      * @param \DomXpath $xpath
      * @return bool
      */
@@ -465,7 +489,7 @@ class Metric extends MetricInterface
         $nodes = $xpath->query(
             "(//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li|//xhtml:*[@id='breadcrumbs']/xhtml:ul/xhtml:li/xhtml:span|//xhtml:*[@id='dcf-breadcrumbs']/xhtml:ol/xhtml:li|//xhtml:*[@id='dcf=breadcrumbs']/xhtml:ol/xhtml:li/xhtml:span)/xhtml:a"
         );
-        
+
         switch ($nodes->length) {
             case 0:
                 break;
@@ -487,7 +511,7 @@ class Metric extends MetricInterface
 
     /**
      * Get a array of PDF links
-     * 
+     *
      * @param \DomXpath $xpath
      * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
      */
@@ -498,7 +522,7 @@ class Metric extends MetricInterface
 
         foreach ($nodes as $node) {
             $href = $node->getAttribute('href');
-            
+
             if (strtolower(substr($href, -4)) == '.pdf') {
                 $links[] = array(
                     'value_found' => $href,
@@ -506,13 +530,38 @@ class Metric extends MetricInterface
                 );
             }
         }
-        
+
+        return $links;
+    }
+
+    /**
+     * Get a array of Box.com links
+     *
+     * @param \DomXpath $xpath
+     * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
+     */
+    public function getBoxLinks(\DomXpath $xpath)
+    {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:a");
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+
+            if (strpos($href, 'box.com') !== false) {
+                $links[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
         return $links;
     }
 
     /**
      * Get a list of flash objects
-     * 
+     *
      * @param \DomXpath $xpath
      * @return array - an array of objects.  Each link is an associative array with 'file' and 'html' values
      */
@@ -547,14 +596,14 @@ class Metric extends MetricInterface
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => array(),
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(),
         );
-        
+
         $nodes = $xpath->query("//xhtml:*[@id='maincontent']//xhtml:*[contains(@class,'wdn-icon-')]|//xhtml:*[@id='wdn_local_footer']//xhtml:*[contains(@class,'wdn-icon-')]");
 
         foreach ($nodes as $node) {
             //perform tests
             $node_value = preg_replace('/\s+/', '', $node->nodeValue);
             $context = htmlspecialchars($xpath->document->saveHTML($node));
-            
+
             //compute the value_found (icon class)
             $icon_class = '';
             $classes = explode(' ', $node->getAttribute('class'));
@@ -563,15 +612,15 @@ class Metric extends MetricInterface
                     $icon_class = $class;
                 }
             }
-            
+
             if (!empty($node_value)) {
                 $errors[self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][] = array(
                     'value_found' => $icon_class,
                     'context' => $context,
                 );
             }
-            
-            
+
+
             if (!$node->hasAttribute('aria-hidden') || 'true' != $node->getAttribute('aria-hidden')) {
                 $errors[self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][] = array(
                     'value_found' => $icon_class,
@@ -588,7 +637,7 @@ class Metric extends MetricInterface
      *
      * @param \DomXpath $xpath
      * @return array - an array of the textual references to "UNL" or similar. Each is an associative array with 'context', 'value_found' values
-     */ 
+     */
     public function getBrandInconsistencyReferences(\DomXpath $xpath)
     {
         $errors = array();
@@ -603,7 +652,7 @@ class Metric extends MetricInterface
                     'context' => $node->textContent
                 );
             }
-            $full_names = 
+            $full_names =
                 substr_count($node->textContent, 'University of Nebraska-Lincoln') + //normal dash
                 substr_count($node->textContent, 'University of Nebraska--Lincoln') +  //two dashes
                 substr_count($node->textContent, 'University of NebraskaLincoln') + //no space
