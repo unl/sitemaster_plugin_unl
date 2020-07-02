@@ -548,7 +548,7 @@ class Metric extends MetricInterface
         foreach ($nodes as $node) {
             $href = $node->getAttribute('href');
 
-            if (strpos($href, 'box.com') !== false) {
+            if (strpos($href, '.box.com') !== false) {
                 $links[] = array(
                     'value_found' => $href,
                     'context' => htmlspecialchars($xpath->document->saveHTML($node))
