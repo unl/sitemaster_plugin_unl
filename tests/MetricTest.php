@@ -44,7 +44,7 @@ class MetricTest extends \PHPUnit\Framework\TestCase
         $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
         $xpath_template_unknown = $this->getTestXPath('example.html');
 
-        $this->assertEquals('5.2.0', $metric->getDEPVersion($xpath_template_5_2));
+        $this->assertEquals('5.2.1', $metric->getDEPVersion($xpath_template_5_2));
         $this->assertEquals('5.1.5', $metric->getDEPVersion($xpath_template_5_1));
         $this->assertEquals('5.0.5', $metric->getDEPVersion($xpath_template_5_0));
         $this->assertEquals('4.0.9', $metric->getDEPVersion($xpath_template_4_0));
