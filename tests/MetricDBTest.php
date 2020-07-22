@@ -21,17 +21,29 @@ class MetricDBTest extends DBTestCase
         $metric_record = $metric->getMetricRecord();
         $site = Site::getByBaseURL('http://www.test.com/');
         $scan = Scan::createNewScan($site);
+        $page_5_2 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_2', Page::FOUND_WITH_CRAWL);
         $page_5_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_1', Page::FOUND_WITH_CRAWL);
         $page_5_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_0', Page::FOUND_WITH_CRAWL);
         $page_4_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/4_0', Page::FOUND_WITH_CRAWL);
         $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1', Page::FOUND_WITH_CRAWL);
         $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0', Page::FOUND_WITH_CRAWL);
 
+        $xpath_template_5_2     = $this->getTestXPath('template_5_2.html');
         $xpath_template_5_1     = $this->getTestXPath('template_5_1.html');
         $xpath_template_5_0     = $this->getTestXPath('template_5_0.html');
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
         $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
+
+        $metric->markPage($page_5_2, $xpath_template_5_2, $scan);
+
+        $page_attributes = PageAttributes::getByScannedPageID($page_5_2->id);
+        $scan_attributes = ScanAttributes::getByScansID($scan->id);
+
+        $this->assertEquals('5.2', $page_attributes->html_version);
+        $this->assertEquals('5.2.1', $page_attributes->dep_version);
+        $this->assertEquals('5.2', $scan_attributes->html_version);
+        $this->assertEquals('5.2.1', $scan_attributes->dep_version);
 
         $metric->markPage($page_5_1, $xpath_template_5_1, $scan);
 

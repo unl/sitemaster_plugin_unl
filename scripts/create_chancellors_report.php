@@ -23,7 +23,7 @@ function calcPercent($pages_with_errors, $total_pages)
 $csv[] = array(
     'Site URL',
     'Site Title',
-    'In 5.1',
+    'In 5.2',
     'Version Found',
     'Self Reported % Complete',
     'Est. Completion Date',
@@ -51,7 +51,7 @@ foreach ($sites as $site) {
         continue;
     }
 
-    $in_5_1           = NULL;
+    $in_5_2           = NULL;
     $percent_complete = NULL;
     $complete_date    = NULL;
     $gpa              = NULL;
@@ -149,10 +149,10 @@ foreach ($sites as $site) {
         continue;
     }
     
-    $in_5_1 = 'yes';
+    $in_5_2 = 'yes';
     $version_found = $unl_scan_attributes->html_version;
-    if ($unl_scan_attributes->html_version != '5.1') {
-        $in_5_1 = 'no';
+    if ($unl_scan_attributes->html_version != '5.2') {
+        $in_5_2 = 'no';
     }
     
     if (filter_var($unl_scan_attributes->root_site_url, FILTER_VALIDATE_URL)) {
@@ -167,7 +167,7 @@ foreach ($sites as $site) {
     $csv[] = array(
         $site->base_url,
         $title,
-        $in_5_1,
+        $in_5_2,
         $version_found,
         $percent_complete,
         $complete_date,
@@ -186,7 +186,7 @@ foreach ($sites as $site) {
     );
 }
 
-$fp = fopen(__DIR__ . '/../files/5.1_report.csv', 'w');
+$fp = fopen(__DIR__ . '/../files/5.2_report.csv', 'w');
 
 foreach ($csv as $fields) {
     fputcsv($fp, $fields);

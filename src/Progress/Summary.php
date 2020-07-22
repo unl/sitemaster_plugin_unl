@@ -58,7 +58,7 @@ class Summary
     }
 
     /**
-     * Determine if the found scan html version is valid (in 5.1)
+     * Determine if the found scan html version is valid (in 5.2)
      * 
      * @return bool
      */
@@ -72,7 +72,7 @@ class Summary
     }
 
     /**
-     * Determine if the found scan dependents are valid (in 5.1)
+     * Determine if the found scan dependents are valid (in 5.2)
      * 
      * @return bool
      */
@@ -86,14 +86,14 @@ class Summary
     }
 
     /**
-     * Determine if a given version is valid (in 5.1)
+     * Determine if a given version is valid (in 5.2)
      * 
      * @param mixed $version the version to check
      * @return bool
      */
     public function versionIsValid($version)
     {
-        if (version_compare($version, 5.1, '>=')) {
+        if (version_compare($version, 5.2, '>=')) {
             return true;
         }
 
