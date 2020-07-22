@@ -83,7 +83,7 @@ class EditForm implements ViewableInterface, PostHandlerInterface
      */
     public function getPageTitle()
     {
-        return 'Edit UNL 5.1 Self Reported Progress';
+        return 'Edit UNL 5.2 Self Reported Progress';
     }
 
     /**
