@@ -201,81 +201,30 @@ class Metric extends MetricInterface
             ));
         }
 
-        //youtube notice
-        $embeds = $this->getYouTubeEmbeds($xpath);
-        if (!empty($embeds)) {
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
+        $this->markMetric($page,
+            $this->getYouTubeEmbeds($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE,
+            false);
 
-            foreach ($embeds as $embed) {
-                $page->addMark($mark, array(
-                    'value_found' => $embed
-                ));
-            }
-        }
+        $this->markMetric($page,
+            $this->getPDFLinks($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS,
+            true);
 
-        $pdfs = $this->getPDFLinks($xpath);
-        if (!empty($pdfs)) {
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
+        $this->markMetric($page,
+            $this->getFlashObjects($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT,
+            true);
 
-            foreach ($pdfs as $pdf) {
-                $page->addMark($mark, array(
-                    'value_found' => $pdf['value_found'],
-                    'context'     => $pdf['context']
-                ));
-            }
-        }
+        $this->markMetric($page,
+            $this->getBoxLinks($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_BOX_LINK,
+            true);
 
-        $flash_objects = $this->getFlashObjects($xpath);
-        if (!empty($flash_objects)) {
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
-
-            foreach ($flash_objects as $flash_object) {
-                $page->addMark($mark, array(
-                    'value_found' => $flash_object['value_found'],
-                    'context'     => $flash_object['context']
-                ));
-            }
-        }
-
-        $box_links = $this->getBoxLinks($xpath);
-        if (!empty($box_links)) {
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_BOX_LINK;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
-
-            foreach ($box_links as $box_link) {
-                $page->addMark($mark, array(
-                    'value_found' => $box_link['value_found'],
-                    'context'     => $box_link['context']
-                ));
-            }
-        }
+        $this->markMetric($page,
+            $this->getBrandInconsistencyReferences($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES,
+            true);
 
         $errors = $this->getIconFontErrors($xpath);
         foreach ($errors as $machine_name=>$elements) {
@@ -294,22 +243,23 @@ class Metric extends MetricInterface
                 ));
             }
         }
+    }
 
-        $errors = $this->getBrandInconsistencyReferences($xpath);
-        if (!empty($errors)) {
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES;
+    function markMetric(&$page, $items, $machineName, $withContext = false){
+        if (!empty($items)) {
             $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
+                $machineName,
+                $this->getMarkTitle($machineName),
+                $this->getMarkPointDeduction($machineName),
+                $this->getMarkDescription($machineName),
+                $this->getMarkHelpText($machineName)
             );
-            foreach ($errors as $error) {
-                $page->addMark($mark, array(
-                    'value_found' => $error['value_found'],
-                    'context'     => $error['context']
-                ));
+            foreach ($items as $item) {
+                $markValues = array('value_found' => $item['value_found']);
+                if ($withContext === true) {
+                    $markValues['context'] = $item['context'];
+                }
+                $page->addMark($mark, $markValues);
             }
         }
     }
