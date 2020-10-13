@@ -170,35 +170,13 @@ class Metric extends MetricInterface
         $version_helper = new FrameworkVersionHelper();
 
         if (!$version_helper->isCurrent($html_version, FrameworkVersionHelper::VERSION_NAME_HTML)) {
-            //Create a new mark
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_HTML;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
-
-            $page->addMark($mark, array(
-                'value_found' => $html_version
-            ));
+            $items = array('value_found' => $html_version);
+            $this->markMetric($page, $items, self::MARK_MN_UNL_FRAMEWORK_HTML, false);
         }
 
         if (!$version_helper->isCurrent($dep_version, FrameworkVersionHelper::VERSION_NAME_DEP)) {
-            //Create a new mark
-            $machine_name = self::MARK_MN_UNL_FRAMEWORK_DEP;
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
-
-            $page->addMark($mark, array(
-                'value_found' => $dep_version
-            ));
+            $items = array('value_found' => $dep_version);
+            $this->markMetric($page, $items, self::MARK_MN_UNL_FRAMEWORK_DEP, false);
         }
 
         $this->markMetric($page,
@@ -227,21 +205,8 @@ class Metric extends MetricInterface
             true);
 
         $errors = $this->getIconFontErrors($xpath);
-        foreach ($errors as $machine_name=>$elements) {
-            $mark = $this->getMark(
-                $machine_name,
-                $this->getMarkTitle($machine_name),
-                $this->getMarkPointDeduction($machine_name),
-                $this->getMarkDescription($machine_name),
-                $this->getMarkHelpText($machine_name)
-            );
-
-            foreach ($elements as $element) {
-                $page->addMark($mark, array(
-                    'value_found' => $element['value_found'],
-                    'context'     => $element['context']
-                ));
-            }
+        foreach ($errors as $machineName => $elements) {
+            $this->markMetric($page, $elements, $machineName, true);
         }
     }
 
