@@ -28,52 +28,69 @@ class Metric extends MetricInterface
      */
     public function __construct($plugin_name, array $options = array())
     {
-        $options = array_replace_recursive(array(
-            'title_text' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
-                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'A Youtube Embed was found',
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'A PDF was found. Please independently ensure PDF accessibility',
-                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'A flash object was found',
-                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'A box.com link was found which may now be invalid due to UNL migrating from Box to Office 365 services for document storage.',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'An icon font was found without aria-hidden="true"',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'An icon font is applied to an element with contents',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'Style inconsistencies were found with the University of Nebraska style guide.',
+        $optionsConfig = array(
+            self::MARK_MN_UNL_FRAMEWORK_HTML => array(
+                'title_text' => 'The UNLedu framework HTML is out of date',
+                'description_text' => 'The UNLedu framework HTML is out of date',
+                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
+                'point_deductions' => 80
             ),
-            'description_text' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 'The UNLedu framework HTML is out of date',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'The UNLedu framework dependents are out of date',
-                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'Please ensure that the PDF is accessible.',
-                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'The use of flash is discouraged as it does not work on most mobile devices',
-                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'Please ensure this link remains valid during this transition, and change it to point to its new location as soon as your documents have been moved.',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
+            self::MARK_MN_UNL_FRAMEWORK_DEP => array(
+                'title_text' => 'The UNLedu framework dependents are out of date',
+                'description_text' => 'The UNLedu framework dependents are out of date',
+                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
+                'point_deductions' => 20
             ),
-            'help_text' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
-                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 'See [webaim](http://webaim.org/techniques/acrobat/) for help with PDF accessibility.',
-                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 'Either remove the flash object, or replace it with an HTML5 alternative.',
-                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 'Verify the box.com link is still valid, and if not remove or replace with current link location.',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
+            self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => array(
+                'title_text' => 'A Youtube Embed was found',
+                'description_text' => 'It is important to keep in mind that youtube is blocked in some places around the world, including China.  It is a best practice to host video on mediahub.unl.edu, where the video will not be blocked.',
+                'help_text' => 'Host the video from [Mediahub](http://mediahub.unl.edu/)',
+                'point_deductions' => 0
             ),
-            'point_deductions' => array(
-                self::MARK_MN_UNL_FRAMEWORK_HTML => 80,
-                self::MARK_MN_UNL_FRAMEWORK_DEP => 20,
-                self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => 0,
-                self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => 0,
-                self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => 0,
-                self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => 0,
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => 1,
-                self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => 1,
-                self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => 0,
+            self::MARK_MN_UNL_FRAMEWORK_PDF_LINKS => array(
+                'title_text' => 'A PDF was found. Please independently ensure PDF accessibility',
+                'description_text' => 'Please ensure that the PDF is accessible.',
+                'help_text' => 'See [webaim](http://webaim.org/techniques/acrobat/) for help with PDF accessibility.',
+                'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT => array(
+                'title_text' => 'A flash object was found',
+                'description_text' => 'The use of flash is discouraged as it does not work on most mobile devices',
+                'help_text' => 'Either remove the flash object, or replace it with an HTML5 alternative.',
+                'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_BOX_LINK => array(
+                'title_text' => 'A box.com link was found which may now be invalid due to UNL migrating from Box to Office 365 services for document storage.',
+                'description_text' => 'Please ensure this link remains valid during this transition, and change it to point to its new location as soon as your documents have been moved.',
+                'help_text' => 'Verify the box.com link is still valid, and if not remove or replace with current link location.',
+                'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(
+                'title_text' => 'An icon font was found without aria-hidden="true"',
+                'description_text' => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
+                'help_text' => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                'point_deductions' => 1
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => array(
+                'title_text' => 'An icon font is applied to an element with contents',
+                'description_text' => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
+                'help_text' => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                'point_deductions' => 1
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => array(
+                'title_text' => 'Style inconsistencies were found with the University of Nebraska style guide.',
+                'description_text' => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
+                'help_text' => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
+                'point_deductions' => 0
+            ),
+            'default'=> array(
+                'title_text' => 'Framework Error',
+                'description_text' => 'General UNLedu framework error',
+                'help_text' => 'Fix this problem',
+                'point_deductions' => 0
             )
-        ), $options);
+        );
+        $options = array_replace_recursive($optionsConfig, $options);
 
         parent::__construct($plugin_name, $options);
     }
@@ -170,12 +187,12 @@ class Metric extends MetricInterface
         $version_helper = new FrameworkVersionHelper();
 
         if (!$version_helper->isCurrent($html_version, FrameworkVersionHelper::VERSION_NAME_HTML)) {
-            $items = array('value_found' => $html_version);
+            $items = array(array('value_found' => $html_version));
             $this->markMetric($page, $items, self::MARK_MN_UNL_FRAMEWORK_HTML, false);
         }
 
         if (!$version_helper->isCurrent($dep_version, FrameworkVersionHelper::VERSION_NAME_DEP)) {
-            $items = array('value_found' => $dep_version);
+            $items = array(array('value_found' => $dep_version));
             $this->markMetric($page, $items, self::MARK_MN_UNL_FRAMEWORK_DEP, false);
         }
 
@@ -214,10 +231,10 @@ class Metric extends MetricInterface
         if (!empty($items)) {
             $mark = $this->getMark(
                 $machineName,
-                $this->getMarkTitle($machineName),
-                $this->getMarkPointDeduction($machineName),
-                $this->getMarkDescription($machineName),
-                $this->getMarkHelpText($machineName)
+                $this->getMarkValue($machineName, 'title_text'),
+                $this->getMarkValue($machineName, 'point_deductions'),
+                $this->getMarkValue($machineName, 'description_text'),
+                $this->getMarkValue($machineName, 'help_text')
             );
             foreach ($items as $item) {
                 $markValues = array('value_found' => $item['value_found']);
@@ -229,64 +246,14 @@ class Metric extends MetricInterface
         }
     }
 
-    /**
-     * get the name for a mark
-     *
-     * @param string $machine_name the machine name of the mark
-     * @return string
-     */
-    public function getMarkTitle($machine_name)
-    {
-        if (isset($this->options['title_text'][$machine_name])) {
-            return $this->options['title_text'][$machine_name];
+    private function getMarkValue($machineName, $name) {
+        if (isset($this->options[$machineName][$name])) {
+            return $this->options[$machineName][$name];
+        } elseif (isset($this->options['default'][$name])) {
+            return $this->options['default'][$name];
         }
 
-        return 'Framework Error';
-    }
-
-    /**
-     * get the point deduction for a mark
-     *
-     * @param string $machine_name the machine name of the mark
-     * @return double
-     */
-    public function getMarkPointDeduction($machine_name)
-    {
-        if (isset($this->options['point_deductions'][$machine_name])) {
-            return $this->options['point_deductions'][$machine_name];
-        }
-
-        return 0;
-    }
-
-    /**
-     * get the message for a mark
-     *
-     * @param string $machine_name the machine name of the mark
-     * @return string
-     */
-    public function getMarkDescription($machine_name)
-    {
-        if (isset($this->options['description_text'][$machine_name])) {
-            return $this->options['description_text'][$machine_name];
-        }
-
-        return 'General UNLedu framework error';
-    }
-
-    /**
-     * get the help text to be used with a mark for a given machine name
-     *
-     * @param string $machine_name the machine name of the mark
-     * @return string
-     */
-    public function getMarkHelpText($machine_name)
-    {
-        if (isset($this->options['help_text'][$machine_name])) {
-            return $this->options['help_text'][$machine_name];
-        }
-
-        return 'Fix this problem';
+        return $name . ' not defined' . ' for ' . $machineName;
     }
 
     /**
