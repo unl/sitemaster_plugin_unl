@@ -59,9 +59,9 @@ class MetricTest extends \PHPUnit\Framework\TestCase
     public function getYouTubeEmbeds()
     {
         $metric = new Metric('unl');
-        
+
         $xpath_template = $this->getTestXPath('example.html');
-        $this->assertEquals(array('//www.youtube.com/embed/SxPE9xwsXTs'), $metric->getYouTubeEmbeds($xpath_template));
+        $this->assertEquals(array(array('value_found' => '//www.youtube.com/embed/SxPE9xwsXTs')), $metric->getYouTubeEmbeds($xpath_template));
 
         $xpath_template = $this->getTestXPath('template_5_2.html');
         $this->assertEquals(array(), $metric->getYouTubeEmbeds($xpath_template));
@@ -121,17 +121,17 @@ class MetricTest extends \PHPUnit\Framework\TestCase
 
         $xpath_template = $this->getTestXPath('icon-font.html');
         $errors = $metric->getIconFontErrors($xpath_template);
-        
+
         //Should only have found 1 element for both errors
         $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN]));
         $this->assertEquals(1, count($errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS]));
-        
+
         //Make sure we found the right elements
         $this->assertEquals('wdn-icon-no-aria-hidden', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN][0]['value_found']);
         $this->assertEquals('wdn-icon-has-contents', $errors[Metric::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS][0]['value_found']);
     }
 
-     /**
+    /**
      * @test
      */
     public function getBrandInconsistencies()

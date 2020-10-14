@@ -246,7 +246,7 @@ class Metric extends MetricInterface
         }
     }
 
-    private function getMarkValue($machineName, $name) {
+    public function getMarkValue($machineName, $name) {
         if (isset($this->options[$machineName][$name])) {
             return $this->options[$machineName][$name];
         } elseif (isset($this->options['default'][$name])) {
@@ -352,7 +352,9 @@ class Metric extends MetricInterface
 
         $sources = array();
         foreach ($nodes as $node) {
-            $sources[] = $node->getAttribute('src');
+            $sources[] = array(
+                'value_found' => $node->getAttribute('src')
+            );
         }
 
         return $sources;
@@ -479,13 +481,11 @@ class Metric extends MetricInterface
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(),
         );
 
-        $nodes = $xpath->query("//xhtml:*[@id='maincontent']//xhtml:*[contains(@class,'wdn-icon-')]|//xhtml:*[@id='wdn_local_footer']//xhtml:*[contains(@class,'wdn-icon-')]");
-
+        $nodes = $xpath->query("//xhtml:*[@id='maincontent']//xhtml:*[contains(@class,'wdn-icon-')]|//xhtml:*[@id='dcf-main']//xhtml:*[contains(@class,'wdn-icon-')]|//xhtml:*[@id='dcf-wdn_local_footer']//xhtml:*[contains(@class,'wdn-icon-')]|//xhtml:*[@id='dcf-footer']//xhtml:*[contains(@class,'wdn-icon-')]");
         foreach ($nodes as $node) {
             //perform tests
             $node_value = preg_replace('/\s+/', '', $node->nodeValue);
             $context = htmlspecialchars($xpath->document->saveHTML($node));
-
             //compute the value_found (icon class)
             $icon_class = '';
             $classes = explode(' ', $node->getAttribute('class'));
