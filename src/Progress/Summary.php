@@ -58,7 +58,7 @@ class Summary
     }
 
     /**
-     * Determine if the found scan html version is valid (in 5.2)
+     * Determine if the found scan html version is valid (in 5.3)
      * 
      * @return bool
      */
@@ -72,7 +72,7 @@ class Summary
     }
 
     /**
-     * Determine if the found scan dependents are valid (in 5.2)
+     * Determine if the found scan dependents are valid (in 5.3)
      * 
      * @return bool
      */
@@ -86,7 +86,7 @@ class Summary
     }
 
     /**
-     * Determine if a given version is valid (in 5.2)
+     * Determine if a given version is valid (in 5.3)
      * 
      * @param mixed $version the version to check
      * @return bool

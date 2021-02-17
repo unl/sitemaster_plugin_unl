@@ -21,6 +21,7 @@ class MetricDBTest extends DBTestCase
         $metric_record = $metric->getMetricRecord();
         $site = Site::getByBaseURL('http://www.test.com/');
         $scan = Scan::createNewScan($site);
+        $page_5_3 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_3', Page::FOUND_WITH_CRAWL);
         $page_5_2 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_2', Page::FOUND_WITH_CRAWL);
         $page_5_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_1', Page::FOUND_WITH_CRAWL);
         $page_5_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/5_0', Page::FOUND_WITH_CRAWL);
@@ -28,12 +29,21 @@ class MetricDBTest extends DBTestCase
         $page_3_1 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_1', Page::FOUND_WITH_CRAWL);
         $page_3_0 = Page::createNewPage($scan->id, $site->id, 'http://test.com/3_0', Page::FOUND_WITH_CRAWL);
 
+        $xpath_template_5_3     = $this->getTestXPath('template_5_3.html');
         $xpath_template_5_2     = $this->getTestXPath('template_5_2.html');
         $xpath_template_5_1     = $this->getTestXPath('template_5_1.html');
         $xpath_template_5_0     = $this->getTestXPath('template_5_0.html');
         $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
         $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
         $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
+
+        $metric->markPage($page_5_3, $xpath_template_5_3, $scan);
+
+        $page_attributes = PageAttributes::getByScannedPageID($page_5_3->id);
+        $scan_attributes = ScanAttributes::getByScansID($scan->id);
+
+        $this->assertEquals('5.3', $page_attributes->html_version);
+        $this->assertEquals('5.3.1', $page_attributes->dep_version);
 
         $metric->markPage($page_5_2, $xpath_template_5_2, $scan);
 
@@ -42,8 +52,6 @@ class MetricDBTest extends DBTestCase
 
         $this->assertEquals('5.2', $page_attributes->html_version);
         $this->assertEquals('5.2.1', $page_attributes->dep_version);
-        $this->assertEquals('5.2', $scan_attributes->html_version);
-        $this->assertEquals('5.2.1', $scan_attributes->dep_version);
 
         $metric->markPage($page_5_1, $xpath_template_5_1, $scan);
 
@@ -52,8 +60,6 @@ class MetricDBTest extends DBTestCase
 
         $this->assertEquals('5.1', $page_attributes->html_version);
         $this->assertEquals('5.1.5', $page_attributes->dep_version);
-        $this->assertEquals('5.1', $scan_attributes->html_version);
-        $this->assertEquals('5.1.5', $scan_attributes->dep_version);
 
         $metric->markPage($page_5_0, $xpath_template_5_0, $scan);
         $scan_attributes->reload();
