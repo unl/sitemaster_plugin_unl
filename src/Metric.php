@@ -86,15 +86,15 @@ class Metric extends MetricInterface
 				'point_deductions' => 0
 			),
 			self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE => array(
-				'title_text' => 'Found use of deprecated WDN styles file',
-				'description_text' => 'Use of the deprecated WDN styles file is discouraged and will not be available beginning July 2022',
+				'title_text' => 'Found use of deprecated WDN CSS file.',
+				'description_text' => 'Use of the deprecated WDN CSS file is discouraged and will not be available beginning July 2022.',
 				'help_text' => 'See [the wdn css documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
 				'point_deductions' => 0
 			),
 			self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES => array(
-				'title_text' => 'Found use of deprecated WDN style reference',
-				'description_text' => 'Use of the deprecated WDN styles are discouraged and will not be supported beginning July 2022',
-				'help_text' => 'See [the wdn css documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
+				'title_text' => 'Found use of deprecated WDN style reference.',
+				'description_text' => 'Use of the deprecated WDN styles are discouraged and will not be supported beginning July 2022.',
+				'help_text' => 'See [the wdn css documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic. Some styles reported may not be WDN styles but match the regex pattern, these may be overridden.',
 				'point_deductions' => 0
 			),
 			'default'=> array(
