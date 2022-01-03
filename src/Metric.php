@@ -617,8 +617,8 @@ class Metric extends MetricInterface
 			$classMatch = $node->getAttribute('class');
 			$classes = preg_split("/\s+/", $classMatch);
 			foreach ($classes as $class) {
-				// only flag classes which start with wdn
-				if (substr(strtolower($class), 0, 3) === 'wdn') {
+				// only flag classes which start with wdn or contains '-wdn-col-'
+				if (substr(strtolower($class), 0, 3) === 'wdn' || strpos(strtolower($class), '-wdn-col-')) {
 					$links[] = array(
                         'value_found' => $class,
                         'context' => htmlspecialchars($xpath->document->saveHTML($node))
