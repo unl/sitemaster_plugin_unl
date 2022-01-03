@@ -58,7 +58,7 @@ if ($context->depIsValid()) {
         <?php
         if ($context->scan) {
             ?>
-          <a href="<?php echo $context->scan->getURL() ?>unl/versions/" class="wdn-button wdn-button-triad">See what versions we found</a>
+          <a href="<?php echo $context->scan->getURL() ?>unl/versions/" class="dcf-btn dcf-btn-secondary">See what versions we found</a>
             <?php
         }
 
@@ -66,7 +66,7 @@ if ($context->depIsValid()) {
 
         if ($user && $context->site->userIsVerified($user)) {
             ?>
-          <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="wdn-button wdn-pull-right">Edit self reported progress</a>
+          <a href="<?php echo $context->site->getURL() ?>unl_progress/edit/" class="dcf-btn dcf-btn-primary dcf-float-right">Edit self reported progress</a>
             <?php
         }
         ?>
