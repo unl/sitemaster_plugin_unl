@@ -1,10 +1,10 @@
-<form action="<?php echo $context->getEditURL(); ?>" method="POST">
+<form class="dcf-form" action="<?php echo $context->getEditURL(); ?>" method="POST">
     <ol>
         <li>
             <label for="estimated_completion">Estimated Completion Date</label>
             <input id="estimated_completion" name="estimated_completion" type="date" value="<?php echo $context->progress->estimated_completion ?>" >
         </li>
-        <li>
+        <li class="dcf-input-radio">
             <label for="self_progress">Current Conversion Progress</label>
             <?php 
             $value = 0;
@@ -47,7 +47,7 @@
     </ol>
 
     <input type="hidden" name="action" value="edit" />
-    <button type="submit">Save</button>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Save</button>
 </form>
 
 <script>

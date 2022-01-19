@@ -47,7 +47,7 @@ $id = $context->getVersionType() . uniqid();
     
     <div class="table-scroll-container">
         <div class="table-scroll">
-            <table class="dcf-bleed sortable" data-sortlist="[[0,1]]">
+            <table class="dcf-table dcf-bleed sortable" data-sortlist="[[0,1]]">
                 <thead>
                     <th>Date</th>
                     <?php foreach ($data['versions'] as $version=>$version_data): ?>

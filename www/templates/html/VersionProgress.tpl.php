@@ -7,7 +7,7 @@ $versions = $version_helper->getAllVersions();
     Select the version you want to view
     <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
         <div>
-            <form action="<?php echo $context->getURL() ?>" method="get">
+            <form class="dcf-form" action="<?php echo $context->getURL() ?>" method="get">
                 <ul>
                     <li>
                         <label for="major_release_version">
@@ -21,11 +21,11 @@ $versions = $version_helper->getAllVersions();
                         </select>
                     </li>
                 </ul>
-                <input type="submit" value="submit" />
+                <input class="dcf-btn dcf-btn-primary" type="submit" value="submit" />
             </form>
         </div>
         <div>
-            <form action="<?php echo $context->getURL() ?>" method="get">
+            <form class="dcf-form" action="<?php echo $context->getURL() ?>" method="get">
                 <ul>
                     <li>
                         <label for="major_release_version">
@@ -39,7 +39,7 @@ $versions = $version_helper->getAllVersions();
                         </select>
                     </li>
                 </ul>
-                <input type="submit" value="submit" />
+                <input class="dcf-btn dcf-btn-primary" type="submit" value="submit" />
             </form>
         </div>
     </div>
