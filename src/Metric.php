@@ -21,6 +21,8 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
     const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
+    const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE';
+    const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES';
 
     /**
      * @param string $plugin_name
@@ -81,6 +83,18 @@ class Metric extends MetricInterface
                 'title_text' => 'Style inconsistencies were found with the University of Nebraska style guide.',
                 'description_text' => 'In written communication, the full name, University of Nebraska–Lincoln, should be spelled out when the university is first mentioned or cited. Thereafter, references should cite “the university” or “Nebraska.”',
                 'help_text' => 'See [the brand book](http://unlcms.unl.edu/ucomm/styleguide/u#UNL-abbrev) for more information on this topic.',
+                'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE => array(
+                'title_text' => 'Found use of deprecated WDN CSS file.',
+                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please see [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for the phase out schedule.',
+                'help_text' => 'See [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
+                'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES => array(
+                'title_text' => 'Found use of deprecated WDN style reference.',
+                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please see [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for the phase out schedule.',
+                'help_text' => 'See [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
                 'point_deductions' => 0
             ),
             'default'=> array(
@@ -219,6 +233,16 @@ class Metric extends MetricInterface
         $this->markMetric($page,
             $this->getBrandInconsistencyReferences($xpath),
             self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES,
+            true);
+
+        $this->markMetric($page,
+            $this->getDeprecatedStyleFileReferences($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE,
+            true);
+
+        $this->markMetric($page,
+            $this->getDeprecatedStyleReferences($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES,
             true);
 
         $errors = $this->getIconFontErrors($xpath);
@@ -551,5 +575,58 @@ class Metric extends MetricInterface
         }
 
         return $errors;
+    }
+
+    /**
+     * Check for deprecated styles file references
+     *
+     * @param \DomXpath $xpath
+     * @returnrray - an array of the textual references to deprecated file. Each is an associative array with 'context', 'value_found' values
+     */
+    public function getDeprecatedStyleFileReferences(\DomXpath $xpath)
+    {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:link");
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+
+            if (preg_match('/wdn\/templates_5.\d+\/css\/deprecated.css/i', $href)) {
+                $links[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
+        return $links;
+    }
+
+    /**
+     * Check for deprecated styles references
+     *
+     * @param \DomXpath $xpath
+     * @returnrray - an array of the textual references to deprecated styles. Each is an associative array with 'context', 'value_found' values
+     */
+    public function getDeprecatedStyleReferences(\DomXpath $xpath)
+    {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:*[@id='dcf-main']//xhtml:*[contains(@class,'wdn-')]|//xhtml:*[@id='dcf-main']//xhtml:*[contains(@class,'wdn_')]|//xhtml:*[@id='dcf-footer']//xhtml:*[contains(@class,'wdn-')]|//xhtml:*[@id='dcf-footer']//xhtml:*[contains(@class,'wdn_')]");
+
+        foreach ($nodes as $node) {
+            $classMatch = $node->getAttribute('class');
+            $classes = preg_split("/\s+/", $classMatch);
+            foreach ($classes as $class) {
+                // only flag classes which start with wdn or contains '-wdn-col-'
+                if (substr(strtolower($class), 0, 3) === 'wdn' || strpos(strtolower($class), '-wdn-col-')) {
+                    $links[] = array(
+                        'value_found' => $class,
+                        'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                    );
+                }
+            }
+        }
+
+        return $links;
     }
 }
