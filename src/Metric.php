@@ -87,13 +87,13 @@ class Metric extends MetricInterface
             ),
             self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE => array(
                 'title_text' => 'Found use of deprecated WDN CSS file.',
-                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please see the WDN styles documentation link below for the phase out schedule.',
+                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please use the WDN styles documentation link below for the phase out schedule.',
                 'help_text' => 'See [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
                 'point_deductions' => 0
             ),
             self::MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES => array(
                 'title_text' => 'Found use of deprecated WDN style reference.',
-                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please see the WDN styles documentation link below for the phase out schedule.',
+                'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please use the WDN styles documentation link below for the phase out schedule.',
                 'help_text' => 'See [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
                 'point_deductions' => 0
             ),
