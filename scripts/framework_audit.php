@@ -37,6 +37,7 @@ $csv[] = array(
     'Site Title',
     'HTML Version Found',
     'DEP Version Found',
+    'Template Type Found',
 );
 
 function getXPath($url)
@@ -78,6 +79,7 @@ foreach ($sites as $site) {
     
     $dep = $metric->getDEPVersion($xpath);
     $html = $metric->getHTMLVersion($xpath);
+    $type = $metric->getTemplateType($xpath);
     
     //convert null to a string for more accurate array access (php converts a null key to an empty string '')
     if (null === $dep) {
@@ -86,6 +88,10 @@ foreach ($sites as $site) {
     
     if (null === $html) {
         $html = 'null';
+    }
+
+    if (null === $type) {
+        $type = 'null';
     }
     
     if (!isset($found_versions['dep'][$dep])) {
@@ -96,14 +102,20 @@ foreach ($sites as $site) {
         $found_versions['html'][$html] = 0;
     }
 
+    if (!isset($found_versions['type'][$type])) {
+        $found_versions['type'][$type] = 0;
+    }
+
     $found_versions['dep'][$dep]++;
     $found_versions['html'][$html]++;
+    $found_versions['type'][$type]++;
 
     $csv[] = array(
         $site->base_url,
         str_replace(array("\r","\n"), ' ', $title),
         $html,
-        $dep
+        $dep,
+        $type
     );
 }
 
@@ -135,6 +147,15 @@ foreach ($found_versions['dep'] as $dep_version=>$num_sites) {
     }
 }
 
+foreach ($found_versions['type'] as $template_type=>$num_sites) {
+    if ($record = VersionHistory::getByDateAndVersion($date_of_scan, VersionHistory::VERSION_TYPE_TYPE, $template_type)) {
+        $record->number_of_sites = $num_sites;
+        $record->save();
+    } else {
+        VersionHistory::createHistoryRecord(VersionHistory::VERSION_TYPE_TYPE, $template_type, $num_sites, $date_of_scan);
+    }
+}
+
 //Clean up existing data for the day.
 
 $existing_html = new \SiteMaster\Plugins\Unl\VersionHistory\ByTypeAndDate(array(
@@ -156,6 +177,18 @@ $existing_dep = new \SiteMaster\Plugins\Unl\VersionHistory\ByTypeAndDate(array(
 
 foreach ($existing_dep as $version_record) {
     if (!array_key_exists($version_record->version_number, $found_versions['dep'])) {
+        echo $version_record->version_number . ' was no longer found, deleting...' . PHP_EOL;
+        $version_record->delete();
+    }
+}
+
+$existing_type = new \SiteMaster\Plugins\Unl\VersionHistory\ByTypeAndDate(array(
+    'version_type' => VersionHistory::VERSION_TYPE_TYPE,
+    'dates' => array($date_of_scan)
+));
+
+foreach ($existing_type as $version_record) {
+    if (!array_key_exists($version_record->version_number, $found_versions['type'])) {
         echo $version_record->version_number . ' was no longer found, deleting...' . PHP_EOL;
         $version_record->delete();
     }
