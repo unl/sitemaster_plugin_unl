@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `unl_scan_attributes` (
   `scans_id` INT NOT NULL,
   `html_version` VARCHAR(10),
   `dep_version` VARCHAR(10),
+  `template_type` VARCHAR(20),
   `root_site_url` VARCHAR(255),
   CONSTRAINT `fk_unl_scan_attributes_scans1`
   FOREIGN KEY (`scans_id`)
@@ -11,7 +12,8 @@ CREATE TABLE IF NOT EXISTS `unl_scan_attributes` (
     ON UPDATE NO ACTION,
   PRIMARY KEY (`id`),
   INDEX `scan_html_version_index` (`html_version` ASC),
-  INDEX `scan_dep_version_index` (`dep_version` ASC))
+  INDEX `scan_dep_version_index` (`dep_version` ASC),
+  INDEX `scan_type_version_index` (`template_type` ASC))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `unl_page_attributes` (
@@ -19,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `unl_page_attributes` (
   `scanned_page_id` INT NOT NULL,
   `html_version` VARCHAR(10),
   `dep_version` VARCHAR(10),
+  `template_type` VARCHAR(20),
   CONSTRAINT `fk_unl_page_attributes_page1`
   FOREIGN KEY (`scanned_page_id`)
   REFERENCES `scanned_page` (`id`)
@@ -26,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `unl_page_attributes` (
     ON UPDATE NO ACTION,
   PRIMARY KEY (`id`),
   INDEX `scan_html_version_index` (`html_version` ASC),
-  INDEX `scan_dep_version_index` (`dep_version` ASC))
+  INDEX `scan_dep_version_index` (`dep_version` ASC),
+  INDEX `scan_type_version_index` (`template_type` ASC))
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `unl_site_progress` (
@@ -51,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `unl_site_progress` (
 
 CREATE TABLE IF NOT EXISTS `unl_version_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `version_type` ENUM('HTML', 'DEP') NOT NULL,
+  `version_type` ENUM('HTML', 'DEP', 'TYPE') NOT NULL,
   `version_number` VARCHAR(56),
   `number_of_sites` INT NOT NULL DEFAULT 0,
   `date_created` DATE NOT NULL,

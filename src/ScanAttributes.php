@@ -11,6 +11,7 @@ class ScanAttributes extends Record
     public $scans_id;         //fk for scans.id
     public $html_version;     //VARCHAR(10)
     public $dep_version;      //VARCHAR(10)
+    public $template_type;    //VARCHAR(20)
     public $root_site_url;    //VARCHAR(255)
 
     public function keys()
@@ -40,10 +41,11 @@ class ScanAttributes extends Record
      * @param int $scans_id the scans.id
      * @param string $html_version the lowest html version found in the scan
      * @param string $dep_version the lowest dependents version found in the scan
+     * @param string $template_type the type of template being used
      * @param array $fields an associative array of field names and values to insert
      * @return bool|ScanAttributes
      */
-    public static function createScanAttributes($scans_id, $html_version, $dep_version, array $fields = array())
+    public static function createScanAttributes($scans_id, $html_version, $dep_version, $template_type, array $fields = array())
     {
         $link = new self();
         $link->synchronizeWithArray($fields);
@@ -51,6 +53,7 @@ class ScanAttributes extends Record
         $link->scans_id = $scans_id;
         $link->html_version    = $html_version;
         $link->dep_version     = $dep_version;
+        $link->template_type   = $template_type;
 
         if (!$link->insert()) {
             return false;

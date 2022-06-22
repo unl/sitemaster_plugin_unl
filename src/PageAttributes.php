@@ -11,6 +11,7 @@ class PageAttributes extends Record
     public $scanned_page_id;  //fk for scanned_page.id
     public $html_version;     //VARCHAR(10)
     public $dep_version;      //VARCHAR(10)
+    public $template_type;    //VARCHAR(20)
 
     public function keys()
     {
@@ -42,7 +43,7 @@ class PageAttributes extends Record
      * @param array $fields an associative array of field names and values to insert
      * @return bool|PageAttributes
      */
-    public static function createPageAttributes($scanned_page_id, $html_version, $dep_version, array $fields = array())
+    public static function createPageAttributes($scanned_page_id, $html_version, $dep_version, $template_type, array $fields = array())
     {
         $link = new self();
         $link->synchronizeWithArray($fields);
@@ -50,6 +51,7 @@ class PageAttributes extends Record
         $link->scanned_page_id = $scanned_page_id;
         $link->html_version    = $html_version;
         $link->dep_version     = $dep_version;
+        $link->template_type   = $template_type;
 
         if (!$link->insert()) {
             return false;
