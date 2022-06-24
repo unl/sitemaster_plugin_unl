@@ -49,7 +49,7 @@ if ($context->typeIsValid()) {
                 <div>
                     <div class="visual-island <?php echo $current_type_valid ?>">
                         <span class="dashboard-value"><?php echo $current_type ?></span>
-                        <span class="dashboard-metric">Framework Type</span>
+                        <span class="dashboard-metric">Template Type</span>
                     </div>
                 </div>
             </div>
