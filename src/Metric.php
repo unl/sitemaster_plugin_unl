@@ -192,7 +192,7 @@ class Metric extends MetricInterface
                 $scan_attributes->save();
             }
 
-            if(!is_null($template_type)){
+            if (!is_null($template_type)) {
                 $scan_attributes->template_type = $template_type;
                 $scan_attributes->save();
             }
