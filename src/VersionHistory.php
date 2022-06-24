@@ -9,13 +9,14 @@ use Sitemaster\Core\Util;
 class VersionHistory extends Record
 {
     public $id; //int required
-    public $version_type; //ENUM('HTML', 'DEP')
+    public $version_type; //ENUM('HTML', 'DEP', 'TYPE')
     public $version_number; //VARCHAR
     public $number_of_sites; //INT
     public $date_created; //DATETIME
     
     const VERSION_TYPE_HTML = 'HTML';
     const VERSION_TYPE_DEP = 'DEP';
+    const VERSION_TYPE_TYPE = 'TYPE';
 
     public function keys()
     {

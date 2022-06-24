@@ -44,6 +44,7 @@ class MetricDBTest extends DBTestCase
 
         $this->assertEquals('5.3', $page_attributes->html_version);
         $this->assertEquals('5.3.1', $page_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
 
         $metric->markPage($page_5_2, $xpath_template_5_2, $scan);
 
@@ -52,6 +53,7 @@ class MetricDBTest extends DBTestCase
 
         $this->assertEquals('5.2', $page_attributes->html_version);
         $this->assertEquals('5.2.1', $page_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
 
         $metric->markPage($page_5_1, $xpath_template_5_1, $scan);
 
@@ -60,24 +62,28 @@ class MetricDBTest extends DBTestCase
 
         $this->assertEquals('5.1', $page_attributes->html_version);
         $this->assertEquals('5.1.5', $page_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
 
         $metric->markPage($page_5_0, $xpath_template_5_0, $scan);
         $scan_attributes->reload();
 
         $this->assertEquals('5.0', $scan_attributes->html_version);
         $this->assertEquals('5.0.5', $scan_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
         
         $metric->markPage($page_4_0, $xpath_template_4_0, $scan);
         $scan_attributes->reload();
 
         $this->assertEquals('4.0', $scan_attributes->html_version);
         $this->assertEquals('4.0.9', $scan_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
 
         $metric->markPage($page_3_1, $xpath_template_3_1, $scan);
         $scan_attributes->reload();
         
         $this->assertEquals('3.1', $scan_attributes->html_version);
         $this->assertEquals('3.1.19', $scan_attributes->dep_version);
+        $this->assertEquals('fixed', $page_attributes->template_type);
         
         //check marks
         $metric->markPage($page_3_0, $xpath_template_3_0, $scan);

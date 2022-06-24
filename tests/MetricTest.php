@@ -60,6 +60,32 @@ class MetricTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
+    public function getTemplateType()
+    {
+        $metric = new Metric('unl');
+
+        $xpath_template_5_3     = $this->getTestXPath('template_5_3.html');
+        $xpath_template_5_2     = $this->getTestXPath('template_5_2.html');
+        $xpath_template_5_1     = $this->getTestXPath('template_5_1.html');
+        $xpath_template_5_0     = $this->getTestXPath('template_5_0.html');
+        $xpath_template_4_0     = $this->getTestXPath('template_4_0.html');
+        $xpath_template_3_1     = $this->getTestXPath('template_3_1.html');
+        $xpath_template_3_0     = $this->getTestXPath('template_3_0.html');
+        $xpath_template_unknown = $this->getTestXPath('example.html');
+
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_5_3));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_5_2));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_5_1));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_5_0));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_4_0));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_3_1));
+        $this->assertEquals('fixed', $metric->getTemplateType($xpath_template_3_0));
+        $this->assertEquals(null, $metric->getTemplateType($xpath_template_unknown));
+    }
+
+    /**
+     * @test
+     */
     public function getYouTubeEmbeds()
     {
         $metric = new Metric('unl');

@@ -16,6 +16,7 @@ $site           = $scan->getSite();
             <th class="path">Path</th>
             <th class="unl-html-version">UNLedu HTML Version</th>
             <th class="unl-dep-version">UNLedu Dependents Version</th>
+            <th class="unl-type-version">UNLedu Template Type</th>
         </tr>
         </thead>
         <tbody>
@@ -41,6 +42,15 @@ $site           = $scan->getSite();
                     $version = '';
                     if ($attributes) {
                         $version = $attributes->dep_version;
+                    }
+                    echo $version;
+                    ?>
+                </td>
+                <td class="unl-type-version">
+                    <?php
+                    $version = '';
+                    if ($attributes) {
+                        $version = $attributes->template_type;
                     }
                     echo $version;
                     ?>

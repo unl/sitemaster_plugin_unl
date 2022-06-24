@@ -86,6 +86,20 @@ class Summary
     }
 
     /**
+     * Determine if the found scan dependents are valid (in 5.3)
+     * 
+     * @return bool
+     */
+    public function typeIsValid()
+    {
+        if (!$this->scan_attributes) {
+            return false;
+        }
+
+        return !is_null($this->scan_attributes->template_type);
+    }
+
+    /**
      * Determine if a given version is valid (in 5.3)
      * 
      * @param mixed $version the version to check

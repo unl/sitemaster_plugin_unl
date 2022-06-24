@@ -171,12 +171,13 @@ class Metric extends MetricInterface
     {
         $html_version = $this->getHTMLVersion($xpath);
         $dep_version = $this->getDEPVersion($xpath);
+        $template_type = $this->getTemplateType($xpath);
 
         //Save these attributes for the page.
-        PageAttributes::createPageAttributes($page->id, $html_version, $dep_version);
+        PageAttributes::createPageAttributes($page->id, $html_version, $dep_version, $template_type);
 
         if (!$scan_attributes = ScanAttributes::getByScansID($scan->id)) {
-            $scan_attributes = ScanAttributes::createScanAttributes($scan->id, $html_version, $dep_version);
+            $scan_attributes = ScanAttributes::createScanAttributes($scan->id, $html_version, $dep_version, $template_type);
         } else {
             //Update the scan version if this page's versions are older
             if (version_compare($html_version, $scan_attributes->html_version) == -1) {
@@ -188,6 +189,11 @@ class Metric extends MetricInterface
             if (version_compare($dep_version, $scan_attributes->dep_version) == -1) {
                 //$dep_version is smaller, so decrease the scan attribute version
                 $scan_attributes->dep_version = $dep_version;
+                $scan_attributes->save();
+            }
+
+            if (!is_null($template_type)) {
+                $scan_attributes->template_type = $template_type;
                 $scan_attributes->save();
             }
 
@@ -360,6 +366,47 @@ class Metric extends MetricInterface
 
         //Couldn't find anything.
         return null;
+    }
+
+    /**
+     * Get the type of template being used from the comment in the head
+     *
+     * @param \DOMXPath $xpath the xpath of the page
+     * @return null|string the version (null if not found)
+     */
+    public function getTemplateType(\DOMXPath $xpath)
+    {
+        $comments = array();
+
+        // gets all the comments in the head tags
+        $comment_nodes = $xpath->query("/xhtml:html/xhtml:head/comment()");
+        foreach ($comment_nodes as $node) {
+            $comments[] = $node->nodeValue;
+        }
+
+        // no comments were found
+        if (empty($comments)) {
+            return null;
+        }
+
+        // searches the comments for the filename with type .dwt
+        $types_found = array();
+        foreach ($comments as $comment) {
+            $matches = array();
+            if (preg_match('/[a-zA-Z_]*\.dwt/', $comment, $matches) && !empty($matches)) {
+                foreach ($matches as $match) {
+                    $types_found[] = $match;
+                }
+            }
+        }
+
+        // nothing was found in the comments
+        if (empty($types_found)) {
+            return null;
+        }
+
+        // removes the .dwt from the string
+        return str_replace(".dwt", "", $types_found[0]);
     }
 
     /**
