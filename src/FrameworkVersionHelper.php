@@ -9,6 +9,7 @@ class FrameworkVersionHelper
         'current_branches' => array('5.3', '5.2', '5.1', '5.0', '4.1'), //The currently supported branches in github
         'cache' => true, //cache the results
         'autoload' => true, //autoload the current versions
+        'allowable_dep_version_depth' => 2, // Number of version back that are allowed
     );
     
     protected $cache_file = false;
@@ -87,6 +88,20 @@ class FrameworkVersionHelper
 
             if ($dep_version = $this->parseVersionFile($dep_version)) {
                 $versions['dep'][] = $dep_version;
+
+                $version_numbers = explode('.', $dep_version);
+                $version_number_length = count($version_numbers);
+                if ($version_number_length === 3) {
+                    for ($i = 0; $i < $this->options['allowable_dep_version_depth']; $i++) {
+                        $last_version_number = intval($version_numbers[$version_number_length - 1]);
+                        $last_version_number = $last_version_number - 1;
+    
+                        if ($last_version_number >= 1) {
+                            $version_numbers[$version_number_length - 1] = $last_version_number;
+                            $versions['dep'][] = implode('.', $version_numbers);
+                        }
+                    }
+                }
             }
         }
         
