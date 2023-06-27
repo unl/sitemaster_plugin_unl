@@ -18,6 +18,7 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_PDF_LINKS = 'UNL_FRAMEWORK_PDF';
     const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
     const MARK_MN_UNL_FRAMEWORK_BOX_LINK = 'UNL_FRAMEWORK_BOX';
+    const MARK_MN_UNL_FRAMEWORK_VIDGRID = 'UNL_FRAMEWORK_VIDGRID';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
     const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
@@ -66,6 +67,12 @@ class Metric extends MetricInterface
                 'description_text' => 'Please ensure this link remains valid during this transition, and change it to point to its new location as soon as your documents have been moved.',
                 'help_text' => 'Verify the box.com link is still valid, and if not remove or replace with current link location.',
                 'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_VIDGRID => array(
+                'title_text' => 'A element containing VidGrid was found.',
+                'description_text' => 'Please ensure this element has been updated to Yuja, or has been removed.',
+                'help_text' => 'Please update or remove references to VidGrid.',
+                'point_deductions' => 1
             ),
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(
                 'title_text' => 'An icon font was found without aria-hidden="true"',
@@ -234,6 +241,11 @@ class Metric extends MetricInterface
         $this->markMetric($page,
             $this->getBoxLinks($xpath),
             self::MARK_MN_UNL_FRAMEWORK_BOX_LINK,
+            true);
+
+        $this->markMetric($page,
+            $this->getVidGridReferences($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_VIDGRID,
             true);
 
         $this->markMetric($page,
@@ -512,6 +524,46 @@ class Metric extends MetricInterface
         }
 
         return $links;
+    }
+
+    /**
+     * Get a array of Box.com links
+     *
+     * @param \DomXpath $xpath
+     * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
+     */
+    public function getVidGridReferences(\DomXpath $xpath)
+    {
+        $referencesToVidGrid = array();
+        $nodes = $xpath->query("//xhtml:*[contains(text(),'vidgrid')]|//xhtml:*[contains(@href,'vidgrid')]|//xhtml:*[contains(@src,'vidgrid')]");
+
+        foreach ($nodes as $node) {
+            $text = $node->textContent;
+            if (strpos($text, 'vidgrid')) {
+                $referencesToVidGrid[] = array(
+                    'value_found' => $text,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+
+            $href = $node->getAttribute('href');
+            if (strpos($href, 'vidgrid')) {
+                $referencesToVidGrid[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+
+            $src = $node->getAttribute('src');
+            if (strpos($src, 'vidgrid')) {
+                $referencesToVidGrid[] = array(
+                    'value_found' => $src,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
+        return $referencesToVidGrid;
     }
 
     /**
