@@ -96,7 +96,7 @@ class FrameworkVersionHelper
                         $last_version_number = intval($version_numbers[$version_number_length - 1]);
                         $last_version_number = $last_version_number - 1;
     
-                        if ($last_version_number >= 1) {
+                        if ($last_version_number >= 0) {
                             $version_numbers[$version_number_length - 1] = $last_version_number;
                             $versions['dep'][] = implode('.', $version_numbers);
                         }
