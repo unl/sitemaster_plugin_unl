@@ -1,4 +1,7 @@
 <?php
+
+use SiteMaster\Plugins\Unl\CMSID;
+
 ini_set('display_errors', true);
 
 //Initialize all settings and autoloaders
@@ -96,6 +99,14 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     $site->production_status = determine_production_status($site->base_url);
     $site->base_url = $site_info['uri']; //Base URL protocol might change
     $site->save();
+
+    $cms_id_tracker = CMSID::getBySiteId($site->id);
+    if ($cms_id_tracker === false) {
+        CMSID::createCMSID($site->id, $cms_site_id, null);
+    } else {
+        $cms_id_tracker->unlcms_site_id = $cms_site_id;
+        $cms_id_tracker->save();
+    }
     
     //Add members
     foreach ($site_info['users'] as $uid=>$user_info) {

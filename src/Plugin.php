@@ -10,6 +10,8 @@ use SiteMaster\Core\Events\RoutesCompile;
 use SiteMaster\Core\Events\Theme\PrependOutput;
 use SiteMaster\Core\Events\Theme\RegisterStyleSheets;
 use SiteMaster\Core\Util;
+use SiteMaster\Core\Registry\Site\Role;
+
 
 class Plugin extends PluginInterface
 {
@@ -42,6 +44,7 @@ class Plugin extends PluginInterface
                 drop table if exists unl_scan_attributes;
                 drop table if exists unl_page_attributes;
                 drop table if exists unl_site_progress;
+                drop table if exists unl_cms_id;
                 SET FOREIGN_KEY_CHECKS = 1";
 
         if (!Util::execMultiQuery($sql, true)) {
@@ -98,6 +101,14 @@ class Plugin extends PluginInterface
                 return false;
             }
         }
+
+        if ($previousVersion <= 2015010701) {
+            $sql = file_get_contents($this->getRootDirectory() . "/data/update-2023092701.sql");
+
+            if (!Util::execMultiQuery($sql, true)) {
+                return false;
+            }
+        }
         
         return true;
     }
@@ -113,7 +124,7 @@ class Plugin extends PluginInterface
      */
     public function getVersion()
     {
-        return 2015010701;
+        return 2023092701;
     }
 
     /**
