@@ -5,13 +5,14 @@ use DB\Record;
 
 class CMSID extends Record
 {
+    public $id;               //int required
     public $site_id;               //int required
     public $unlcms_site_id;        //VARCHAR(20)
     public $next_gen_cms_site_id; //VARCHAR(20)
 
     public function keys()
     {
-        return array('site_id');
+        return array('id');
     }
 
     public static function getTable()
