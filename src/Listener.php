@@ -21,6 +21,7 @@ class Listener extends PluginListener
         $event->addRoute('/^unl_progress\/help\/$/', __NAMESPACE__ . '\Help\VersionProgress');
         $event->addRoute('/^unl_versions\/$/', __NAMESPACE__ . '\VersionReport');
         $event->addRoute('/^sites\/(?P<site_id>(\d*))\/scans\/(?P<scans_id>(\d*))\/unl\/versions\/$/',     __NAMESPACE__ . '\Scan\FrameworkVersions');
+        $event->addRoute('/^unl_ownership_report\/$/', __NAMESPACE__ . '\OwnershipReport');
     }
 
     /**
