@@ -22,13 +22,13 @@
                 foreach ($member_roles as $role) {
                     $role_name = $role->getRole()->role_name;
                     if ($role_name === 'Owner') {
-                        $owner = $user->uid;
+                        $owner = $user->first_name . ' ' .  $user->last_name;
                     }
                     if ($role_name === 'Backup Site Manager') {
-                        $backup_site_manager = $user->uid;
+                        $backup_site_manager = $user->first_name . ' ' .  $user->last_name;
                     }
                     if ($role_name === 'Primary Site Manager') {
-                        $primary_site_manager = $user->uid;
+                        $primary_site_manager = $user->first_name . ' ' .  $user->last_name;
                     }
                 }
             }
