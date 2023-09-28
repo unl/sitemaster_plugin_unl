@@ -13,7 +13,7 @@
             $owner = "";
             $primary_site_manager = "";
             $backup_site_manager = "";
-            $site_members = $context->getMembers($site->id);
+            $site_members = $context->getMembers($site->site_id);
 
             // Get the owner, primary site manager, backup site manager from the list of members
             foreach ($site_members as $member) {
@@ -22,13 +22,13 @@
                 foreach ($member_roles as $role) {
                     $role_name = $role->getRole()->role_name;
                     if ($role_name === 'Owner') {
-                        $owner = $user->first_name . ' ' .  $user->last_name;
+                        $owner = $user->uid;
                     }
                     if ($role_name === 'Backup Site Manager') {
-                        $backup_site_manager = $user->first_name . ' ' .  $user->last_name;
+                        $backup_site_manager = $user->uid;
                     }
                     if ($role_name === 'Primary Site Manager') {
-                        $primary_site_manager = $user->first_name . ' ' .  $user->last_name;
+                        $primary_site_manager = $user->uid;
                     }
                 }
             }
