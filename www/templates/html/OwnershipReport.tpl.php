@@ -2,7 +2,7 @@
     <p class="dcf-m-0">This page provides a list of UNL CMS websites and their Owner, Primary Site Manager, and Secondary Site Manager.</p>
     <button id="download_csv_button" class="dcf-btn dcf-btn-primary">Download .csv</button>
 </div>
-<table>
+<table id="ownership_report_table">
     <tr>
         <th>Webaudit id</th>
         <th>UNL CMS id</th>
