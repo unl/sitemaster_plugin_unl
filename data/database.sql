@@ -70,5 +70,7 @@ CREATE TABLE IF NOT EXISTS `unl_cms_id` (
   `next_gen_cms_site_id` VARCHAR(20),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`site_id`)
-  references `sites`(`id`),
+  REFERENCES `sites` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
 ) ENGINE = InnoDB;
