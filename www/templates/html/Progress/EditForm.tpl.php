@@ -1,10 +1,16 @@
+<style>
+    .select2-input {
+        color: black;
+    }
+</style>
 <form class="dcf-form" action="<?php echo $context->getEditURL(); ?>" method="POST">
-    <ol>
-        <li>
+    <fieldset style="width: min(100%, 70ch);">
+        <legend>Update Your Self Report</legend>
+        <div class="dcf-form-group">
             <label for="estimated_completion">Estimated Completion Date</label>
             <input id="estimated_completion" name="estimated_completion" type="date" value="<?php echo $context->progress->estimated_completion ?>" >
-        </li>
-        <li class="dcf-input-radio">
+        </div>
+        <div class="dcf-form-group">
             <label for="self_progress">Current Conversion Progress</label>
             <?php 
             $value = 0;
@@ -17,37 +23,35 @@
                     document.getElementById('self_progress_value').innerHTML=val;
                 }
             </script>
-            <input id="self_progress" name="self_progress" type="range" min="0" max="100" step="1" onchange="updateSelfProgress(this.value);" value="<?php echo $value ?>">
-            <br />
-            current self reported progress: <span id="self_progress_value"><?php  echo $value ?></span>%
-        </li>
-        <li>
+            <input id="self_progress" name="self_progress" type="range" min="0" max="100" step="1" onchange="updateSelfProgress(this.value);" value="<?php echo $value ?>" aria-describedby="self_progress_help">
+            <p id="self_progress_help" class="dcf-form-help dcf-mb-0">Current self reported progress: <span id="self_progress_value"><?php  echo $value ?></span>%</p>
+        </div>
+        <div class="dcf-form-group">
             <label for="self_comments">Comments</label>
             <textarea name="self_comments" id="self_comments"><?php echo $context->progress->self_comments ?></textarea>
-        </li>
-        <li>
-            <label for="replaced_by">This production site will be replaced by the development site at (only sites marked as in development will appear in this list):</label>
-            <select id="replaced_by" name="replaced_by" class="select2">
+        </div>
+        <div class="dcf-form-group">
+            <label for="replaced_by">This production site will be replaced by the development site at:</label>
+            <select id="replaced_by" name="replaced_by" class="select2" aria-describedby="replaced_by_help">
                 <option value="" <?php echo (empty($context->progress->replaced_by))?'':'selected="selected"' ?>>(none)</option>
                 <?php
-                $sites = new \SiteMaster\Core\Registry\Sites\ByProductionStatus(array(
-                    'production_status' => \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT
-                ));
-                foreach ($sites as $site) {
-                    $selected = '';
-                    if ($context->progress->replaced_by == $site->id) {
-                        $selected = 'selected="selected"';
+                    $sites = new \SiteMaster\Core\Registry\Sites\ByProductionStatus(array(
+                        'production_status' => \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT
+                    ));
+                    foreach ($sites as $site) {
+                        $selected = '';
+                        if ($context->progress->replaced_by == $site->id) {
+                            $selected = 'selected="selected"';
+                        }
+                        echo '<option value="' . $site->id . '" ' . $selected . '>' . $site->base_url . '</option>' . PHP_EOL;
                     }
-                    echo '<option value="' . $site->id . '" ' . $selected . '>' . $site->base_url . '</option>' . PHP_EOL;
-                }
-                
                 ?>
             </select>
-        </li>
-    </ol>
-
-    <input type="hidden" name="action" value="edit" />
-    <button class="dcf-btn dcf-btn-primary" type="submit">Save</button>
+            <p id="replaced_by_help" class="dcf-form-help">Only sites marked as in development will appear in this list.</p>
+        </div>
+        <input type="hidden" name="action" value="edit" />
+        <button class="dcf-btn dcf-btn-primary" type="submit">Save</button>
+    </fieldset>
 </form>
 
 <script>
