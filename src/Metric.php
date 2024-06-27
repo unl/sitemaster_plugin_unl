@@ -19,6 +19,7 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_FLASH_OBJECT = 'UNL_FRAMEWORK_FLASH';
     const MARK_MN_UNL_FRAMEWORK_BOX_LINK = 'UNL_FRAMEWORK_BOX';
     const MARK_MN_UNL_FRAMEWORK_VIDGRID = 'UNL_FRAMEWORK_VIDGRID';
+    const MARK_MN_UNL_FRAMEWORK_POLYFILL = 'UNL_FRAMEWORK_POLYFILL';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN = 'UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN';
     const MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS = 'UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS';
     const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
@@ -72,6 +73,12 @@ class Metric extends MetricInterface
                 'title_text' => 'A element containing VidGrid was found.',
                 'description_text' => 'Please ensure this element has been updated to Yuja, or has been removed.',
                 'help_text' => 'Please update or remove references to VidGrid.',
+                'point_deductions' => 1
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_POLYFILL => array(
+                'title_text' => 'Polyfill.io link has been found.',
+                'description_text' => 'Polyfill.io has changed ownership and is now considered malware.',
+                'help_text' => 'Please update or remove references to Polyfill.io.',
                 'point_deductions' => 1
             ),
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(
@@ -246,6 +253,11 @@ class Metric extends MetricInterface
         $this->markMetric($page,
             $this->getVidGridReferences($xpath),
             self::MARK_MN_UNL_FRAMEWORK_VIDGRID,
+            true);
+
+        $this->markMetric($page,
+            $this->getPolyfillReference($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_POLYFILL,
             true);
 
         $this->markMetric($page,
@@ -527,7 +539,7 @@ class Metric extends MetricInterface
     }
 
     /**
-     * Get a array of Box.com links
+     * Get a array of vidgrid links
      *
      * @param \DomXpath $xpath
      * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
@@ -564,6 +576,46 @@ class Metric extends MetricInterface
         }
 
         return $referencesToVidGrid;
+    }
+
+    /**
+     * Get a array of polyfill.io links
+     *
+     * @param \DomXpath $xpath
+     * @return array - an array of links.  Each link is an associative array with 'href' and 'html' values
+     */
+    public function getPolyfillReference(\DomXpath $xpath)
+    {
+        $referencesToPolyfill = array();
+        $nodes = $xpath->query("//xhtml:*[contains(text(),'polyfill.io')]|//xhtml:*[contains(@href,'polyfill.io')]|//xhtml:*[contains(@src,'polyfill.io')]");
+
+        foreach ($nodes as $node) {
+            $text = $node->textContent;
+            if (strpos($text, 'polyfill.io')) {
+                $referencesToPolyfill[] = array(
+                    'value_found' => $text,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+
+            $href = $node->getAttribute('href');
+            if (strpos($href, 'polyfill.io')) {
+                $referencesToPolyfill[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+
+            $src = $node->getAttribute('src');
+            if (strpos($src, 'polyfill.io')) {
+                $referencesToPolyfill[] = array(
+                    'value_found' => $src,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
+        return $referencesToPolyfill;
     }
 
     /**
