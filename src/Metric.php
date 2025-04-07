@@ -36,13 +36,13 @@ class Metric extends MetricInterface
             self::MARK_MN_UNL_FRAMEWORK_HTML => array(
                 'title_text' => 'The UNLedu framework HTML is out of date',
                 'description_text' => 'The UNLedu framework HTML is out of date',
-                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
+                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](https://github.com/unl/wdntemplates/wiki/Synchronizing-the-Framework)',
                 'point_deductions' => 80
             ),
             self::MARK_MN_UNL_FRAMEWORK_DEP => array(
                 'title_text' => 'The UNLedu framework dependents are out of date',
                 'description_text' => 'The UNLedu framework dependents are out of date',
-                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](http://wdn.unl.edu/synchronizing-unledu-web-framework)',
+                'help_text' => 'For mirroring instructions, see [Synchronizing the UNLedu Web Framework](https://github.com/unl/wdntemplates/wiki/Synchronizing-the-Framework)',
                 'point_deductions' => 20
             ),
             self::MARK_MN_UNL_FRAMEWORK_YOUTUBUE => array(
@@ -84,13 +84,13 @@ class Metric extends MetricInterface
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_NOT_ARIA_HIDDEN => array(
                 'title_text' => 'An icon font was found without aria-hidden="true"',
                 'description_text' => 'Screen readers might read icon-fonts and convey an incorrect or confusing meaning. Icon fonts should be hidden from screen readers.',
-                'help_text' => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                'help_text' => 'See [the WDN icon-font documentation](https://github.com/unl/wdntemplates/wiki/Icons) for help with accessibility.',
                 'point_deductions' => 1
             ),
             self::MARK_MN_UNL_FRAMEWORK_ICON_FONT_HAS_CONTENTS => array(
                 'title_text' => 'An icon font is applied to an element with contents',
                 'description_text' => 'Because icon fonts should be hidden from screen readers with aria-hidden="true", the element containing the icon font and text within it will not be read.',
-                'help_text' => 'See [the WDN icon-font documentation](http://wdn.unl.edu/documentation/icons) for help with accessibility.',
+                'help_text' => 'See [the WDN icon-font documentation](https://github.com/unl/wdntemplates/wiki/Icons) for help with accessibility.',
                 'point_deductions' => 1
             ),
             self::MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES => array(
