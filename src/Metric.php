@@ -116,7 +116,7 @@ class Metric extends MetricInterface
                 'title_text' => 'Found use of term "Registered Student Organization".',
                 'description_text' => 'The term "Registered Student Organization" is incorrect, the correct term is "Recognized Student Organization".',
                 'help_text' => 'Change text from "Registered Student Organization" to "Recognized Student Organization".',
-                'point_deductions' => 0
+                'point_deductions' => 1
             ),
             'default'=> array(
                 'title_text' => 'Framework Error',
@@ -598,7 +598,7 @@ class Metric extends MetricInterface
      */
     public function getIncorrectRSOReferences(\DomXpath $xpath)
     {
-        $referencesToIncorrectRSO = array();
+        $errors = array();
         $nodes = $xpath->query("//*[@id='wdn_content_wrapper']//text()|//*[@id='dcf-main']//text()");
 
         foreach ($nodes as $node) {
@@ -614,7 +614,7 @@ class Metric extends MetricInterface
             }
         }
 
-        return $referencesToIncorrectRSO;
+        return $errors;
     }
 
     /**
