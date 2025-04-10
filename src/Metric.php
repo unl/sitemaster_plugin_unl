@@ -25,6 +25,7 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_BRAND_INCONSISTENCIES = 'UNL_FRAMEWORK_BRAND_INCONSISTENCIES';
     const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE';
     const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES';
+    const MARK_MN_UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES = 'UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES';
 
     /**
      * @param string $plugin_name
@@ -110,6 +111,12 @@ class Metric extends MetricInterface
                 'description_text' => 'WDN styles (e.g., classes such as "wdn-band") should no longer be used. Support for WDN styles will begin to be phased out in July 2022. Please use the WDN styles documentation link below for the phase out schedule.',
                 'help_text' => 'See [the WDN styles documentation](https://wdn.unl.edu/documentation/5.0/css/deprecated) for more information on this topic.',
                 'point_deductions' => 0
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES => array(
+                'title_text' => 'Found use of term "Registered Student Organization".',
+                'description_text' => 'The term "Registered Student Organization" is incorrect, the correct term is "Recognized Student Organization".',
+                'help_text' => 'Change text from "Registered Student Organization" to "Recognized Student Organization".',
+                'point_deductions' => 1
             ),
             'default'=> array(
                 'title_text' => 'Framework Error',
@@ -258,6 +265,11 @@ class Metric extends MetricInterface
         $this->markMetric($page,
             $this->getPolyfillReference($xpath),
             self::MARK_MN_UNL_FRAMEWORK_POLYFILL,
+            true);
+
+        $this->markMetric($page,
+            $this->getIncorrectRSOReferences($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES,
             true);
 
         $this->markMetric($page,
@@ -576,6 +588,33 @@ class Metric extends MetricInterface
         }
 
         return $referencesToVidGrid;
+    }
+
+    /**
+     * Get a array of uses of incorrect term "Registered Student Organization"
+     *
+     * @param \DomXpath $xpath
+     * @return array - An array of text nodes
+     */
+    public function getIncorrectRSOReferences(\DomXpath $xpath)
+    {
+        $errors = array();
+        $nodes = $xpath->query("//*[@id='wdn_content_wrapper']//text()|//*[@id='dcf-main']//text()");
+
+        foreach ($nodes as $node) {
+            $incorrect_RSOs = substr_count($node->textContent, 'Registered Student Organization') +
+            substr_count($node->textContent, 'registered student organization') +
+            substr_count($node->textContent, 'Registered student organization');
+            if ($incorrect_RSOs > 0) {
+                $errors[] = array(
+                    'value_found' => 'Registered Student Organization',
+                    'count' => $incorrect_RSOs,
+                    'context' => $node->textContent
+                );
+            }
+        }
+
+        return $errors;
     }
 
     /**
