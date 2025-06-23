@@ -26,6 +26,7 @@ class Metric extends MetricInterface
     const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLES_FILE';
     const MARK_MN_UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES = 'UNL_FRAMEWORK_WDN_DEPRECATED_STYLE_REFERENCES';
     const MARK_MN_UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES = 'UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES';
+    const MARK_MN_UNL_FRAMEWORK_ONE_DRIVE_SHAREPOINT_LINK = 'UNL_FRAMEWORK_ONE_DRIVE_SHAREPOINT_LINK';
 
     /**
      * @param string $plugin_name
@@ -117,6 +118,12 @@ class Metric extends MetricInterface
                 'description_text' => 'The term "Registered Student Organization" is incorrect, the correct term is "Recognized Student Organization".',
                 'help_text' => 'Change text from "Registered Student Organization" to "Recognized Student Organization".',
                 'point_deductions' => 1
+            ),
+            self::MARK_MN_UNL_FRAMEWORK_ONE_DRIVE_SHAREPOINT_LINK => array(
+                'title_text' => 'Found OneDrive or Sharepoint link (They will need to be updated as part of the Office 365 transition).',
+                'description_text' => 'Our scans indicate you have file links to Sharepoint or OneDrive on this website. If you intend to retain these as SharePoint or OneDrive links, they will need to be updated at the point of your unit\'s Office 365 transition.',
+                'help_text' => 'A better practice for *necessary* file links would be to import them to your website.',
+                'point_deductions' => 0
             ),
             'default'=> array(
                 'title_text' => 'Framework Error',
@@ -270,6 +277,11 @@ class Metric extends MetricInterface
         $this->markMetric($page,
             $this->getIncorrectRSOReferences($xpath),
             self::MARK_MN_UNL_FRAMEWORK_INCORRECT_RSO_REFERENCES,
+            true);
+
+        $this->markMetric($page,
+            $this->getOneDriveSharepointLinks($xpath),
+            self::MARK_MN_UNL_FRAMEWORK_ONE_DRIVE_SHAREPOINT_LINK,
             true);
 
         $this->markMetric($page,
@@ -615,6 +627,33 @@ class Metric extends MetricInterface
         }
 
         return $errors;
+    }
+
+    /**
+     * Get a array of uses of OneDrive or Sharepoint Links
+     *
+     * @param \DomXpath $xpath
+     * @return array - An array of text nodes
+     */
+    public function getOneDriveSharepointLinks(\DomXpath $xpath) {
+        $links = array();
+        $nodes = $xpath->query("//xhtml:a");
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+
+            if (
+                strpos($href, 'my.sharepoint.com/:w:/r/') !== false ||
+                strpos($href, 'sharepoint.com/:w:/r') !== false
+            ) {
+                $links[] = array(
+                    'value_found' => $href,
+                    'context' => htmlspecialchars($xpath->document->saveHTML($node))
+                );
+            }
+        }
+
+        return $links;
     }
 
     /**
