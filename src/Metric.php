@@ -384,7 +384,7 @@ class Metric extends MetricInterface
     {
         $version = '';
 
-        //look for >= 3.1 templates
+        //look for 3.1 to 5.3 templates
         $nodes = $xpath->query(
             "//xhtml:script[@id='wdn_dependents']/@src"
         );
@@ -396,8 +396,21 @@ class Metric extends MetricInterface
         $matches = array();
 
         if (preg_match('/all.js\?dep=([0-9.]*)/', $version, $matches) && isset($matches[1])) {
-            //found look for >= 3.1 templates
+            //found look for 3.1 to 5.3 templates
             return $matches[1];
+        }
+
+        // Look for 6.0 templates
+        $nodes = $xpath->query(
+            "//xhtml:link[contains(@href, 'main.css')]/@href"
+        );
+
+        foreach ($nodes as $node) {
+            $version = $node->nodeValue;
+
+            if (preg_match('/main\.css\?dep=([0-9.]*)/', $version, $matches) && isset($matches[1])) {
+                return $matches[1];
+            }
         }
 
         //look for 3.0
