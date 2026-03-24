@@ -124,7 +124,7 @@ class Plugin extends PluginInterface
      */
     public function getVersion()
     {
-        return 2023092701;
+        return 2026032401;
     }
 
     /**
