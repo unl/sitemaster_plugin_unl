@@ -18,8 +18,8 @@ function determine_production_status($base_url) {
         return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_ARCHIVED;
     }
     
-    if (strpos($base_url, '://unlcms.unl.edu/') !== false) {
-        //Sites that start in ://unlcms.unl.edu/ should be considered 'development' instances
+    if (strpos($base_url, '://cms.unl.edu/') !== false) {
+        //Sites that start in ://cms.unl.edu/ should be considered 'development' instances
         return \SiteMaster\Core\Registry\Site::PRODUCTION_STATUS_DEVELOPMENT;
     }
 
@@ -31,7 +31,7 @@ function strip_protocol($url) {
 }
 
 //Append the current time to prevent caching.
-$cms_json_url = 'http://unlcms.unl.edu/admin/sites/unl/feed?time=' . time();
+$cms_json_url = 'https://cms.unl.edu/admin/sites/unl/feed?time=' . time();
 
 $cms_json = file_get_contents($cms_json_url);
 
@@ -60,11 +60,11 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     /*
      * @var $site_info array(2) {
                           ["uri"]=>
-                          string(38) "http://unlcms.unl.edu/is/nuclearbunnys"
+                          string(38) "http://cms.unl.edu/herbie"
                           ["users"]=>
                           array(1) {
                             [0]=>
-                            string(10) "lfrerichs1"
+                            string(10) "hhusker1"
                           }
                         }
      */
@@ -169,7 +169,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
 //ONLY if we have a list of base URLs from the call of unlcms. we wouldn't want to delete everything if that api call fails for some reason.
 if (!empty($cms_base_urls)) {
     //Loop over sites in the registry and remove the ones we need to
-    //Only remove http://unlcms.unl.edu/ sites, as these are unlcms specific and development sites.
+    //Only remove http://cms.unl.edu/ sites, as these are unlcms specific and development sites.
     //They should not ever move to non-unlcms servers. Production sites might, so we can't assume anything for them.
     $cms_sites = new \SiteMaster\Plugins\Unl\Sites\CMSDevSites();
     foreach ($cms_sites as $site) {
@@ -178,7 +178,7 @@ if (!empty($cms_base_urls)) {
          */
 
         //Don't remove the base unlcms site.
-        if ('http://unlcms.unl.edu/' == $site->base_url) {
+        if ('http://cms.unl.edu/' == $site->base_url) {
             continue;
         }
         
