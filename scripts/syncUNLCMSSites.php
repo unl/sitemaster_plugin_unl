@@ -109,7 +109,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
     }
     
     //Add members
-    foreach ($site_info['users'] as $uid=>$user_info) {
+    foreach ($site_info['users'] as $uid) {
         $uid = trim(strtolower($uid));
         $user = \SiteMaster\Core\User\User::getByUIDAndProvider($uid, 'unl.edu');
         if (!$user) {
@@ -157,7 +157,7 @@ foreach ($cms_sites as $cms_site_id=>$site_info) {
             continue;
         }
         
-        if (!in_array(trim(strtolower($user->uid)), array_map('strtolower', array_keys($site_info['users'])))) {
+        if (!in_array(trim(strtolower($user->uid)), array_map('strtolower', $site_info['users']))) {
             //remove em (they are no longer in the list of users)
             $role->delete();
         }
