@@ -8,6 +8,7 @@ ini_set('display_errors', true);
 require_once(__DIR__ . '/../../../init.php');
 
 function is_in_maintenance_mode($base_url) {
+    $base_url = 'https:' . strip_protocol($base_url);
     $info = \SiteMaster\Core\Util::getHTTPInfo($base_url);
     sleep(1); //be nice to the server
     return 503 == $info['http_code'];
