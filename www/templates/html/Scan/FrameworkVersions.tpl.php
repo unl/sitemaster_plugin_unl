@@ -5,7 +5,7 @@ $site           = $scan->getSite();
 
 <div class="framework-versions info-section">
     <header>
-        <h3>UNLedu Framework Versions by Page</h3>
+        <h2>UNLedu Framework Versions by Page</h2>
         <div class="subhead">
             This is a list of all framework versions that we found on your site.
         </div>
